@@ -2,7 +2,7 @@
 FROM node:14 AS build
 
 # 작업 디렉토리 설정
-WORKDIR /app/meetokey
+WORKDIR /meetokey
 
 # 패키지 파일 복사 및 설치
 COPY package*.json ./
