@@ -22,13 +22,13 @@ jobs:
     # 3. Docker 이미지 빌드 및 태그 (no-cache 옵션 추가)
     - name: Build and tag Docker image
       run: |
-        docker build --no-cache -t ${{ secrets.DOCKER_HUB_USERNAME }}/chic_STT_frontend:latest .
-        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/chic_STT_frontend:latest ${{ secrets.DOCKER_HUB_USERNAME }}/chic_STT_frontend:latest
+        docker build --no-cache -t ${{ secrets.DOCKER_HUB_USERNAME }}/chic_stt_frontend:latest .
+        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/chic_stt_frontend:latest ${{ secrets.DOCKER_HUB_USERNAME }}/chic_stt_frontend:latest
 
     # 4. Docker Hub로 푸시
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/chic_STT_frontend:latest
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/chic_stt_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
       run: |
         echo "Starting deployment..."
         sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_ID }}@${{ secrets.SSH_SERVER_IP }} << 'EOF'
-          IMAGE="${{ secrets.DOCKER_HUB_USERNAME }}/chic_STT_frontend:latest"
+          IMAGE="${{ secrets.DOCKER_HUB_USERNAME }}/chic_stt_frontend:latest"
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker pull $IMAGE
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker stop chic_STT_FE || true
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker rm chic_STT_FE || true
