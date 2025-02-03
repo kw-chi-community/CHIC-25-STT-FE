@@ -13,7 +13,7 @@ function Homepage() {
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [meetingLogs, setMeetingLogs] = useState([
     { date: '2024-01-30', content: '회의록 1' },
     { date: '2024-01-29', content: '회의록 2' },
@@ -29,7 +29,7 @@ function Homepage() {
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    setUsername('사용자 이름'); // 실제 구현에서는 입력된 사용자 이름 사용
+    setUsername('UserName'); // 실제 구현에서는 입력된 사용자 이름 사용
     setShowLogin(false);
   };
 
@@ -38,98 +38,116 @@ function Homepage() {
     setUsername('');
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
   };
 
-  const filteredLogs = meetingLogs.filter(log => log.date === selectedDate.toISOString().split('T')[0]);
+  const filteredLogs = meetingLogs.filter(log => log.date === selectedDate);
 
   return (
     <PageContainer>
-      <div className="px-5 vh-100 d-flex flex-column">
-        <Header>
-          <LogoText>
-            <h1 style={{ fontWeight: 'bold', fontSize: '50px' }}>
-              <i className="bi bi-journal-bookmark-fill"></i> Meet Okey !
-            </h1>
-          </LogoText>
-          <LoginContainer>
-            <div style={{ fontSize: '14px' }}>
-              {isLoggedIn ? (
-                <>
-                  <p>{username}</p>
-                  <Button variant="light" onClick={handleLogout}>로그아웃</Button>
-                </>
-              ) : (
-                <Button variant="light" onClick={handleLoginShow}>로그인</Button>
-              )}
-            </div>
-          </LoginContainer>
-        </Header>
+    <div className="px-5 vh-100 d-flex flex-column">
+      <Header>
+        <LogoText>
+        <h1 style={{ fontWeight: 'bold',fontSize: '50px' }}>
+            <i className="bi bi-journal-bookmark-fill"></i> Meet Okey !
+        </h1>
+        </LogoText>
+        <LoginContainer>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '20px' }}>
+          {isLoggedIn ? (
+            <>
+              <p>Welcome! {username}</p>
+              <Button style={{ backgroundColor: '#D8BFD8', borderColor: '#D8BFD8' }} onClick={handleLogout}>
+          LogOut
+        </Button>
+            </>
+          ) : (
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginShow}>
+        LogIn
+      </Button>
+          )}
+        </div>
+        </LoginContainer>
+      </Header>
 
-        <MainContainer>
-          <MicButton variant="primary" className="d-flex align-items-center">
-            <img src={mic} alt="Microphone" style={{ width: '1000px', height: '200px', marginRight: '8px' }} />
-          </MicButton>
-        </MainContainer>
+      <MainContainer>
+        <MicButton variant="primary" className="d-flex align-items-center">
+          <img src={mic} alt="Microphone" style={{ width: '1000px', height: '200px', marginRight: '8px' }} />
+        </MicButton>
+      </MainContainer>
 
-        <MeetingSection>
-          <NoteContainer>
-            <div className="col-6 p-3">
-              <h4>최근 회의록</h4>
-              <ul className="list-group">
-                {filteredLogs.length > 0 ? (
-                  filteredLogs.map((log, index) => (
-                    <li key={index} className="list-group-item">{log.content}</li>
-                  ))
-                ) : (
-                  <li className="list-group-item">해당 날짜의 회의록이 없습니다.</li>
-                )}
-              </ul>
-            </div>
-          </NoteContainer>
-          <CalenderContainer>
-            <div className="col-4 p-3">
-              <h4>Calender</h4>
-              <StyledCalendar
+      <MeetingSection>
+        <NoteContainer>
+        <div className="col-6 p-3">
+          <h4>최근 회의록</h4>
+          <ul className="list-group">
+            {filteredLogs.length > 0 ? (
+              filteredLogs.map((log, index) => (
+                <li key={index} className="list-group-item">{log.content}</li>
+              ))
+            ) : (
+              <li className="list-group-item">해당 날짜의 회의록이 없습니다.</li>
+            )}
+          </ul>
+        </div>
+        </NoteContainer>
+        
+        <div className="col-4 p-3">
+          <h4>Calender</h4>
+          <StyledCalendar
             value={new Date(selectedDate)}
             onChange={setSelectedDate}
             className="custom-calendar"
           />
-            </div>
-          </CalenderContainer>
-        </MeetingSection>
+        </div>
+        
+        
+      </MeetingSection>
 
-        <Modal show={showLogin} onHide={handleLoginClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>로그인</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <input type="text" className="form-control mb-2" placeholder="아이디" />
-            <input type="password" className="form-control mb-2" placeholder="비밀번호" />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleLoginClose}>닫기</Button>
-            <Button variant="primary" onClick={handleLogin}>로그인</Button>
-            <Button variant="success" onClick={handleRegisterShow}>회원가입</Button>
-          </Modal.Footer>
-        </Modal>
+      <Modal show={showLogin} onHide={handleLoginClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>LogIn</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input type="text" className="form-control mb-2" placeholder="ID" />
+          <input type="password" className="form-control mb-2" placeholder="Password" />
+        </Modal.Body>
+        <Modal.Footer>
+        <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginClose}>
+      Close
+    </Button>
+    <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLogin}>
+      LogIn
+    </Button>
+    <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegisterShow}>
+      SignUp
+    </Button>
+     </Modal.Footer>
+      </Modal>
 
-        <Modal show={showRegister} onHide={handleRegisterClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>회원가입</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <input type="text" className="form-control mb-2" placeholder="이름" />
-            <input type="text" className="form-control mb-2" placeholder="아이디" />
-            <input type="password" className="form-control mb-2" placeholder="비밀번호" />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleRegisterClose}>닫기</Button>
-            <Button variant="primary" onClick={() => { setShowRegister(false); setShowLogin(true); }}>가입하기</Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+      <Modal show={showRegister} onHide={handleRegisterClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>SignUp</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input type="text" className="form-control mb-2" placeholder="Name" />
+          <input type="text" className="form-control mb-2" placeholder="ID" />
+          <input type="password" className="form-control mb-2" placeholder="Password" />
+        </Modal.Body>
+        <Modal.Footer>
+        <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleRegisterClose}>
+      Close
+    </Button>
+    <Button
+      style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }}
+      onClick={() => { setShowRegister(false); setShowLogin(true); }}
+    >
+      SignUp
+    </Button>
+      </Modal.Footer>
+      </Modal>
+    </div>
     </PageContainer>
   );
 }
@@ -138,7 +156,7 @@ export default Homepage;
 
 const PageContainer = styled.div`
   height: 100vh;
-  background: linear-gradient(to bottom left, #ffffff, #CCCBED);
+  background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -151,23 +169,24 @@ const Header = styled.div`
   height: 10%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
+  position: relative; /* 절대 위치 요소를 위한 설정 */
 `;
 
 const LogoText = styled.div`
-  margin-top: 28px;
-  flex-grow: 1;
-  display: flex;
-  justify-content: flex-start;
   font-size: 50px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const LoginContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-right: 20px;
-  font-size: 14px;
+display: flex;
+align-items: center;
+gap: 5px;
+position: absolute;
+right: 20px;
+font-size: 14px;
 `;
 
 const MainContainer = styled.div`
@@ -202,7 +221,7 @@ const MeetingSection = styled.div`
 
 const NoteContainer = styled.div`
   height: 100%;
-  flex: 4;
+  flex: 6;
   padding: 12px 24px;
   display: flex;
   align-items: center;
@@ -216,13 +235,15 @@ const NoteContainer = styled.div`
 
 const CalenderContainer = styled.div`
   height: 100%;
+  width: 500px;
   display: flex;
   align-items: center;
-  background-color: transparent;
+  background-color: #ffffff;
   color: black;
   border: none;
   border-radius: 26px;
   flex-grow: 1;
+  box-shadow: 0px 4px 10px lightgray;
 `;
 
 const StyledCalendar = styled(Calendar)`
@@ -233,7 +254,7 @@ const StyledCalendar = styled(Calendar)`
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 
   .react-calendar__tile {
-    font-size: 16px !important;
+    font-size: 18px !important;
     border-radius: 12px;
     transition: background-color 0.3s;
   }
