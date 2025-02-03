@@ -138,7 +138,7 @@ export default Homepage;
 
 const PageContainer = styled.div`
   height: 100vh;
-  background: linear-gradient(to bottom left, #ffffff, #C9A4FF);
+  background: linear-gradient(to bottom left, #ffffff, #CCCBED);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -226,10 +226,37 @@ const CalenderContainer = styled.div`
 `;
 
 const StyledCalendar = styled(Calendar)`
-  width: 100% !important; /* 100% width */
-  height: 400px !important; /* Height of the calendar */
+  width: 100% !important;
+  height: 400px !important;
   border-radius: 26px;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
   .react-calendar__tile {
-    font-size: 16px !important; /* Adjust tile font size */
+    font-size: 16px !important;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+  }
+
+  .react-calendar__tile:hover {
+    background-color: #D8D8F2;
+  }
+
+  .react-calendar__tile--now {
+    background: #C9C7EC !important; /* 오늘 날짜는 하늘색으로! */
+    border-radius: 12px;
+  }
+
+  .react-calendar__tile--active {
+    background: #CFADFF !important; /* 선택된 날짜는 더 진한 파란색으로! */
+    color: white !important;
+    border-radius: 12px;
+  }
+
+  /* 회의록이 있는 날짜 스타일 */
+  .meeting-log-day {
+    background-color: #ffefc2 !important; /* 노란색 배경 */
+    color: #8b572a !important;
+    font-weight: bold;
   }
 `;
