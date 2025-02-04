@@ -75,7 +75,7 @@ function Homepage() {
 
       <MainContainer>
 
-      <MicButton onClick={handleMicClick}>📢 회의록 추가</MicButton>
+      <MicButton style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2' }} onClick={handleMicClick}>📢 회의록 추가</MicButton>
         
       </MainContainer>
 
@@ -270,13 +270,6 @@ const NoteContainer = styled.div`
   }
 `;
 
-const Note = styled.div`
-  background: #ffffff;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-`;
 
 const CalenderContainer = styled.div`
   height: 100%;
