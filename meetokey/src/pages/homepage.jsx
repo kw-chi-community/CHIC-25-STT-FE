@@ -5,7 +5,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Modal, Button } from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
 import mic from '../assets/imgs/mic-remove.png';
 
 function Homepage() {
@@ -13,11 +12,7 @@ function Homepage() {
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [meetingLogs, setMeetingLogs] = useState([
-    { date: '2024-01-30', content: '회의록 1' },
-    { date: '2024-01-29', content: '회의록 2' },
-  ]);
+ 
 
   const handleLoginClose = () => setShowLogin(false);
   const handleLoginShow = () => setShowLogin(true);
@@ -38,11 +33,18 @@ function Homepage() {
     setUsername('');
   };
 
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [notes, setNotes] = useState({});
 
-  const filteredLogs = meetingLogs.filter(log => log.date === selectedDate);
+  const handleMicClick = () => {
+    setNotes((prevNotes) => {
+      const newNotes = { ...prevNotes };
+      const currentNotes = newNotes[selectedDate] || [];
+      const newNote = `회의록 ${selectedDate}(${currentNotes.length + 1})`;
+      newNotes[selectedDate] = [...currentNotes, newNote];
+      return newNotes;
+    });
+  };
 
   return (
     <PageContainer>
@@ -72,32 +74,33 @@ function Homepage() {
       </Header>
 
       <MainContainer>
-        <MicButton variant="primary" className="d-flex align-items-center">
-          <img src={mic} alt="Microphone" style={{ width: '1000px', height: '200px', marginRight: '8px' }} />
-        </MicButton>
+
+      <MicButton onClick={handleMicClick}>📢 회의록 추가</MicButton>
+        
       </MainContainer>
 
       <MeetingSection>
         <NoteContainer>
-        <div className="col-6 p-3">
-          <h4>최근 회의록</h4>
+        <div className="col-12 p-3">
+        <div className="note-title">{selectedDate}의 회의록</div> {/* 제목 추가 */}
+   
           <ul className="list-group">
-            {filteredLogs.length > 0 ? (
-              filteredLogs.map((log, index) => (
-                <li key={index} className="list-group-item">{log.content}</li>
-              ))
-            ) : (
-              <li className="list-group-item">해당 날짜의 회의록이 없습니다.</li>
-            )}
-          </ul>
+        {notes[selectedDate] && notes[selectedDate].length > 0 ? (
+          notes[selectedDate].map((note, index) => (
+            <li key={index} className="list-group-item">{note}</li>
+          ))
+        ) : (
+          <li className="list-group-item">해당 날짜의 회의록이 없습니다.</li>
+        )}
+      </ul>
         </div>
         </NoteContainer>
         
         <div className="col-4 p-3">
           <h4>Calender</h4>
           <StyledCalendar
+            onChange={(date) => setSelectedDate(date.toLocaleDateString("ko-KR").replace(/\. /g, "-").replace(/\.$/, ""))}
             value={new Date(selectedDate)}
-            onChange={setSelectedDate}
             className="custom-calendar"
           />
         </div>
@@ -197,20 +200,25 @@ const MainContainer = styled.div`
   padding: 20px;
 `;
 
-const MicButton = styled.button`
-  height: 100%;
-  padding: 12px 24px;
-  align-items: center;
-  background-color: transparent;
-  color: black;
-  border: none;
-  border-radius: 26px;
-  margin-right: 40px;
-  box-shadow: none;
-  display: flex;
-  justify-content: center;
-`;
 
+
+const MicButton = styled.button`
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 const MeetingSection = styled.div`
   height: 60%;
   display: flex;
@@ -221,7 +229,7 @@ const MeetingSection = styled.div`
 
 const NoteContainer = styled.div`
   height: 100%;
-  flex: 6;
+  width: 2000px;
   padding: 12px 24px;
   display: flex;
   align-items: center;
@@ -231,6 +239,43 @@ const NoteContainer = styled.div`
   border-radius: 26px;
   margin-right: 40px;
   box-shadow: 0px 4px 10px lightgray;
+  position: relative; /* 내부 요소 고정 가능하도록 설정 */
+
+
+  .note-title {
+    font-size: 18px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f9f9f9;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 10;
+  }
+
+  .list-group {
+    width: 100%; /* 리스트 그룹이 컨테이너 너비를 꽉 채우도록 */
+    margin-top: 40px; /* 제목 아래에 공간 추가 */
+  }
+
+  .list-group-item {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    border: none; /* 기존 list-group의 테두리 제거 */
+    width: 100%;
+  }
+`;
+
+const Note = styled.div`
+  background: #ffffff;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const CalenderContainer = styled.div`
