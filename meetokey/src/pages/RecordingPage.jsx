@@ -1,74 +1,137 @@
-import React, { useState, useRef } from "react";
-//useState: 렌더링 됨 (변경 감지됨. ex. 녹음 중인지) useRef: 렌더링 안 됨 (그냥 값 저장용) ex. mediaRecoderRef, websocketRef 등등
+import React, { useState, useEffect, useRef } from "react";
+import RecordingModal from "../components/RecordingComponents/Modal";
+import Header from "../components/RecordingComponents/Header";
+import Timer from "../components/RecordingComponents/Timer";
+import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
+import RecordingControls from "../components/RecordingComponents/RecordingControls";
+import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
+import AudioPlayer from "../components/RecordingComponents/AudioPlayer";
 
-const RecordingPage = () => { //리액트 컴포넌트 선언언
-    const [isRecording, setIsRecording] = useState(false); //녹음 중이면 상태 true, 아니면 false
-    const mediaRecorderRef = useRef(null); //녹음 도구를 저장하는 변수
-    const websocketRef = useRef(null); //서버와 연결하는 변수 
+const RecordingPage = () => {
+    const [isRecording, setIsRecording] = useState(false);
+    const [showModal, setShowModal] = useState(true);
+    const [meetingName, setMeetingName] = useState("");
+    const [topic, setTopic] = useState("");
+    const [seconds, setSeconds] = useState(0);
+    const [audioUrl, setAudioUrl] = useState(null);
 
-    const startRecording = async () => { //이 함수가 실행되면 마이크를 사용해서 녹음을 시작하고, 서버로 전송
+    const mediaRecorderRef = useRef(null);
+    const websocketRef = useRef(null);
+    const audioChunks = useRef([]);
+
+    // 타이머 관리
+    useEffect(() => {
+        let interval;
+        if (isRecording) {
+            interval = setInterval(() => setSeconds((prev) => prev + 1), 1000);
+        } else {
+            clearInterval(interval);
+            setSeconds(0);
+        }
+        return () => clearInterval(interval);
+    }, [isRecording]);
+
+    // 오디오 스트림 가져오기
+    const getAudioStream = async () => {
         try {
-          
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            //사용자에게 마이크를 사용할 지 물어보고,  허용하면 stream을 가져옴. stream에 마이크에서 입력된 오디오 데이터가 들어옴. await를 사용하여 마이크가 허용될 때까지 기다림.
+            console.log("✅ 마이크 접근 성공");
+            return stream;
+        } catch (error) {
+            console.error("🚫 마이크 접근 실패:", error);
+            alert("마이크 사용이 허용되지 않았습니다.");
+            return null;
+        }
+    };
 
-            // WebSocket 연결
+    // 녹음 시작
+    const startRecording = async () => {
+        try {
+            const stream = await getAudioStream();
+            if (!stream) return;
+
             const websocket = new WebSocket("ws://localhost:8000/ws/audio");
             websocketRef.current = websocket;
-            //서버와의 연결을 생성
-            //websocketRef.current에 저장하여 나중에 연결을 끊을 수 있도록
 
             websocket.onopen = () => {
-                console.log("WebSocket connection established.");
-                // MediaRecorder 초기화
-                const mediaRecorder = new MediaRecorder(stream);
-                mediaRecorderRef.current = mediaRecorder;
+                console.log("✅ WebSocket 연결 성공");
+                setIsRecording(true);
 
-                // 녹음 데이터가 생성될 때마다 WebSocket으로 전송
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0 && websocket.readyState === WebSocket.OPEN) {
-                        websocket.send(event.data);
+                const recorder = new MediaRecorder(stream);
+                mediaRecorderRef.current = recorder;
+                audioChunks.current = [];
+
+                recorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.current.push(event.data);
+                        if (websocket.readyState === WebSocket.OPEN) {
+                            websocket.send(event.data);
+                        }
                     }
                 };
 
-                // 녹음 시작
-                mediaRecorder.start(200);
-                setIsRecording(true);
+                recorder.onstop = () => {
+                    const blob = new Blob(audioChunks.current, { type: "audio/wav" });
+                    const url = URL.createObjectURL(blob);
+                    setAudioUrl(url);
+                };
+
+                recorder.start();
+                console.log("🎙 녹음 시작됨");
             };
 
             websocket.onclose = () => {
-                console.log("WebSocket connection closed.");
+                console.log("🔌 WebSocket 연결 종료");
                 stopRecording();
             };
 
             websocket.onerror = (error) => {
-                console.error("WebSocket error:", error);
+                console.error("⚠️ WebSocket 오류:", error);
                 stopRecording();
             };
         } catch (error) {
-            console.error("Error accessing microphone:", error);
+            console.error("🚫 녹음 시작 중 오류:", error);
         }
     };
 
+    // 녹음 중지
     const stopRecording = () => {
         if (mediaRecorderRef.current) {
             mediaRecorderRef.current.stop();
         }
-
         if (websocketRef.current) {
             websocketRef.current.close();
         }
-
         setIsRecording(false);
+        console.log("🛑 녹음 중지");
     };
 
     return (
-        <div>
-            <h1>🎤 Recording Page</h1>
-            <p>이곳에서 음성을 녹음하고 WebSocket을 통해 데이터를 전송할 수 있습니다.</p>
-            <button onClick={isRecording ? stopRecording : startRecording}>
-                {isRecording ? "Stop Recording" : "Start Recording"}
-            </button>
+        <div className="p-6 flex flex-col items-center">
+            {showModal ? (
+                <RecordingModal
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                    onStart={(name, topic) => {
+                        setMeetingName(name);
+                        setTopic(topic);
+                        setShowModal(false);
+                    }}
+                />
+            ) : (
+                <>
+                    <Header meetingName={meetingName} topic={topic} />
+                    <RecordingStatus isRecording={isRecording} />
+                    <RecordingControls
+                        isRecording={isRecording}
+                        startRecording={startRecording}
+                        stopRecording={stopRecording}
+                    />
+                    <Timer seconds={seconds} />
+                    <AudioPlayer audioUrl={audioUrl} />
+                    <TopicSwitcher onSwitch={setTopic} />
+                </>
+            )}
         </div>
     );
 };
