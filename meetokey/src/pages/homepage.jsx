@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from 'react';
-import React, { useState,useEffect } from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -81,11 +80,6 @@ function Homepage() {
   //회의록
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
-  };
-
-  //회의록
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
-  const [notes, setNotes] = useState({});
 
   const handleMicClick = () => {
     setNotes((prevNotes) => {
@@ -96,15 +90,7 @@ function Homepage() {
       return newNotes;
     });
   };
-  const handleMicClick = () => {
-    setNotes((prevNotes) => {
-      const newNotes = { ...prevNotes };
-      const currentNotes = newNotes[selectedDate] || [];
-      const newNote = `회의록 ${selectedDate}(${currentNotes.length + 1})`;
-      newNotes[selectedDate] = [...currentNotes, newNote];
-      return newNotes;
-    });
-  };
+  
 
   return (
     <PageContainer>
@@ -132,63 +118,13 @@ function Homepage() {
         </div>
         </LoginContainer>
       </Header>
-    <div className="px-5 vh-100 d-flex flex-column">
-      <Header>
-        <LogoText>
-        <h1 style={{ fontWeight: 'bold',fontSize: '50px' }}>
-            <i className="bi bi-journal-bookmark-fill"></i> Meet Okey !
-        </h1>
-        </LogoText>
-        <LoginContainer>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '20px' }}>
-          {isLoggedIn ? (
-            <>
-              <p>Welcome! {username}</p>
-              <Button style={{ backgroundColor: '#D8BFD8', borderColor: '#D8BFD8' }} onClick={handleLogout}>
-          LogOut
-        </Button>
-            </>
-          ) : (
-            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginShow}>
-        LogIn
-      </Button>
-          )}
-        </div>
-        </LoginContainer>
-      </Header>
-
       <MainContainer>
 
       <MicButton style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2' }} onClick={handleMicClick}>📢 회의록 추가</MicButton>
         
       </MainContainer>
-      <MainContainer>
+      
 
-      <MicButton style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2' }} onClick={handleMicClick}>📢 회의록 추가</MicButton>
-        
-      </MainContainer>
-
-      <MeetingSection>
-        <NoteContainer>
-        <div className="col-12 p-3">
-        <div className="note-title">{selectedDate}의 회의록</div> {/* 제목 추가 */}
-   
-          <ul className="list-group">
-        {notes[selectedDate] && notes[selectedDate].length > 0 ? (
-          notes[selectedDate].map((note, index) => (
-            <li key={index} className="list-group-item">{note}</li>
-          ))
-        ) : (
-          <li className="list-group-item">해당 날짜의 회의록이 없습니다.</li>
-        )}
-      </ul>
-        </div>
-        </NoteContainer>
-        
-        <div className="col-4 p-3">
-          <h4>Calender</h4>
-          <StyledCalendar
-            onChange={(date) => setSelectedDate(date.toLocaleDateString("ko-KR").replace(/\. /g, "-").replace(/\.$/, ""))}
       <MeetingSection>
         <NoteContainer>
         <div className="col-12 p-3">
@@ -214,13 +150,7 @@ function Homepage() {
             className="custom-calendar"
           />
         </div>
-        
-        
-      </MeetingSection>
-        </div>
-        
-        
-      </MeetingSection>
+        </MeetingSection>
 
       {/* LogIn Modal */}
         <Modal show={showLogin} onHide={handleLoginClose}>
@@ -283,7 +213,7 @@ function Homepage() {
     </div>
     </PageContainer>
   );
-}
+};
 
 export default Homepage;
 
