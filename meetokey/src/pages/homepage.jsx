@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -22,17 +22,50 @@ function Homepage() {
     setShowRegister(true);
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setUsername('UserName'); // 실제 구현에서는 입력된 사용자 이름 사용
-    setShowLogin(false);
+  //login, logout 기능
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = JSON.parse(atob(token.split(".")[1])); // JWT 디코딩
+        setUsername(decoded.username);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Invalid token", error);
+      }
+    }
+  }, []); 
+
+  const handleLogin = async () => {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!response.ok) throw new Error("로그인 실패");
+
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      alert("로그인 성공");
+      setUsername(username);
+      setIsLoggedIn(true);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUsername("");
     setIsLoggedIn(false);
-    setUsername('');
   };
 
+  //회의록
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
 
