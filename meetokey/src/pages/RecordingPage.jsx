@@ -55,7 +55,7 @@ const RecordingPage = () => {
             const stream = await getAudioStream();
             if (!stream) return;
 
-            const websocket = new WebSocket("ws://localhost:8000/ws/audio");
+            const websocket = new WebSocket("http://112.152.14.116:25210/ws/audio");
             websocketRef.current = websocket;
 
             websocket.onopen = () => {
