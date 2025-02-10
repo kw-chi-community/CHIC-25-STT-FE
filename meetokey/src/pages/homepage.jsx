@@ -36,24 +36,33 @@ function Homepage() {
     }
   }, []); 
 
+    // 로그인 폼 필드 상태
+    const [loginUserID, setLoginUserID] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+  
+
   const handleLogin = async () => {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
+    // FormData 객체를 사용하여 Form 데이터를 구성합니다.
+    const formData = new FormData();
+    formData.append("userid", loginUserID);
+    formData.append("password", loginPassword);
+  
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      // 백엔드 URL: 112.152.14.116:25114/users/login
+      const response = await fetch("http://112.152.14.116:25114/users/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: formData,
       });
-
+  
       if (!response.ok) throw new Error("로그인 실패");
-
+  
       const data = await response.json();
-      localStorage.setItem("token", data.token);
+      // 백엔드에서 "access_token"과 "token_type"을 반환한다고 가정합니다.
+      localStorage.setItem("token", data.access_token);
       alert("로그인 성공");
-      setUsername(username);
+      setUsername(loginUserID);
       setIsLoggedIn(true);
+      setShowLogin(false);
     } catch (error) {
       alert(error.message);
     }
@@ -141,26 +150,42 @@ function Homepage() {
         
       </MeetingSection>
 
-      <Modal show={showLogin} onHide={handleLoginClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>LogIn</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input type="text" className="form-control mb-2" placeholder="ID" />
-          <input type="password" className="form-control mb-2" placeholder="Password" />
-        </Modal.Body>
-        <Modal.Footer>
-        <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginClose}>
-      Close
-    </Button>
-    <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLogin}>
-      LogIn
-    </Button>
-    <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegisterShow}>
-      SignUp
-    </Button>
-     </Modal.Footer>
-      </Modal>
+      {/* LogIn Modal */}
+        <Modal show={showLogin} onHide={handleLoginClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>LogIn</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type="text"
+              id="loginUserID"
+              className="form-control mb-2"
+              placeholder="ID"
+              value={loginUserID}
+              onChange={(e) => setLoginUserID(e.target.value)}
+            />
+            <input
+              type="password"
+              id="loginPassword"
+              className="form-control mb-2"
+              placeholder="Password"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginClose}>
+              Close
+            </Button>
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLogin}>
+              LogIn
+            </Button>
+            <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegisterShow}>
+              SignUp
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
 
       <Modal show={showRegister} onHide={handleRegisterClose}>
         <Modal.Header closeButton>
