@@ -47,6 +47,10 @@ function Homepage() {
     const formData = new FormData();
     formData.append("userid", loginUserID);
     formData.append("password", loginPassword);
+
+    console.log("loginUserID:", loginUserID);
+    console.log("loginPassword:", loginPassword);
+
   
     try {
       // 백엔드 URL: 112.152.14.116:25114/users/login
