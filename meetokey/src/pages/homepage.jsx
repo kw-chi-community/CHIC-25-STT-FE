@@ -76,10 +76,40 @@ function Homepage() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUsername("");
-    localStorage.removeItem("token");
-    setUsername("");
     setIsLoggedIn(false);
   };
+
+    // 회원가입 폼 필드 상태
+    const [registerName, setRegisterName] = useState('');
+    const [registerUserID, setRegisterUserID] = useState('');
+    const [registerPassword, setRegisterPassword] = useState('');
+
+    // 회원가입 요청 함수
+    const handleRegister = async () => {
+      try {
+        // 백엔드 URL: 112.152.14.116:25114/users/
+        const response = await fetch("http://112.152.14.116:25114/users/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: registerName,   // 사용자의 이름 (예: 한글 이름)
+            userid: registerUserID,   // 로그인 아이디 (유니크)
+            password: registerPassword,
+          }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || "회원가입 실패");
+        }
+
+        alert("회원가입 성공! 로그인 해주세요.");
+        setShowRegister(false);
+        setShowLogin(true);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
 
   //회의록
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
@@ -193,27 +223,42 @@ function Homepage() {
         </Modal>
 
 
-      <Modal show={showRegister} onHide={handleRegisterClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>SignUp</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input type="text" className="form-control mb-2" placeholder="Name" />
-          <input type="text" className="form-control mb-2" placeholder="ID" />
-          <input type="password" className="form-control mb-2" placeholder="Password" />
-        </Modal.Body>
-        <Modal.Footer>
-        <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleRegisterClose}>
-      Close
-    </Button>
-    <Button
-      style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }}
-      onClick={() => { setShowRegister(false); setShowLogin(true); }}
-    >
-      SignUp
-    </Button>
-      </Modal.Footer>
-      </Modal>
+        <Modal show={showRegister} onHide={handleRegisterClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>SignUp</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type="text"
+              className="form-control mb-2"
+              placeholder="Name"
+              value={registerName}
+              onChange={(e) => setRegisterName(e.target.value)}
+            />
+            <input
+              type="text"
+              className="form-control mb-2"
+              placeholder="ID"
+              value={registerUserID}
+              onChange={(e) => setRegisterUserID(e.target.value)}
+            />
+            <input
+              type="password"
+              className="form-control mb-2"
+              placeholder="Password"
+              value={registerPassword}
+              onChange={(e) => setRegisterPassword(e.target.value)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleRegisterClose}>
+              Close
+            </Button>
+            <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegister}>
+              SignUp
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
     </PageContainer>
   );
