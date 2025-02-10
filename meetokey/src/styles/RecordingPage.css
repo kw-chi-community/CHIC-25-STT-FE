@@ -1,0 +1,187 @@
+/* 🌟 전체 페이지 스타일 */
+.recording-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #f5f3ff, #ffffff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+}
+
+/* 🌟 헤더 스타일 */
+.header {
+    background: linear-gradient(to right, #6b3dff, #4b2dd9);
+    color: white;
+    padding: 16px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 🌟 녹음 컨트롤 버튼 */
+.recording-controls {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.recording-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+/* 🎙 녹음 시작 버튼 */
+.start-button {
+    background: linear-gradient(to right, #6b3dff, #4b2dd9);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-button:hover {
+    background: linear-gradient(to right, #5a32e0, #3b1ac2);
+}
+
+/* 🛑 녹음 중지 버튼 */
+.stop-button {
+    background: linear-gradient(to right, #ff4d4d, #d92626);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.stop-button:hover {
+    background: linear-gradient(to right, #e02a2a, #b61e1e);
+}
+
+/* 🌟 녹음 상태 */
+.recording-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #6b3dff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recording-status.active {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.recording-status.inactive {
+    border-color: #6b3dff;
+    color: #6b3dff;
+}
+
+/* 🌟 타이머 */
+.timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    color: #6b3dff;
+}
+
+/* 🌟 오디오 플레이어 */
+.audio-player {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.play-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #6b3dff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+}
+
+/* 🌟 모달 스타일 */
+.recording-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-button {
+    background: linear-gradient(to right, #6b3dff, #4b2dd9);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.modal-button:hover {
+    background: linear-gradient(to right, #5a32e0, #3b1ac2);
+}
+
+/* 🌟 토픽 스위처 */
+.topic-switcher {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.topic-input {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}

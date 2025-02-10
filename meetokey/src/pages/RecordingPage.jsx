@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import "../styles/RecordingPage.css"; // ✅ CSS 파일 import 추가
+
 import RecordingModal from "../components/RecordingComponents/Modal";
 import Header from "../components/RecordingComponents/Header";
 import Timer from "../components/RecordingComponents/Timer";
@@ -6,6 +8,9 @@ import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import RecordingControls from "../components/RecordingComponents/RecordingControls";
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
 import AudioPlayer from "../components/RecordingComponents/AudioPlayer";
+
+
+
 
 const RecordingPage = () => {
     const [isRecording, setIsRecording] = useState(false);
