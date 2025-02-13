@@ -98,6 +98,10 @@ function Homepage() {
           }),
         });
 
+        console.log("registerName:", registerName);
+        console.log("registerUserID:", registerUserID);
+        console.log("registerPassword:", registerPassword);
+
         if (!response.ok) {
           const errData = await response.json();
           throw new Error(errData.detail || "회원가입 실패");
