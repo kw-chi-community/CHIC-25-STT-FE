@@ -9,7 +9,7 @@ import RecordingControls from "../components/RecordingComponents/RecordingContro
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
 import AudioPlayer from "../components/RecordingComponents/AudioPlayer";
 
-
+import { useLocation } from 'react-router-dom';
 
 
 const RecordingPage = () => {
@@ -24,8 +24,16 @@ const RecordingPage = () => {
     const websocketRef = useRef(null);
     const audioChunks = useRef([]);
 
+
+    //JWT 토큰
+    const location = useLocation();
+    const { token } = location.state || {};  // 상태로 전달된 token
+
     // 타이머 관리
     useEffect(() => {
+        // 토큰 확인하기
+         console.log('Received Token:', token);
+
         let interval;
         if (isRecording) {
             interval = setInterval(() => setSeconds((prev) => prev + 1), 1000);
@@ -34,7 +42,7 @@ const RecordingPage = () => {
             setSeconds(0);
         }
         return () => clearInterval(interval);
-    }, [isRecording]);
+    }, [isRecording, token]);
 
     // 오디오 스트림 가져오기
     const getAudioStream = async () => {

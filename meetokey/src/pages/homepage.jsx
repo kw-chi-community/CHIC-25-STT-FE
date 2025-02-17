@@ -5,6 +5,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Modal, Button } from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useNavigate } from 'react-router-dom';
+
 import mic from '../assets/imgs/mic-remove.png';
 
 function Homepage() {
@@ -119,6 +121,8 @@ function Homepage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
 
+  const navigate = useNavigate();
+
   const handleMicClick = () => {
     setNotes((prevNotes) => {
       const newNotes = { ...prevNotes };
@@ -127,6 +131,13 @@ function Homepage() {
       newNotes[selectedDate] = [...currentNotes, newNote];
       return newNotes;
     });
+
+
+  // JWT 토큰 가져오기
+  const token = localStorage.getItem("token");
+
+    // Recording 페이지로 이동
+    navigate('/recording', { state: { token } });
   };
   
 
@@ -339,26 +350,21 @@ const MicButton = styled.button`
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  font-size: 35px;
   display: flex;
   align-items: center;
-  gap: 8px;
 
+  /* 호버 효과 추가 */
   &:hover {
-    background-color: #0056b3;
+    background-color: #C9C7EC !important; /* 배경색을 어두운 파란색으로 변경 */
+    transform: scale(1.05); /* 버튼 크기를 5% 정도 키움 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
   }
-  align-items: center;
-  gap: 8px;
-
-  &:hover {
-    background-color: #0056b3;
-  }
+  
 `;
+
 const MeetingSection = styled.div`
   height: 60%;
   display: flex;
