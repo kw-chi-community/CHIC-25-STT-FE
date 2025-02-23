@@ -5,6 +5,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Modal, Button } from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useNavigate } from 'react-router-dom';
+
 import mic from '../assets/imgs/mic-remove.png';
 
 function Homepage() {
@@ -12,6 +14,7 @@ function Homepage() {
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
+ 
  
 
   const handleLoginClose = () => setShowLogin(false);
@@ -36,24 +39,37 @@ function Homepage() {
     }
   }, []); 
 
+    // 로그인 폼 필드 상태
+    const [loginUserID, setLoginUserID] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+  
+
   const handleLogin = async () => {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    // FormData 객체를 사용하여 Form 데이터를 구성합니다.
+    const formData = new FormData();
+    formData.append("userid", loginUserID);
+    formData.append("password", loginPassword);
 
+    console.log("loginUserID:", loginUserID);
+    console.log("loginPassword:", loginPassword);
+
+  
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      // 백엔드 URL: 112.152.14.116:25114/users/login
+      const response = await fetch("http://112.152.14.116:25114/users/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: formData,
       });
-
+  
       if (!response.ok) throw new Error("로그인 실패");
-
+  
       const data = await response.json();
-      localStorage.setItem("token", data.token);
+      // 백엔드에서 "access_token"과 "token_type"을 반환한다고 가정합니다.
+      localStorage.setItem("token", data.access_token);
       alert("로그인 성공");
-      setUsername(username);
+      setUsername(loginUserID);
       setIsLoggedIn(true);
+      setShowLogin(false);
     } catch (error) {
       alert(error.message);
     }
@@ -65,9 +81,47 @@ function Homepage() {
     setIsLoggedIn(false);
   };
 
+    // 회원가입 폼 필드 상태
+    const [registerName, setRegisterName] = useState('');
+    const [registerUserID, setRegisterUserID] = useState('');
+    const [registerPassword, setRegisterPassword] = useState('');
+
+    // 회원가입 요청 함수
+    const handleRegister = async () => {
+      try {
+        // 백엔드 URL: 112.152.14.116:25114/users/
+        const response = await fetch("http://112.152.14.116:25114/users/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: registerName,   // 사용자의 이름 (예: 한글 이름)
+            userid: registerUserID,   // 로그인 아이디 (유니크)
+            password: registerPassword,
+          }),
+        });
+
+        console.log("registerName:", registerName);
+        console.log("registerUserID:", registerUserID);
+        console.log("registerPassword:", registerPassword);
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || "회원가입 실패");
+        }
+
+        alert("회원가입 성공! 로그인 해주세요.");
+        setShowRegister(false);
+        setShowLogin(true);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
   //회의록
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
+
+  const navigate = useNavigate();
 
   const handleMicClick = () => {
     setNotes((prevNotes) => {
@@ -77,7 +131,15 @@ function Homepage() {
       newNotes[selectedDate] = [...currentNotes, newNote];
       return newNotes;
     });
+
+
+  // JWT 토큰 가져오기
+  const token = localStorage.getItem("token");
+
+    // Recording 페이지로 이동
+    navigate('/recording', { state: { token } });
   };
+  
 
   return (
     <PageContainer>
@@ -105,12 +167,12 @@ function Homepage() {
         </div>
         </LoginContainer>
       </Header>
-
       <MainContainer>
 
       <MicButton style={{ backgroundColor: '#9275BF', borderColor: '#9275BF' }} onClick={handleMicClick}>🎙️ </MicButton>
         
       </MainContainer>
+      
 
       <MeetingSection>
         <NoteContainer>
@@ -139,60 +201,90 @@ function Homepage() {
         </div></CalenderContainer>
         
         </MeetingSection>
-        
-        
 
-      <Modal show={showLogin} onHide={handleLoginClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>LogIn</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input type="text" className="form-control mb-2" placeholder="ID" />
-          <input type="password" className="form-control mb-2" placeholder="Password" />
-        </Modal.Body>
-        <Modal.Footer>
-        <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginClose}>
-      Close
-    </Button>
-    <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLogin}>
-      LogIn
-    </Button>
-    <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegisterShow}>
-      SignUp
-    </Button>
-     </Modal.Footer>
-      </Modal>
+      {/* LogIn Modal */}
+        <Modal show={showLogin} onHide={handleLoginClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>LogIn</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type="text"
+              id="loginUserID"
+              className="form-control mb-2"
+              placeholder="ID"
+              value={loginUserID}
+              onChange={(e) => setLoginUserID(e.target.value)}
+            />
+            <input
+              type="password"
+              id="loginPassword"
+              className="form-control mb-2"
+              placeholder="Password"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginClose}>
+              Close
+            </Button>
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLogin}>
+              LogIn
+            </Button>
+            <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegisterShow}>
+              SignUp
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-      <Modal show={showRegister} onHide={handleRegisterClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>SignUp</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input type="text" className="form-control mb-2" placeholder="Name" />
-          <input type="text" className="form-control mb-2" placeholder="ID" />
-          <input type="password" className="form-control mb-2" placeholder="Password" />
-        </Modal.Body>
-        <Modal.Footer>
-        <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleRegisterClose}>
-      Close
-    </Button>
-    <Button
-      style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }}
-      onClick={() => { setShowRegister(false); setShowLogin(true); }}
-    >
-      SignUp
-    </Button>
-      </Modal.Footer>
-      </Modal>
+
+        <Modal show={showRegister} onHide={handleRegisterClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>SignUp</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type="text"
+              className="form-control mb-2"
+              placeholder="Name"
+              value={registerName}
+              onChange={(e) => setRegisterName(e.target.value)}
+            />
+            <input
+              type="text"
+              className="form-control mb-2"
+              placeholder="ID"
+              value={registerUserID}
+              onChange={(e) => setRegisterUserID(e.target.value)}
+            />
+            <input
+              type="password"
+              className="form-control mb-2"
+              placeholder="Password"
+              value={registerPassword}
+              onChange={(e) => setRegisterPassword(e.target.value)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleRegisterClose}>
+              Close
+            </Button>
+            <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegister}>
+              SignUp
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
     </PageContainer>
   );
-}
+};
 
 export default Homepage;
 
 const PageContainer = styled.div`
   height: 100vh;
+  background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
   background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
   display: flex;
   flex-direction: column;
@@ -209,6 +301,8 @@ const Header = styled.div`
   color:#3A215B;
   justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
   position: relative; /* 절대 위치 요소를 위한 설정 */
+  justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
+  position: relative; /* 절대 위치 요소를 위한 설정 */
 `;
 
 const LogoText = styled.div`
@@ -216,9 +310,18 @@ const LogoText = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const LoginContainer = styled.div`
+display: flex;
+align-items: center;
+gap: 5px;
+position: absolute;
+right: 20px;
+font-size: 14px;
 display: flex;
 align-items: center;
 gap: 5px;
@@ -237,29 +340,29 @@ const MainContainer = styled.div`
 
 
 
+
+
 const MicButton = styled.button`
   margin-top: 20px;
   padding: 30px;
   background-color: #ffffff;
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 300px;
   cursor: pointer;
-  font-size: 120px;
+  font-size: 90px;
   display: flex;
   align-items: center;
-  gap: 8px;
 
+  /* 호버 효과 추가 */
   &:hover {
     background-color: #C9C7EC !important; /* 배경색을 어두운 파란색으로 변경 */
     transform: scale(1.1); /* 버튼 크기를 5% 정도 키움 */
     transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
-    background-color: #0056b3;
   }
+  
 `;
+
 const MeetingSection = styled.div`
   height: 60%;
   display: flex;
@@ -270,6 +373,7 @@ const MeetingSection = styled.div`
 
 const NoteContainer = styled.div`
   height: 100%;
+  width: 2000px;
   width: 2000px;
   padding: 12px 24px;
   display: flex;
@@ -316,6 +420,7 @@ const NoteContainer = styled.div`
 `;
 
 
+
 const CalenderContainer = styled.div`
   height: 100%;
   width: 500px;
@@ -323,7 +428,6 @@ const CalenderContainer = styled.div`
   align-items: center;
   background-color: #ffffff;
   justify-content: center; /* 캘린더를 중앙에 정렬 */
-  background-color: #ffffff;
   color: black;
   border: none;
   border-radius: 26px;
@@ -338,6 +442,7 @@ const StyledCalendar = styled(Calendar)`
   border: 1px solid #ffffff;
 
   .react-calendar__tile {
+    font-size: 18px !important;
     font-size: 18px !important;
     border-radius: 12px;
     transition: background-color 0.3s;
