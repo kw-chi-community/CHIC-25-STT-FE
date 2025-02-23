@@ -139,10 +139,8 @@ function Homepage() {
         </div></CalenderContainer>
         
         </MeetingSection>
-        </div>
         
         
-      </MeetingSection>
 
       <Modal show={showLogin} onHide={handleLoginClose}>
         <Modal.Header closeButton>
@@ -249,10 +247,8 @@ const MicButton = styled.button`
   color: white;
   border: none;
   border-radius: 300px;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 90px;
-  font-size: 16px;
+  font-size: 120px;
   display: flex;
   align-items: center;
   gap: 8px;
