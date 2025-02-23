@@ -120,6 +120,36 @@ function Homepage() {
   //회의록
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
+  const [meetings,setMeetings] = useState([]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchMeetingsByDate(selectedDate);
+    }
+  }, [selectedDate, isLoggedIn]);
+
+  const fetchMeetingsByDate = async (date) => {
+    const token = localStorage.getItem("token");
+    const [year, month, day] = date.split("-");
+    const apiUrl = `http://localhost:3000/meetings/by-date/${year}/${month}/${day}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Meetings not found");
+      }
+      const data = await response.json();
+      setMeetings(data);
+    } catch (error) {
+      alert(error.message);
+      setMeetings([]);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -127,7 +157,7 @@ function Homepage() {
     setNotes((prevNotes) => {
       const newNotes = { ...prevNotes };
       const currentNotes = newNotes[selectedDate] || [];
-      const newNote = `회의록 ${selectedDate}(${currentNotes.length + 1})`;
+      const newNote = `Meeting note ${selectedDate}(${currentNotes.length + 1})`;
       newNotes[selectedDate] = [...currentNotes, newNote];
       return newNotes;
     });
@@ -177,17 +207,17 @@ function Homepage() {
       <MeetingSection>
         <NoteContainer>
         <div className="col-12 p-3">
-        <div className="note-title">{selectedDate}의 회의록</div> {/* 제목 추가 */}
+        <div className="note-title">{selectedDate} Meeting Notes</div> {/* 제목 추가 */}
    
-          <ul className="list-group">
-        {notes[selectedDate] && notes[selectedDate].length > 0 ? (
-          notes[selectedDate].map((note, index) => (
-            <li key={index} className="list-group-item">{note}</li>
-          ))
-        ) : (
-          <li className="list-group-item">해당 날짜의 회의록이 없습니다.</li>
-        )}
-      </ul>
+        <ul className="list-group">
+                {meetings.length > 0 ? (
+                  meetings.map((meeting, index) => (
+                    <li key={index} className="list-group-item">{`Meeting ID: ${meeting.id}`}</li>
+                  ))
+                ) : (
+                  <li className="list-group-item">No meetings found for this date</li>
+                )}
+              </ul>
         </div>
         </NoteContainer>
         <CalenderContainer>
