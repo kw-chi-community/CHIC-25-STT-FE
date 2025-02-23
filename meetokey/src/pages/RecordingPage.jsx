@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/RecordingPage.css"; // ✅ CSS 파일 import 추가
 
+import { useNavigate } from 'react-router-dom';
+
 import RecordingModal from "../components/RecordingComponents/Modal";
 import Header from "../components/RecordingComponents/Header";
 import Timer from "../components/RecordingComponents/Timer";
@@ -12,7 +14,9 @@ import AudioPlayer from "../components/RecordingComponents/AudioPlayer";
 import { useLocation } from 'react-router-dom';
 
 
+
 const RecordingPage = () => {
+    const navigate = useNavigate();
     const [isRecording, setIsRecording] = useState(false);
     const [showModal, setShowModal] = useState(true);
     const [meetingName, setMeetingName] = useState("");
@@ -26,9 +30,11 @@ const RecordingPage = () => {
 
 
     //JWT 토큰
-    const location = useLocation();
-    const { token } = location.state || {};  // 상태로 전달된 token
-
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/"); // 토큰이 없으면 홈(/)으로 리디렉트
+    }
+    
     // 타이머 관리
     useEffect(() => {
         // 토큰 확인하기
