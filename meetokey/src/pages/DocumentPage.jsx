@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MeetingHeader from "../components/DocumentComponents/MeetingHeader";
 import MeetingTopics from "../components/DocumentComponents/MeetingTopics";
 import MeetingSummary from "../components/DocumentComponents/MeetingSummary";
@@ -6,6 +7,7 @@ import AudioPlayback from "../components/DocumentComponents/AudioPlayback";
 import SearchBar from "../components/DocumentComponents/SearchBar";
 
 const DocumentPage = () => {
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
     const [meetingData, setMeetingData] = useState({
         meetingDate: "2023년 3월 23일 오후 4:52",
@@ -35,6 +37,14 @@ const DocumentPage = () => {
         audioUrl: "/path/to/audio.mp3" // 녹음본 URL
     });
 
+    // JWT 토큰 확인 후 로그인 안 되어 있으면 홈으로 이동
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/");
+        }
+    }, [navigate]);
+
     // 검색 기능
     const filteredTopics = meetingData.topics.filter(
         (topic) =>
@@ -42,7 +52,7 @@ const DocumentPage = () => {
             topic.details.some((detail) => detail.includes(searchQuery))
     );
 
-    // 주제/세부 내용 삭제
+    // 주제 삭제
     const deleteTopic = (id) => {
         setMeetingData((prevData) => ({
             ...prevData,
@@ -50,6 +60,7 @@ const DocumentPage = () => {
         }));
     };
 
+    // 세부 내용 삭제
     const deleteDetail = (topicId, detailIndex) => {
         setMeetingData((prevData) => ({
             ...prevData,

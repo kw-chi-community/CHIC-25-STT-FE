@@ -1,4 +1,4 @@
-//현재 회의명과 주제를 화면 상단에 표시.
+// 현재 회의명과 주제를 화면 상단에 표시.
 import React from "react";
 
 const Header = ({ meetingName, topic }) => {

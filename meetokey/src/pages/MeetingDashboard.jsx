@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Play, Pause, Download, Search, Calendar, Clock, ChevronDown, Tag, MessageSquare, User, Info, RefreshCcw } from 'lucide-react';
 import '../styles/MeetingDashboard.css';
 
-
-
 const MeetingDashboard = () => {
+  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   
   const meetingData = {
@@ -55,6 +55,17 @@ const MeetingDashboard = () => {
       }
     ]
   };
+
+  // JWT 토큰 확인 후 로그인 안 되어 있으면 홈으로 이동
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("토큰 확인 중:", token);
+
+    if (!token) {
+      console.log("토큰 없음! 홈으로 이동");
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <div className="meeting-dashboard">

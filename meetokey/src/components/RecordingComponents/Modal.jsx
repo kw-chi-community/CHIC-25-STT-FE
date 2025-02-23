@@ -1,11 +1,16 @@
-//초기 설정(회의명, 주제)을 입력받는 모달 창.
+// 초기 설정(회의명, 주제)을 입력받는 모달 창.
 import React, { useState } from "react";
+import "../../styles/RecordingModal.css";  // ✅ CSS 파일 import
 
 const RecordingModal = ({ isOpen, onClose, onStart }) => {
     const [meetingName, setMeetingName] = useState("");
     const [topic, setTopic] = useState("");
 
     const handleStart = () => {
+        if (meetingName.trim() === "" || topic.trim() === "") {
+            alert("회의명과 주제를 입력하세요!");
+            return;
+        }
         onStart(meetingName, topic);
         onClose();
     };
@@ -13,27 +18,25 @@ const RecordingModal = ({ isOpen, onClose, onStart }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h2 className="text-lg font-bold mb-4">회의 정보 입력</h2>
+        <div className="modal-overlay">  {/* ✅ CSS 적용 */}
+            <div className="modal-content">  {/* ✅ CSS 적용 */}
+                <button className="close-button" onClick={onClose}>×</button>
+                <h2 className="modal-title">회의 정보 입력</h2>
                 <input
+                    className="modal-input"
                     type="text"
-                    placeholder="회의명 입력"
-                    className="w-full p-2 border rounded mb-2"
+                    placeholder="회의명을 입력하세요"
                     value={meetingName}
                     onChange={(e) => setMeetingName(e.target.value)}
                 />
                 <input
+                    className="modal-input"
                     type="text"
-                    placeholder="시작 주제 입력"
-                    className="w-full p-2 border rounded mb-2"
+                    placeholder="주제를 입력하세요"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                 />
-                <button
-                    className="bg-blue-500 text-white p-2 rounded w-full"
-                    onClick={handleStart}
-                >
+                <button className="modal-button" onClick={handleStart}>
                     시작하기
                 </button>
             </div>
