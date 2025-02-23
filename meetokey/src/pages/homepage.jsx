@@ -146,8 +146,8 @@ function Homepage() {
     <div className="px-5 vh-100 d-flex flex-column">
       <Header>
         <LogoText>
-        <h1 style={{ fontWeight: 'bold',fontSize: '50px' }}>
-            <i className="bi bi-journal-bookmark-fill"></i> Meet Okey !
+        <h1 style={{ fontWeight: 'bold',fontSize: '55px' }}>
+        📔 Meet Okey!
         </h1>
         </LogoText>
         <LoginContainer>
@@ -169,7 +169,7 @@ function Homepage() {
       </Header>
       <MainContainer>
 
-      <MicButton style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2' }} onClick={handleMicClick}>📢 회의록 추가</MicButton>
+      <MicButton style={{ backgroundColor: '#9275BF', borderColor: '#9275BF' }} onClick={handleMicClick}>🎙️ </MicButton>
         
       </MainContainer>
       
@@ -190,15 +190,16 @@ function Homepage() {
       </ul>
         </div>
         </NoteContainer>
-        
-        <div className="col-4 p-3">
-          <h4>Calender</h4>
+        <CalenderContainer>
+        <div className="col-4 p-3"style={{ textAlign: "center", width: "100%",marginLeft:"10px"}}>
+          <h3 style={{ marginBottom: "16px", textAlign: "left", fontWeight: "bold" }}>Calender</h3>
           <StyledCalendar
             onChange={(date) => setSelectedDate(date.toLocaleDateString("ko-KR").replace(/\. /g, "-").replace(/\.$/, ""))}
             value={new Date(selectedDate)}
             className="custom-calendar"
           />
-        </div>
+        </div></CalenderContainer>
+        
         </MeetingSection>
 
       {/* LogIn Modal */}
@@ -297,6 +298,7 @@ const Header = styled.div`
   height: 10%;
   display: flex;
   align-items: center;
+  color:#3A215B;
   justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
   position: relative; /* 절대 위치 요소를 위한 설정 */
   justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
@@ -342,24 +344,20 @@ const MainContainer = styled.div`
 
 const MicButton = styled.button`
   margin-top: 20px;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #007bff;
+  padding: 30px;
+  background-color: #ffffff;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 300px;
   cursor: pointer;
-  font-size: 35px;
+  font-size: 90px;
   display: flex;
   align-items: center;
 
   /* 호버 효과 추가 */
   &:hover {
     background-color: #C9C7EC !important; /* 배경색을 어두운 파란색으로 변경 */
-    transform: scale(1.05); /* 버튼 크기를 5% 정도 키움 */
+    transform: scale(1.1); /* 버튼 크기를 5% 정도 키움 */
     transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
   }
   
@@ -370,7 +368,7 @@ const MeetingSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px;
+  padding: 30px;
 `;
 
 const NoteContainer = styled.div`
@@ -390,13 +388,13 @@ const NoteContainer = styled.div`
 
 
   .note-title {
-    font-size: 18px;
+    font-size: 30px;
     font-weight: bold;
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    background: #f9f9f9;
+    background: #ffffff;
     padding: 5px 10px;
     border-radius: 5px;
     z-index: 10;
@@ -418,32 +416,7 @@ const NoteContainer = styled.div`
   position: relative; /* 내부 요소 고정 가능하도록 설정 */
 
 
-  .note-title {
-    font-size: 18px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #f9f9f9;
-    padding: 5px 10px;
-    border-radius: 5px;
-    z-index: 10;
-  }
-
-  .list-group {
-    width: 100%; /* 리스트 그룹이 컨테이너 너비를 꽉 채우도록 */
-    margin-top: 40px; /* 제목 아래에 공간 추가 */
-  }
-
-  .list-group-item {
-    background: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    border: none; /* 기존 list-group의 테두리 제거 */
-    width: 100%;
-  }
+ 
 `;
 
 
@@ -451,16 +424,14 @@ const NoteContainer = styled.div`
 const CalenderContainer = styled.div`
   height: 100%;
   width: 500px;
-  width: 500px;
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  background-color: #ffffff;
+  justify-content: center; /* 캘린더를 중앙에 정렬 */
   color: black;
   border: none;
   border-radius: 26px;
   flex-grow: 1;
-  box-shadow: 0px 4px 10px lightgray;
   box-shadow: 0px 4px 10px lightgray;
 `;
 
@@ -468,8 +439,7 @@ const StyledCalendar = styled(Calendar)`
   width: 100% !important;
   height: 400px !important;
   border-radius: 26px;
-  border: 1px solid #e6e6e6;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: 1px solid #ffffff;
 
   .react-calendar__tile {
     font-size: 18px !important;
