@@ -61,8 +61,11 @@ const MeetingDashboard = () => {
   //JWT토큰
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("토큰 확인 중:", token); // 로그 추가
+
     if (!token) {
-      navigate("/"); // ✅ useEffect 안에서 navigate 실행
+      console.log("토큰 없음! 홈으로 이동");
+      navigate("/"); // ✅ useEffect 내부에서 실행
     }
   }, [navigate]);
 
