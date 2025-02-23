@@ -129,6 +129,7 @@ function Homepage() {
   }, [selectedDate, isLoggedIn]);
 
   const fetchMeetingsByDate = async (date) => {
+    console.log("selected data:",date);
     const token = localStorage.getItem("token");
     const [year, month, day] = date.split("-");
     const apiUrl = `http://112.152.14.116:25114/meetings/by-date/${year}/${month}/${day}`;
