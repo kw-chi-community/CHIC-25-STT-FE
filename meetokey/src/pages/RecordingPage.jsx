@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import { useNavigate } from 'react-router-dom';
+
 import RecordingModal from "../components/RecordingComponents/Modal";
 import Header from "../components/RecordingComponents/Header";
 import Timer from "../components/RecordingComponents/Timer";
@@ -8,10 +10,12 @@ import RecordingControls from "../components/RecordingComponents/RecordingContro
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
 import AudioPlayer from "../components/RecordingComponents/AudioPlayer";
 
+import { useLocation } from 'react-router-dom';
 
 
 
 const RecordingPage = () => {
+    const navigate = useNavigate();
     const [isRecording, setIsRecording] = useState(false);
     const [showModal, setShowModal] = useState(true);
     const [meetingName, setMeetingName] = useState("");
@@ -23,8 +27,15 @@ const RecordingPage = () => {
     const websocketRef = useRef(null);
     const audioChunks = useRef([]);
 
+
     // 타이머 관리
     useEffect(() => {
+        //JWT 토큰
+        const token = localStorage.getItem("token");
+        if (!token) {
+        navigate("/"); // 토큰이 없으면 홈(/)으로 리디렉트
+        }
+        
         let interval;
         if (isRecording) {
             interval = setInterval(() => setSeconds((prev) => prev + 1), 1000);
@@ -33,7 +44,7 @@ const RecordingPage = () => {
             setSeconds(0);
         }
         return () => clearInterval(interval);
-    }, [isRecording]);
+    }, [isRecording, navigate]);
 
     // 🚀 오디오 스트림 가져오기 (마이크 권한 요청 & 설정 페이지 자동 열기)
 const getAudioStream = async () => {

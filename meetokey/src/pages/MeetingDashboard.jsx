@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Play, Pause, Download, Search, Calendar, Clock, ChevronDown, Tag, MessageSquare, User, Info, RefreshCcw } from 'lucide-react';
 import '../styles/MeetingDashboard.css';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const MeetingDashboard = () => {
+  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   
   const meetingData = {
@@ -54,7 +56,18 @@ const MeetingDashboard = () => {
         ]
       }
     ]
+    
   };
+  //JWT토큰
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("토큰 확인 중:", token); // 로그 추가
+
+    if (!token) {
+      console.log("토큰 없음! 홈으로 이동");
+      navigate("/"); // ✅ useEffect 내부에서 실행
+    }
+  }, [navigate]);
 
   return (
     <div className="meeting-dashboard">
