@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import MeetingHeader from "../components/DocumentComponents/MeetingHeader";
 import MeetingTopics from "../components/DocumentComponents/MeetingTopics";
 import MeetingSummary from "../components/DocumentComponents/MeetingSummary";
@@ -6,6 +7,7 @@ import AudioPlayback from "../components/DocumentComponents/AudioPlayback";
 import SearchBar from "../components/DocumentComponents/SearchBar";
 
 const DocumentPage = () => {
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
     const [meetingData, setMeetingData] = useState({
         meetingDate: "2023년 3월 23일 오후 4:52",
@@ -34,6 +36,8 @@ const DocumentPage = () => {
         keywords: ["플리마켓", "버스킹", "문화 마켓", "음악 공연", "빈티지 소품"],
         audioUrl: "/path/to/audio.mp3" // 녹음본 URL
     });
+    
+    
 
     // 검색 기능
     const filteredTopics = meetingData.topics.filter(
@@ -60,6 +64,14 @@ const DocumentPage = () => {
             )
         }));
     };
+    
+    //JWT 토큰
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/"); // ✅ useEffect 안에서 navigate 실행
+        }
+      }, [navigate]);
 
     return (
         <div className="p-6 space-y-6">

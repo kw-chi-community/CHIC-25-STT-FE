@@ -29,17 +29,14 @@ const RecordingPage = () => {
     const audioChunks = useRef([]);
 
 
-    //JWT 토큰
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/"); // 토큰이 없으면 홈(/)으로 리디렉트
-    }
-    
     // 타이머 관리
     useEffect(() => {
-        // 토큰 확인하기
-         console.log('Received Token:', token);
-
+        //JWT 토큰
+        const token = localStorage.getItem("token");
+        if (!token) {
+        navigate("/"); // 토큰이 없으면 홈(/)으로 리디렉트
+        }
+        
         let interval;
         if (isRecording) {
             interval = setInterval(() => setSeconds((prev) => prev + 1), 1000);
@@ -48,7 +45,7 @@ const RecordingPage = () => {
             setSeconds(0);
         }
         return () => clearInterval(interval);
-    }, [isRecording, token]);
+    }, [isRecording, navigate]);
 
     // 오디오 스트림 가져오기
     const getAudioStream = async () => {
