@@ -23,7 +23,6 @@ const RecordingPage = () => {
     const websocketRef = useRef(null);
     const audioChunks = useRef([]);
 
-    // ✅ JWT 토큰 확인 후 로그인 안 되어 있으면 홈으로 이동
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -40,7 +39,6 @@ const RecordingPage = () => {
         return () => clearInterval(interval);
     }, [isRecording, navigate]);
 
-    // 🚀 오디오 스트림 가져오기 (마이크 권한 요청 & 설정 페이지 자동 열기)
     const getAudioStream = async () => {
         try {
             console.log("🎤 마이크 권한 요청 중...");
@@ -54,14 +52,12 @@ const RecordingPage = () => {
             if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
                 alert("🚨 마이크 사용이 허용되지 않았습니다. 브라우저 설정에서 변경해주세요.");
                 
-                // 크롬(Chrome) 설정 페이지 열기
                 window.open("chrome://settings/content/microphone", "_blank");
             }
             return null;
         }
     };
 
-    // 🔴 녹음 시작 함수
     const startRecording = async () => {
         try {
             const stream = await getAudioStream();
@@ -122,7 +118,6 @@ const RecordingPage = () => {
         }
     };
 
-    // 🛑 녹음 중지 함수
     const stopRecording = () => {
         if (mediaRecorderRef.current) {
             mediaRecorderRef.current.stop();
@@ -140,7 +135,7 @@ const RecordingPage = () => {
     };
 
     return (
-        <div className="p-6 flex flex-col items-center">
+        <div className="recording-page">
             {showModal ? (
                 <RecordingModal
                     isOpen={showModal}
@@ -169,4 +164,5 @@ const RecordingPage = () => {
     );
 };
 
+// ✅ **🚀 export는 최상위에 위치해야 함!**
 export default RecordingPage;

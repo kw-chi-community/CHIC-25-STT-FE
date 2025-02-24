@@ -10,18 +10,51 @@
     padding: 16px;
   }
   
-  /* Header */
-  .header {
-    background-color: #6b3dff;
-    color: white;
-    padding: 16px;
-  }
-  
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
+  /* 🌟 Header 스타일 - 회의 정보를 돋보이게! */
+.header-container {
+  background: rgba(255, 255, 255, 0.3); /* 반투명한 배경 */
+  border-left: 6px solid #5E3AA1; /* 왼쪽 보라색 포인트 바 */
+  border-radius: 12px;
+  padding: 20px 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 700px;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* 🌟 Header Hover 효과 */
+.header-container:hover {
+  transform: scale(1.02);
+}
+
+/* 🌟 회의명 스타일 - 더 크고 강조! */
+.header-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #3A215B; /* 진한 보라 */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase; /* 대문자로 강조 */
+  letter-spacing: 1.5px;
+}
+
+/* 🌟 주제 스타일 - 회의 개요처럼 보이게 */
+.header-topic {
+  font-size: 1.25rem;
+  color: #5E3AA1; /* 연한 보라 */
+  font-weight: 600;
+  font-style: italic;
+  margin-top: 8px;
+  padding: 5px 10px;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  border: 1px solid #5E3AA1;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
   
   .title {
     font-size: 1.25rem;
