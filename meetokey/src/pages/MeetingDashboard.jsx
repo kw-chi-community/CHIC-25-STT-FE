@@ -61,15 +61,18 @@ const MeetingDashboard = () => {
     const token = localStorage.getItem("token");
     console.log("토큰 확인 중:", token);
 
-    if (!token) {
+    /*if (!token) {
       console.log("토큰 없음! 홈으로 이동");
       navigate("/");
-    }
+    }*/
   }, [navigate]);
 
   return (
     <div className="meeting-dashboard">
-      <div className="header">
+      <div className='header' >
+      <h1 className= "logotext" style={{ fontWeight: 'bold', fontSize: '55px' }}>
+              📔 Meet Okey!
+            </h1>
         <div className="container">
           <div className="header-content">
             <h1 className="title">{meetingData.title}</h1>

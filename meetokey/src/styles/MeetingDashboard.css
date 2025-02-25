@@ -1,285 +1,229 @@
 /* General styles */
+
+
+/* 전체 페이지 스타일 */
 .meeting-dashboard {
-    min-height: 100vh;
-    background-color: #f9f9f9;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 16px;
-  }
-  
-  /* 🌟 Header 스타일 - 회의 정보를 돋보이게! */
-.header-container {
-  background: rgba(255, 255, 255, 0.3); /* 반투명한 배경 */
-  border-left: 6px solid #5E3AA1; /* 왼쪽 보라색 포인트 바 */
-  border-radius: 12px;
-  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(12px);
-  margin-bottom: 20px;
-  width: 90%;
-  max-width: 700px;
-  transition: transform 0.2s ease-in-out;
+  
+  background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
+}
+.logo {
+  margin-top: 15px;
+  position: fixed;
+  gap:30px;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 80px; /* 로고 영역 높이 조정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* 다른 요소들보다 위에 위치 */
 }
 
-/* 🌟 Header Hover 효과 */
-.header-container:hover {
-  transform: scale(1.02);
-}
-
-/* 🌟 회의명 스타일 - 더 크고 강조! */
-.header-title {
-  font-size: 2.5rem;
+.logotext {
+  font-size: 50px;
   font-weight: bold;
-  color: #3A215B; /* 진한 보라 */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  text-transform: uppercase; /* 대문자로 강조 */
-  letter-spacing: 1.5px;
+  color: #3A215B;
 }
 
-/* 🌟 주제 스타일 - 회의 개요처럼 보이게 */
-.header-topic {
-  font-size: 1.25rem;
-  color: #5E3AA1; /* 연한 보라 */
-  font-weight: 600;
-  font-style: italic;
-  margin-top: 8px;
+
+/* 헤더 스타일 */
+.header {
+  width: 100%;
+  color: rgb(8, 8, 8);
+  padding:rgb(0, 0, 0)x;
+  border-radius: 10px;
+}
+
+.title {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.date-time {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.date, .time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* 태그 스타일 */
+.tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.tag {
+  background-color: white;
+  color: #6a0dad;
   padding: 5px 10px;
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 6px;
-  border: 1px solid #5E3AA1;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #6a0dad;
 }
 
-  
-  .title {
-    font-size: 1.25rem;
-    font-weight: bold;
-  }
-  
-  .date-time {
-    display: flex;
-    gap: 16px;
-    font-size: 0.875rem;
-  }
-  
-  .date, .time {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  
-  .tag {
-    padding: 4px 8px;
-    background-color: #6b3dff;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  
-  .tag-icon {
-    width: 12px;
-    height: 12px;
-  }
-  
-  /* Audio player */
-  .audio-player {
-    background-color: white;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 16px;
-  }
-  
-  .audio-controls {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  
-  .play-button {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #6b3dff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-  }
-  
-  .icon-small {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .progress-bar {
-    flex-grow: 1;
-    height: 8px;
-    background-color: #f1f1f1;
-    border-radius: 4px;
-  }
-  
-  .progress {
-    width: 33%;
-    height: 100%;
-    background-color: #6b3dff;
-    border-radius: 4px;
-  }
-  
-  .time-info {
-    font-size: 0.75rem;
-    color: #7d7d7d;
-  }
-  
-  .download-button {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: #6b3dff;
-    font-size: 0.875rem;
-  }
-  
-  /* Main content */
-  .main-content {
-    display: flex;
-    gap: 16px;
-  }
-  
-  .conversations {
-    flex: 1;
-    padding: 16px;
-    border-right: 1px solid #e5e5e5;
-  }
-  
-  .search-bar {
-    position: relative;
-    margin-bottom: 16px;
-  }
-  
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    color: #b1b1b1;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 8px 16px;
-    padding-left: 36px;
-    font-size: 0.875rem;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-  }
-  
-  .conversation-list {
-    margin-top: 16px;
-  }
-  
-  .conversation {
-    background-color: white;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 16px;
-  }
-  
-  .conversation-header {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  
-  .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .purple .avatar-icon {
-    color: #6b3dff;
-  }
-  
-  .blue .avatar-icon {
-    color: #1c64f2;
-  }
-  
-  .green .avatar-icon {
-    color: #10b981;
-  }
-  
-  .speaker {
-    font-weight: 500;
-  }
-  
-  .time {
-    font-size: 0.75rem;
-    color: #7d7d7d;
-  }
-  
-  .content {
-    margin-left: 40px;
-    font-size: 0.875rem;
-    color: #4b4b4b;
-  }
-  
-  /* Summary dashboard */
-  .summary-dashboard {
-    width: 320px;
-    padding: 16px;
-    background-color: white;
-  }
-  
-  .summary-section {
-    margin-bottom: 24px;
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  
-  .section-title {
-    font-weight: 500;
-    display: flex;
-    gap: 4px;
-    align-items: center;
-  }
-  
-  .section-items {
-    list-style: none;
-    padding-left: 20px;
-  }
-  
-  .item {
-    font-size: 0.875rem;
-    color: #4b4b4b;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  
-  .bullet {
-    width: 6px;
-    height: 6px;
-    background-color: #6b3dff;
-    border-radius: 50%;
-  }
-  
+.tag-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* 오디오 플레이어 */
+.audio-player {
+  width: 100%;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.play-button, .download-button {
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.progress-bar {
+  width: 50%;
+  height: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  width: 33%;
+  height: 100%;
+  background: #6a0dad;
+}
+
+.time-info {
+  font-size: 14px;
+}
+
+/* 대화 목록 */
+.conversations {
+  width: 100%;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #000000;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex-grow: 1;
+}
+
+.conversation-list {
+  margin-top: 15px;
+}
+
+.conversation {
+  background: #f0ecf3;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.conversation-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.purple { background-color: #6a0dad; }
+.blue { background-color: #4a90e2; }
+.green { background-color: #27ae60; }
+
+/* 요약 섹션 */
+.summary-dashboard {
+  width: 100%;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.section-items {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.bullet {
+  width: 8px;
+  height: 8px;
+  background: #6a0dad;
+  border-radius: 50%;
+}
