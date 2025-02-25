@@ -25,9 +25,9 @@ const RecordingPage = () => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!token) {
+        /*if (!token) {
             navigate("/");
-        }
+        }*/
 
         let interval;
         if (isRecording) {

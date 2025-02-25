@@ -93,7 +93,7 @@ const MeetingDashboard = () => {
         </div>
       </div>
 
-      <div className="audio-player">
+      <div className="audio-player2">
         <div className="container">
           <div className="audio-controls">
             <button onClick={() => setIsPlaying(!isPlaying)} className="play-button">

@@ -94,8 +94,8 @@
 }
 
 /* 오디오 플레이어 */
-.audio-player {
-  width: 100%;
+.audio-player2 {
+  width: 600px;
   background-color: white;
   padding: 15px;
   border-radius: 10px;
