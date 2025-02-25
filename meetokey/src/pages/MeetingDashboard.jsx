@@ -28,7 +28,7 @@ const MeetingDashboard = () => {
 
     const fetchMeetings = async () => {
       try {
-        const response = await axios.get("http://112.152.14.116:25113/api/meetings", {
+        const response = await axios.get("http://112.152.14.116:25114/api/meetings", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMeetings(response.data);
