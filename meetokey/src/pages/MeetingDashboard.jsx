@@ -4,11 +4,24 @@ import { Play, Pause, Download, Search, Calendar, Clock, Tag, User, Info, Refres
 import axios from 'axios';
 import '../styles/MeetingDashboard.css';
 
+// 시간을 00:00 형식으로 포맷팅하는 함수
+const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+};
+
 const MeetingDashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [meetingData, setMeetingData] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0); // currentTime 상태 추가
   const navigate = useNavigate();
+
+  // 프로그레스 바의 너비 계산
+  const progressWidth = meetingData && meetingData.audioDuration > 0
+    ? (currentTime / meetingData.audioDuration) * 100
+    : 0;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,6 +44,22 @@ const MeetingDashboard = () => {
     fetchMeetings();
   }, []);
 
+  useEffect(() => {
+    if (isPlaying && meetingData?.audioDuration) {
+      const interval = setInterval(() => {
+        setCurrentTime(prevTime => {
+          if (prevTime < meetingData.audioDuration) {
+            return prevTime + 1;
+          }
+          clearInterval(interval);
+          return prevTime;
+        });
+      }, 1000); // 1초마다 업데이트
+
+      return () => clearInterval(interval); // 컴포넌트 언마운트 시 interval 정리
+    }
+  }, [isPlaying, meetingData?.audioDuration]);
+
   return (
     <div className="meeting-dashboard">
       <div className="header">
@@ -41,19 +70,23 @@ const MeetingDashboard = () => {
         {meetingData ? (
           <div className="container">
             <div className="header-content">
-              <h1 className="title">{meetingData.title}</h1>
+              <h1 className="title">{meetingData.title || '회의 제목 없음'}</h1>
               <div className="date-time">
-                <span className="date"><Calendar className="icon" /> {meetingData.date}</span>
-                <span className="time"><Clock className="icon" /> {meetingData.time}</span>
+                <span className="date"><Calendar className="icon" /> {meetingData.date || '날짜 미제공'}</span>
+                <span className="time"><Clock className="icon" /> {meetingData.time || '시간 미제공'}</span>
               </div>
             </div>
 
             <div className="tags">
-              {meetingData.keyTopics?.map((topic, index) => (
-                <span key={index} className="tag">
-                  <Tag className="tag-icon" /> {topic}
-                </span>
-              ))}
+              {meetingData.keyTopics?.length > 0 ? (
+                meetingData.keyTopics.map((topic, index) => (
+                  <span key={index} className="tag">
+                    <Tag className="tag-icon" /> {topic}
+                  </span>
+                ))
+              ) : (
+                <span>📌 주요 토픽이 없습니다.</span>
+              )}
             </div>
           </div>
         ) : (
@@ -70,11 +103,11 @@ const MeetingDashboard = () => {
                   {isPlaying ? <Pause className="icon-small" /> : <Play className="icon-small" />}
                 </button>
                 <div className="progress-bar">
-                  <div className="progress" style={{ width: '33%' }}></div>
+                  <div className="progress" style={{ width: `${progressWidth}%` }}></div>
                 </div>
                 <div className="time-info">
-                  <span>00:00</span>
-                  <span>45:30</span>
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(meetingData.audioDuration)}</span>
                 </div>
                 <button className="download-button">
                   <Download className="icon-small" /> 다운로드
