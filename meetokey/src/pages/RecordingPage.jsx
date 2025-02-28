@@ -17,12 +17,11 @@ const RecordingPage = () => {
     const [meetingName, setMeetingName] = useState("");
     const [topic, setTopic] = useState("");
     const [seconds, setSeconds] = useState(0);
-    const [audioUrl, setAudioUrl] = useState(null);
+    const [audioUrl, setAudioUrl] = useState(null); // ✅ 녹음된 오디오 저장용
 
     const mediaRecorderRef = useRef(null);
-    const websocketRef = useRef(null);
-    const audioChunks = useRef([]);
-    const mediaStreamRef = useRef(null); // ✅ MediaStream 저장용 Ref
+    const audioChunks = useRef([]); // ✅ 녹음된 오디오 데이터 저장
+    const mediaStreamRef = useRef(null); // ✅ 마이크 스트림 저장용
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -40,7 +39,7 @@ const RecordingPage = () => {
         return () => clearInterval(interval);
     }, [isRecording, navigate]);
 
-    // ✅ MediaStream을 가져오는 함수
+    // ✅ 마이크 스트림 초기화
     const initializeMediaStream = async () => {
         try {
             console.log("🎤 마이크 권한 요청 중...");
@@ -48,14 +47,7 @@ const RecordingPage = () => {
                 throw new Error("이 브라우저는 MediaStream API를 지원하지 않습니다.");
             }
 
-            const constraints = {
-                audio: {
-                    echoCancellation: true, // 에코 제거
-                    noiseSuppression: true, // 노이즈 억제
-                    sampleRate: 44100, // 샘플링 속도
-                },
-            };
-
+            const constraints = { audio: true }; // ✅ 오디오만 가져오기
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             mediaStreamRef.current = stream;
             console.log("✅ 마이크 접근 성공");
@@ -66,83 +58,51 @@ const RecordingPage = () => {
     };
 
     useEffect(() => {
-        initializeMediaStream(); // ✅ 컴포넌트 마운트 시 미디어 스트림 가져오기
+        initializeMediaStream(); // ✅ 마운트 시 미디어 스트림 가져오기
     }, []);
 
-    const startRecording = async () => {
+    // ✅ 녹음 시작
+    const startRecording = () => {
         try {
             if (!mediaStreamRef.current) {
                 console.error("🚨 MediaStream이 존재하지 않습니다.");
                 return;
             }
 
-            const websocket = new WebSocket("ws://112.152.14.116:25210/ws/audio");
-            websocketRef.current = websocket;
+            setIsRecording(true);
+            audioChunks.current = []; // 새로운 녹음 시작 시 기존 데이터 초기화
 
-            websocket.onopen = () => {
-                console.log("✅ WebSocket 연결 성공");
-                setIsRecording(true);
+            const recorder = new MediaRecorder(mediaStreamRef.current);
+            mediaRecorderRef.current = recorder;
 
-                const recorder = new MediaRecorder(mediaStreamRef.current);
-                mediaRecorderRef.current = recorder;
-                audioChunks.current = [];
-
-                recorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        if (websocket.readyState === WebSocket.OPEN) {
-                            websocket.send(event.data);
-                            console.log("📡 WebSocket으로 오디오 데이터 전송");
-                        } else {
-                            console.error("🚨 WebSocket이 닫혀 있음");
-                        }
-                    }
-                };
-
-                recorder.onstop = async () => {
-                    console.log("🛑 녹음이 멈춤, 마지막 데이터 전송");
-
-                    if (audioChunks.current.length > 0) {
-                        const blob = new Blob(audioChunks.current, { type: "audio/wav" });
-                        if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-                            websocketRef.current.send(await blob.arrayBuffer());
-                            console.log("📡 WebSocket으로 마지막 오디오 데이터 전송 완료");
-                        }
-                        const url = URL.createObjectURL(blob);
-                        setAudioUrl(url);
-                    }
-                };
-
-                recorder.start(1000);
-                console.log("🎙 녹음 시작됨");
+            recorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunks.current.push(event.data);
+                }
             };
 
-            websocket.onclose = () => {
-                console.log("🔌 WebSocket 연결 종료");
+            recorder.onstop = () => {
+                console.log("🛑 녹음이 멈춤, 오디오 데이터 저장 중...");
+                const blob = new Blob(audioChunks.current, { type: "audio/wav" });
+                const url = URL.createObjectURL(blob);
+                setAudioUrl(url);
+                console.log("🎧 오디오 저장 완료:", url);
             };
 
-            websocket.onerror = (error) => {
-                console.error("⚠️ WebSocket 오류:", error);
-                stopRecording();
-            };
+            recorder.start();
+            console.log("🎙 녹음 시작됨");
         } catch (error) {
             console.error("🚫 녹음 시작 중 오류:", error);
         }
     };
 
+    // ✅ 녹음 중지
     const stopRecording = () => {
         if (mediaRecorderRef.current) {
             mediaRecorderRef.current.stop();
             console.log("🛑 녹음 중지됨");
+            setIsRecording(false);
         }
-
-        setTimeout(() => {
-            if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-                websocketRef.current.close();
-                console.log("🔌 WebSocket 연결 종료");
-            }
-        }, 5000);
-
-        setIsRecording(false);
     };
 
     return (
@@ -167,7 +127,12 @@ const RecordingPage = () => {
                         stopRecording={stopRecording}
                     />
                     <Timer seconds={seconds} />
-                    <AudioPlayer audioUrl={audioUrl} />
+                    {audioUrl && (
+                        <div className="audio-player">
+                            <h3>🎧 녹음된 오디오</h3>
+                            <audio controls src={audioUrl}></audio>
+                        </div>
+                    )}
                     <TopicSwitcher onSwitch={setTopic} />
                 </>
             )}
