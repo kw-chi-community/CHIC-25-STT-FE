@@ -17,7 +17,8 @@ const RecordingPage = () => {
     const [meetingName, setMeetingName] = useState("");
     const [topic, setTopic] = useState("");
     const [seconds, setSeconds] = useState(0);
-    const [audioUrl, setAudioUrl] = useState(null); // ✅ 녹음된 오디오 저장용
+    const [audioUrl, setAudioUrl] = useState(null);
+    const [audioBlob, setAudioBlob] = useState(null); // ✅ 녹음된 오디오 Blob 저장용
 
     const mediaRecorderRef = useRef(null);
     const audioChunks = useRef([]); // ✅ 녹음된 오디오 데이터 저장
@@ -39,15 +40,23 @@ const RecordingPage = () => {
         return () => clearInterval(interval);
     }, [isRecording, navigate]);
 
-    // ✅ 마이크 스트림 초기화
+    // ✅ 마이크 권한 확인 및 스트림 초기화
     const initializeMediaStream = async () => {
         try {
             console.log("🎤 마이크 권한 요청 중...");
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                throw new Error("이 브라우저는 MediaStream API를 지원하지 않습니다.");
+
+            if (!navigator.mediaDevices?.getUserMedia) {
+                throw new Error("이 브라우저는 getUserMedia를 지원하지 않습니다.");
             }
 
-            const constraints = { audio: true }; // ✅ 오디오만 가져오기
+            // ✅ 마이크 권한 확인
+            const permissionStatus = await navigator.permissions?.query({ name: "microphone" });
+            if (permissionStatus?.state === "denied") {
+                alert("🚨 마이크 권한이 차단되었습니다. 브라우저 설정에서 허용해주세요.");
+                return;
+            }
+
+            const constraints = { audio: true };
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             mediaStreamRef.current = stream;
             console.log("✅ 마이크 접근 성공");
@@ -58,7 +67,7 @@ const RecordingPage = () => {
     };
 
     useEffect(() => {
-        initializeMediaStream(); // ✅ 마운트 시 미디어 스트림 가져오기
+        initializeMediaStream();
     }, []);
 
     // ✅ 녹음 시작
@@ -70,7 +79,7 @@ const RecordingPage = () => {
             }
 
             setIsRecording(true);
-            audioChunks.current = []; // 새로운 녹음 시작 시 기존 데이터 초기화
+            audioChunks.current = []; // 기존 녹음 데이터 초기화
 
             const recorder = new MediaRecorder(mediaStreamRef.current);
             mediaRecorderRef.current = recorder;
@@ -86,6 +95,7 @@ const RecordingPage = () => {
                 const blob = new Blob(audioChunks.current, { type: "audio/wav" });
                 const url = URL.createObjectURL(blob);
                 setAudioUrl(url);
+                setAudioBlob(blob); // Blob 데이터 저장
                 console.log("🎧 오디오 저장 완료:", url);
             };
 
@@ -103,6 +113,18 @@ const RecordingPage = () => {
             console.log("🛑 녹음 중지됨");
             setIsRecording(false);
         }
+    };
+
+    // ✅ 녹음된 오디오 다운로드 기능 추가
+    const downloadRecording = () => {
+        if (!audioBlob) return;
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(audioBlob);
+        a.download = "recording.wav";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        console.log("📥 녹음 파일 다운로드 완료");
     };
 
     return (
@@ -127,12 +149,18 @@ const RecordingPage = () => {
                         stopRecording={stopRecording}
                     />
                     <Timer seconds={seconds} />
+
+                    {/* 🎧 녹음된 오디오 UI */}
                     {audioUrl && (
                         <div className="audio-player">
                             <h3>🎧 녹음된 오디오</h3>
                             <audio controls src={audioUrl}></audio>
+                            <button className="download-btn" onClick={downloadRecording}>
+                                📥 녹음 다운로드
+                            </button>
                         </div>
                     )}
+
                     <TopicSwitcher onSwitch={setTopic} />
                 </>
             )}
