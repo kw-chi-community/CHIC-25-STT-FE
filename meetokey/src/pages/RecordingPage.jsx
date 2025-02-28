@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import "../styles/RecordingPage.css"; // ✅ CSS 파일 import 추가
+import "../styles/RecordingPage.css";
 
 import RecordingModal from "../components/RecordingComponents/Modal";
 import Header from "../components/RecordingComponents/Header";
@@ -22,12 +22,13 @@ const RecordingPage = () => {
     const mediaRecorderRef = useRef(null);
     const websocketRef = useRef(null);
     const audioChunks = useRef([]);
+    const mediaStreamRef = useRef(null); // ✅ MediaStream 저장용 Ref
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        /*if (!token) {
+        if (!token) {
             navigate("/");
-        }*/
+        }
 
         let interval;
         if (isRecording) {
@@ -39,29 +40,41 @@ const RecordingPage = () => {
         return () => clearInterval(interval);
     }, [isRecording, navigate]);
 
-    const getAudioStream = async () => {
+    // ✅ MediaStream을 가져오는 함수
+    const initializeMediaStream = async () => {
         try {
             console.log("🎤 마이크 권한 요청 중...");
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error("이 브라우저는 MediaStream API를 지원하지 않습니다.");
+            }
 
+            const constraints = {
+                audio: {
+                    echoCancellation: true, // 에코 제거
+                    noiseSuppression: true, // 노이즈 억제
+                    sampleRate: 44100, // 샘플링 속도
+                },
+            };
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            mediaStreamRef.current = stream;
             console.log("✅ 마이크 접근 성공");
-            return stream;
         } catch (error) {
             console.error("🚫 마이크 접근 실패:", error);
-
-            if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-                alert("🚨 마이크 사용이 허용되지 않았습니다. 브라우저 설정에서 변경해주세요.");
-                
-                window.open("chrome://settings/content/microphone", "_blank");
-            }
-            return null;
+            alert("🚨 마이크 사용이 허용되지 않았습니다. 브라우저 설정을 확인하세요.");
         }
     };
 
+    useEffect(() => {
+        initializeMediaStream(); // ✅ 컴포넌트 마운트 시 미디어 스트림 가져오기
+    }, []);
+
     const startRecording = async () => {
         try {
-            const stream = await getAudioStream();
-            if (!stream) return;
+            if (!mediaStreamRef.current) {
+                console.error("🚨 MediaStream이 존재하지 않습니다.");
+                return;
+            }
 
             const websocket = new WebSocket("ws://112.152.14.116:25210/ws/audio");
             websocketRef.current = websocket;
@@ -70,7 +83,7 @@ const RecordingPage = () => {
                 console.log("✅ WebSocket 연결 성공");
                 setIsRecording(true);
 
-                const recorder = new MediaRecorder(stream);
+                const recorder = new MediaRecorder(mediaStreamRef.current);
                 mediaRecorderRef.current = recorder;
                 audioChunks.current = [];
 
@@ -87,15 +100,13 @@ const RecordingPage = () => {
 
                 recorder.onstop = async () => {
                     console.log("🛑 녹음이 멈춤, 마지막 데이터 전송");
-                    
+
                     if (audioChunks.current.length > 0) {
                         const blob = new Blob(audioChunks.current, { type: "audio/wav" });
-
                         if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
                             websocketRef.current.send(await blob.arrayBuffer());
                             console.log("📡 WebSocket으로 마지막 오디오 데이터 전송 완료");
                         }
-
                         const url = URL.createObjectURL(blob);
                         setAudioUrl(url);
                     }
@@ -164,5 +175,4 @@ const RecordingPage = () => {
     );
 };
 
-// ✅ **🚀 export는 최상위에 위치해야 함!**
 export default RecordingPage;
