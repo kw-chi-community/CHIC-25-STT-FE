@@ -8,10 +8,10 @@
 
 /* 🆕 공통 버튼 스타일 (화이트 배경 + 보라색 테두리) */
 .btn-back, .btn-retake, .btn-stop, .btn-start {
-    padding: 0.6rem 1.2rem;
+    padding: 0.8rem 1.5rem;
     border: 2px solid #6a1b9a; /* 보라색 테두리 */
     border-radius: 8px; /* 더 세련된 둥근 모서리 */
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.15s, opacity 0.15s, background-color 0.2s, box-shadow 0.2s;

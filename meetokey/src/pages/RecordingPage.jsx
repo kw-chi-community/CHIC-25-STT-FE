@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import "../styles/RecordingPage.css"; // ✅ 이렇게 수정
- // ✅ CSS 파일 import
+import "../styles/RecordingPage.css"; 
 
 import RecordingModal from "../components/RecordingComponents/RecordingModal";
 import Header from "../components/RecordingComponents/Header";
@@ -9,21 +8,22 @@ import Timer from "../components/RecordingComponents/Timer";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import RecordingControls from "../components/RecordingComponents/RecordingControls";
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
-import AudioPlayer from "../components/RecordingComponents/AudioPlayer";
+import AudioModal from "../components/RecordingComponents/AudioModal"; // ✅ 추가
 
 const RecordingPage = () => {
     const navigate = useNavigate();
     const [isRecording, setIsRecording] = useState(false);
     const [showModal, setShowModal] = useState(true);
+    const [showAudioModal, setShowAudioModal] = useState(false); // ✅ 오디오 모달 상태 추가
     const [meetingName, setMeetingName] = useState("");
     const [topic, setTopic] = useState("");
     const [seconds, setSeconds] = useState(0);
     const [audioUrl, setAudioUrl] = useState(null);
-    const [audioBlob, setAudioBlob] = useState(null); // ✅ 녹음된 오디오 Blob 저장용
+    const [audioBlob, setAudioBlob] = useState(null);
 
     const mediaRecorderRef = useRef(null);
-    const audioChunks = useRef([]); // ✅ 녹음된 오디오 데이터 저장
-    const mediaStreamRef = useRef(null); // ✅ 마이크 스트림 저장용
+    const audioChunks = useRef([]); 
+    const mediaStreamRef = useRef(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -41,22 +41,9 @@ const RecordingPage = () => {
         return () => clearInterval(interval);
     }, [isRecording, navigate]);
 
-    // ✅ 마이크 권한 확인 및 스트림 초기화
     const initializeMediaStream = async () => {
         try {
             console.log("🎤 마이크 권한 요청 중...");
-
-            if (!navigator.mediaDevices?.getUserMedia) {
-                throw new Error("이 브라우저는 getUserMedia를 지원하지 않습니다.");
-            }
-
-            // ✅ 마이크 권한 확인
-            const permissionStatus = await navigator.permissions?.query({ name: "microphone" });
-            if (permissionStatus?.state === "denied") {
-                alert("🚨 마이크 권한이 차단되었습니다. 브라우저 설정에서 허용해주세요.");
-                return;
-            }
-
             const constraints = { audio: true };
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             mediaStreamRef.current = stream;
@@ -71,17 +58,14 @@ const RecordingPage = () => {
         initializeMediaStream();
     }, []);
 
-    // ✅ 녹음 시작
     const startRecording = () => {
         try {
             if (!mediaStreamRef.current) {
                 console.error("🚨 MediaStream이 존재하지 않습니다.");
                 return;
             }
-
             setIsRecording(true);
-            audioChunks.current = []; // 기존 녹음 데이터 초기화
-
+            audioChunks.current = []; 
             const recorder = new MediaRecorder(mediaStreamRef.current);
             mediaRecorderRef.current = recorder;
 
@@ -96,8 +80,8 @@ const RecordingPage = () => {
                 const blob = new Blob(audioChunks.current, { type: "audio/wav" });
                 const url = URL.createObjectURL(blob);
                 setAudioUrl(url);
-                setAudioBlob(blob); // Blob 데이터 저장
-                console.log("🎧 오디오 저장 완료:", url);
+                setAudioBlob(blob);
+                setShowAudioModal(true); // ✅ 녹음 종료 후 모달 자동 열기
             };
 
             recorder.start();
@@ -107,7 +91,6 @@ const RecordingPage = () => {
         }
     };
 
-    // ✅ 녹음 중지
     const stopRecording = () => {
         if (mediaRecorderRef.current) {
             mediaRecorderRef.current.stop();
@@ -116,7 +99,6 @@ const RecordingPage = () => {
         }
     };
 
-    // ✅ 녹음된 오디오 다운로드 기능 추가
     const downloadRecording = () => {
         if (!audioBlob) return;
         const a = document.createElement("a");
@@ -144,24 +126,10 @@ const RecordingPage = () => {
                 <>
                     <Header meetingName={meetingName} topic={topic} />
                     <RecordingStatus isRecording={isRecording} />
-                    <RecordingControls
-                        isRecording={isRecording}
-                        startRecording={startRecording}
-                        stopRecording={stopRecording}
-                    />
+                    <RecordingControls isRecording={isRecording} startRecording={startRecording} stopRecording={stopRecording} />
                     <Timer seconds={seconds} />
-
-                    {audioUrl && (
-                        <div className="audio-player">
-                            <h3>🎧 녹음된 오디오</h3>
-                            <audio controls src={audioUrl}></audio>
-                            <button className="download-btn" onClick={downloadRecording}>
-                                📥 녹음 다운로드
-                            </button>
-                        </div>
-                    )}
-
                     <TopicSwitcher onSwitch={setTopic} />
+                    <AudioModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} audioUrl={audioUrl} onDownload={downloadRecording} />
                 </>
             )}
         </div>

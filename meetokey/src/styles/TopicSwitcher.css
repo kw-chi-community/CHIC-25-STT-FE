@@ -1,34 +1,49 @@
-/* 🎙 초소형 녹음 상태 표시 (완전 흰색 배경) */
-.recording-status {
-    text-align: center;
-    font-size: 0.4rem; /* 🔹 글씨 크기 최소화 */
+/* 📌 TopicSwitcher 스타일 */
+.topic-switcher {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 🔤 입력 필드 스타일 */
+.topic-input {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 2px solid #6a1b9a; /* 보라색 테두리 */
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* 입력 필드 포커스 시 효과 */
+.topic-input:focus {
+    border-color: #8e24aa; /* 더 진한 보라색 */
+    box-shadow: 0 0 8px rgba(142, 36, 170, 0.3);
+}
+
+/* 🟣 버튼 스타일 */
+.switch-button {
+    padding: 10px 18px;
+    font-size: 1rem;
     font-weight: bold;
-    margin: 0;
-    padding: 0.1rem 0.3rem; /* 🔹 패딩 최소화 */
-    border-radius: 4px; /* 🔹 부드러운 모서리 */
-    width: fit-content;
-    min-width: 30px; /* 🔹 최소 크기 유지 */
-    background-color: white !important; /* 🔹 완전 흰색 배경 */
-    border: 1px solid #6a1b9a; /* 🔹 보라색 테두리 */
-    color: #6a1b9a; /* 🔹 보라색 텍스트 */
-    box-shadow: 0 1px 3px rgba(106, 27, 154, 0.2); /* 🔹 부드러운 그림자 */
-    transition: all 0.2s ease-in-out;
+    color: white;
+    background-color: #6a1b9a; /* 보라색 버튼 */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 
-/* 🔴 녹음 중일 때 (테두리 & 글씨 빨간색) */
-.recording-active {
-    border: 1px solid #b71c1c; /* 🔹 빨간 테두리 */
-    color: #b71c1c; /* 🔹 빨간 텍스트 */
+/* 버튼 호버 효과 */
+.switch-button:hover {
+    background-color: #8e24aa; /* 더 진한 보라색 */
+    box-shadow: 0 4px 10px rgba(142, 36, 170, 0.3);
+    transform: translateY(-2px);
 }
 
-/* 🎤 녹음 대기 상태 (보라색 테두리 & 글씨) */
-.recording-inactive {
-    border: 1px solid #6a1b9a;
-    color: #6a1b9a;
-}
-
-/* 🆕 부드러운 애니메이션 (호버 시 배경 변화 없이 그림자 강조) */
-.recording-status:hover {
-    transform: scale(1.03);
-    box-shadow: 0 2px 6px rgba(106, 27, 154, 0.3);
+/* 버튼 클릭 효과 */
+.switch-button:active {
+    background-color: #7b1fa2;
+    transform: translateY(0);
 }

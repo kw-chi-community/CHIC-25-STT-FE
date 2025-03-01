@@ -1,17 +1,31 @@
-/* 헤더 컨테이너 - 가로로 길게 조정 */
+/* 🏗 헤더 컨테이너 - 상단에 맞게 조정 */
 .header-container {
     width: 100%;
-    max-width: 1200px; /* 전체 페이지 너비에 맞춤 */
+    max-width: 1200px; /* 전체 페이지 너비 유지 */
     background-color: #6a1b9a; /* 진한 보라색 */
     color: white;
-    padding: 1.5rem;
+    padding: 1.2rem;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem; /* 🔹 아래 여백 줄이기 */
     box-shadow: 0 4px 6px rgba(106, 27, 154, 0.3);
     text-align: center;
     display: flex;
-    justify-content: space-between; /* 좌우 정렬 */
+    justify-content: space-between;
     align-items: center;
+}
+
+/* 🆕 전체 컨텐츠 영역 - 흰색 배경 크기 줄이기 */
+.content-container {
+    width: 90%; /* 🔹 전체 너비를 90%로 줄임 */
+    max-width: 900px; /* 🔹 최대 너비 제한 */
+    background-color: white;
+    border-radius: 12px; /* 🔹 둥근 모서리 */
+    padding: 1.5rem; /* 🔹 패딩 줄임 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 🔹 부드러운 그림자 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: -1rem auto 1rem auto; /* 🔹 상단 여백 줄이고 중앙 정렬 */
 }
 
 /* 헤더 타이틀 (회의명) */
@@ -20,7 +34,7 @@
     font-weight: 700;
     margin: 0;
     flex-grow: 1;
-    text-align: left; /* 왼쪽 정렬 */
+    text-align: left;
     padding-left: 20px;
 }
 
@@ -31,7 +45,32 @@
     margin: 0;
     color: #e1bee7; /* 연한 보라색 */
     padding-right: 20px;
-    text-align: right; /* 오른쪽 정렬 */
+    text-align: right;
+}
+
+/* 🆕 버튼 및 녹음 상태 컨테이너 */
+.recording-controls-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: -0.5rem; /* 🔹 더 위로 올리기 */
+}
+
+/* 🆕 녹음 상태 표시 위치 조정 */
+.recording-status {
+    margin-top: -1rem; /* 🔹 타이머와 녹음 상태 더 위로 */
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 🆕 타이머 위치 조정 */
+.timer-display {
+    text-align: center;
+    font-size: 1rem; /* 🔹 더 작게 */
+    font-weight: bold;
+    margin-top: -0.8rem; /* 🔹 녹음 상태와 더 가까이 */
+    color: #6a1b9a;
 }
 
 /* 반응형 스타일 (모바일 최적화) */
@@ -52,5 +91,21 @@
         font-size: 1.3rem;
         text-align: center;
         padding-right: 0;
+    }
+
+    .content-container {
+        width: 95%; /* 🔹 모바일에서 좀 더 좁게 */
+        max-width: 600px; /* 🔹 모바일에서도 적절한 크기 */
+        margin-top: -0.5rem; /* 🔹 모바일에서도 적절한 위치로 조정 */
+    }
+
+    .recording-status {
+        font-size: 0.9rem;
+        margin-top: -0.5rem;
+    }
+
+    .timer-display {
+        font-size: 0.9rem;
+        margin-top: -0.5rem;
     }
 }

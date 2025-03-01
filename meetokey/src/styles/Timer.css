@@ -1,22 +1,16 @@
-/* 타이머 스타일 */
+/* ⏱ 타이머 스타일 (텍스트 형식) */
 .timer-display {
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 1.2rem; /* 🔹 크기 조절 */
     font-weight: bold;
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border-radius: 8px;
-    background-color: #f3e5f5; /* 연한 보라색 배경 */
-    color: #6a1b9a; /* 진한 보라색 */
-    border: 2px solid #8e24aa; /* 보라색 테두리 */
-    box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
-  }
-  
-  /* 반응형 디자인 */
-  @media (max-width: 480px) {
-    .timer-display {
-      font-size: 1.2rem;
-      padding: 0.4rem;
-    }
-  }
-  
+    color: #6a1b9a; /* 🔹 보라색 텍스트 */
+    border: none; /* 🔹 테두리 제거 */
+    background: none; /* 🔹 배경 제거 */
+    padding: 0;
+    margin: 0;
+}
+
+/* 숫자 강조 */
+.timer-display span {
+    color: #8e24aa; /* 🔹 더 진한 보라색 */
+}

@@ -1,13 +1,13 @@
 /* 🎙 초소형 녹음 상태 표시 (완전 흰색 배경) */
 .recording-status {
     text-align: center;
-    font-size: 0.4rem; /* 🔹 글씨 크기 최소화 */
+    font-size: 1.2rem; /* 🔹 글씨 크기 최소화 */
     font-weight: bold;
     margin: 0;
     padding: 0.1rem 0.3rem; /* 🔹 패딩 최소화 */
     border-radius: 4px; /* 🔹 부드러운 모서리 */
     width: fit-content;
-    min-width: 30px; /* 🔹 최소 크기 유지 */
+    min-width: 40px; /* 🔹 최소 크기 유지 */
     background-color: white !important; /* 🔹 완전 흰색 배경 */
     border: 1px solid #6a1b9a; /* 🔹 보라색 테두리 */
     color: #6a1b9a; /* 🔹 보라색 텍스트 */
