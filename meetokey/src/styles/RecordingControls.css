@@ -1,0 +1,54 @@
+/* 🎮 녹음 컨트롤 버튼 스타일 */
+.recording-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 20px;
+}
+
+/* 🆕 공통 버튼 스타일 (화이트 배경 + 보라색 테두리) */
+.btn-back, .btn-retake, .btn-stop, .btn-start {
+    padding: 0.6rem 1.2rem;
+    border: 2px solid #6a1b9a; /* 보라색 테두리 */
+    border-radius: 8px; /* 더 세련된 둥근 모서리 */
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s, background-color 0.2s, box-shadow 0.2s;
+    color: #6a1b9a; /* 보라색 텍스트 */
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(106, 27, 154, 0.2); /* 보라색 그림자 */
+}
+
+/* 🆕 공통 호버 스타일 (연한 보라색 배경) */
+.btn-back:hover, .btn-retake:hover, .btn-stop:hover, .btn-start:hover {
+    background-color: #f3e5f5; /* 연한 보라색 */
+    box-shadow: 0 4px 10px rgba(106, 27, 154, 0.3);
+    transform: translateY(-2px);
+}
+
+/* 🆕 공통 클릭(활성화) 스타일 */
+.btn-back:active, .btn-retake:active, .btn-stop:active, .btn-start:active {
+    background-color: #e1bee7; /* 더 연한 보라색 */
+    transform: translateY(0);
+}
+
+/* 🆕 돌아가기 버튼 */
+.btn-back {
+    color: #6a1b9a; /* 보라색 글씨 */
+}
+
+/* 🆕 Retake 버튼 */
+.btn-retake {
+    color: #6a1b9a;
+}
+
+/* 🆕 중지 버튼 (보라색 테두리 유지 + 빨간 글씨) */
+.btn-stop {
+    color: #e74c3c;
+}
+
+/* 🆕 시작 버튼 */
+.btn-start {
+    color: #6a1b9a;
+}

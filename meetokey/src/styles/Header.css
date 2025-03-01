@@ -1,4 +1,7 @@
+/* 헤더 컨테이너 - 가로로 길게 조정 */
 .header-container {
+    width: 100%;
+    max-width: 1200px; /* 전체 페이지 너비에 맞춤 */
     background-color: #6a1b9a; /* 진한 보라색 */
     color: white;
     padding: 1.5rem;
@@ -6,18 +9,48 @@
     margin-bottom: 1.5rem;
     box-shadow: 0 4px 6px rgba(106, 27, 154, 0.3);
     text-align: center;
-  }
-  
-  .header-title {
-    font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center;
+}
+
+/* 헤더 타이틀 (회의명) */
+.header-title {
+    font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 0.5rem 0;
-  }
-  
-  .header-topic {
-    font-size: 1.2rem;
+    margin: 0;
+    flex-grow: 1;
+    text-align: left; /* 왼쪽 정렬 */
+    padding-left: 20px;
+}
+
+/* 헤더 주제 (토픽) */
+.header-topic {
+    font-size: 1.5rem;
     font-weight: 500;
     margin: 0;
     color: #e1bee7; /* 연한 보라색 */
-  }
-  
+    padding-right: 20px;
+    text-align: right; /* 오른쪽 정렬 */
+}
+
+/* 반응형 스타일 (모바일 최적화) */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .header-title {
+        font-size: 1.6rem;
+        text-align: center;
+        padding-left: 0;
+    }
+
+    .header-topic {
+        font-size: 1.3rem;
+        text-align: center;
+        padding-right: 0;
+    }
+}

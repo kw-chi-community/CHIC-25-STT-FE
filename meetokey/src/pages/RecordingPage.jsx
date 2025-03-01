@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import "../styles/RecordingPage.css";
+import "../styles/RecordingPage.css"; // ✅ 이렇게 수정
+ // ✅ CSS 파일 import
 
-import RecordingModal from "../components/RecordingComponents/Modal";
+import RecordingModal from "../components/RecordingComponents/RecordingModal";
 import Header from "../components/RecordingComponents/Header";
 import Timer from "../components/RecordingComponents/Timer";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
@@ -150,7 +151,6 @@ const RecordingPage = () => {
                     />
                     <Timer seconds={seconds} />
 
-                    {/* 🎧 녹음된 오디오 UI */}
                     {audioUrl && (
                         <div className="audio-player">
                             <h3>🎧 녹음된 오디오</h3>

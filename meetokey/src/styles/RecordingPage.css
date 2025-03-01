@@ -1,15 +1,17 @@
-/* RecordingPage.css */
-
 /* 전체 페이지 스타일 */
 .recording-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    color: #1a1919;
-    
-  background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
+    min-height: 100vh;
+    width: 90%;
+    max-width: 1200px; /* 옆으로 길게 조정 */
+    margin: 0 auto;
+    padding: 20px;
+    background: white; /* 배경 흰색 */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 살짝 그림자 추가 */
 }
 
 /* 헤더 스타일 */
@@ -17,30 +19,41 @@
     width: 100%;
     padding: 20px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
+    color: #6a1b9a; /* 보라색 */
 }
 
 /* 녹음 상태 표시 */
 .recording-status {
     margin: 20px 0;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.2);
-    font-size: 30px;
+    background-color: rgba(106, 27, 154, 0.1); /* 연한 보라색 */
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
+    color: #6a1b9a;
+    width: 80%;
 }
 
 /* 녹음 컨트롤 버튼 스타일 */
+.recording-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 20px 0;
+    width: 100%;
+}
+
 .recording-controls button {
     padding: 12px 24px;
-    margin: 10px;
     border: none;
     border-radius: 10px;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    width: 150px;
 }
 
 .start-btn {
@@ -67,17 +80,25 @@
     font-weight: bold;
     margin: 20px 0;
     padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(106, 27, 154, 0.1); /* 연한 보라색 */
     border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    color: #6a1b9a;
 }
 
 /* 오디오 플레이어 스타일 */
 .audio-player {
     margin-top: 20px;
     padding: 15px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(106, 27, 154, 0.05); /* 아주 연한 보라색 */
     border-radius: 10px;
     text-align: center;
+    width: 80%;
+}
+
+.audio-player audio {
+    width: 100%;
 }
 
 /* 모달 스타일 */
@@ -86,8 +107,12 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    max-width: 600px;
+    text-align: center;
 }
 
+/* 모달 버튼 */
 .recording-modal button {
     background-color: #6a0dad;
     color: white;
@@ -99,4 +124,29 @@
 
 .recording-modal button:hover {
     background-color: #5a0cae;
+}
+
+/* 반응형 스타일 (모바일 최적화) */
+@media (max-width: 768px) {
+    .recording-page {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .recording-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .recording-controls button {
+        width: 100%;
+    }
+
+    .audio-player {
+        width: 100%;
+    }
+
+    .recording-modal {
+        width: 90%;
+    }
 }
