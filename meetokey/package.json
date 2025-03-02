@@ -4,7 +4,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "dependencies": {
-    "axios": "^1.7.9",
+    "axios": "^1.8.1",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "es-abstract": "^1.23.9",
@@ -553,7 +553,7 @@
     "strip-final-newline": "^2.0.0",
     "strip-json-comments": "^3.1.1",
     "style-loader": "^3.3.4",
-    "styled-components": "^6.1.14",
+    "styled-components": "^6.1.15",
     "stylehacks": "^5.1.1",
     "stylis": "^4.3.2",
     "sucrase": "^3.35.0",

@@ -1,9 +1,9 @@
-//현재 녹음 시간이 몇 초째인지 표시.
 import React from "react";
+import "../../styles/Timer.css"; // ✅ CSS 파일 import
 
 const Timer = ({ seconds }) => {
     return (
-        <p className="text-lg font-bold">⏱ {seconds}초째 녹음 중</p>
+        <p className="timer-display">⏱ {seconds}초째 녹음 중</p>
     );
 };
 
