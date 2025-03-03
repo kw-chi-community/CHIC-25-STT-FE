@@ -157,3 +157,16 @@
 .audio-modal {
     margin-top: 60px; /* 위쪽 여백 증가 */
 }
+
+.soundwave-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* 상단 요소와 간격 조절 */
+}
+
+.soundwave-img {
+    width: 70%;  /* 적당한 크기로 조절 */
+    max-width: 500px;
+    height: auto;
+}

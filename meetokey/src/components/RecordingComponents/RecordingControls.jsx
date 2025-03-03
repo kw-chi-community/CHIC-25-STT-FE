@@ -1,13 +1,16 @@
 import React from "react";
-import "../../styles/RecordingControls.css"; // ✅ 올바른 CSS 파일 import
+import { useNavigate } from "react-router-dom"; 
+import "../../styles/RecordingControls.css"; 
 
 const RecordingControls = ({ isRecording, startRecording, stopRecording }) => {
+    const navigate = useNavigate(); 
+
     return (
         <div className="recording-controls">
-            <button className="btn-back">🔙 돌아가기</button>
-            <button className="btn-retake" onClick={stopRecording}>
-                🔄 Retake
-            </button>
+            {/* ✅ Home("/")으로 이동 */}
+            <button className="btn-back" onClick={() => navigate("/")}>🔙 돌아가기</button>
+            
+            
             {isRecording ? (
                 <button onClick={stopRecording} className="btn-stop">
                     🛑 중지
