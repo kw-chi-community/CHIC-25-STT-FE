@@ -16,7 +16,7 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* 입력 필드 포커스 시 효과 */
+/* 입력 필드 포커스 시 효과 q*/
 .topic-input:focus {
     border-color: #8e24aa; /* 더 진한 보라색 */
     box-shadow: 0 0 8px rgba(142, 36, 170, 0.3);
