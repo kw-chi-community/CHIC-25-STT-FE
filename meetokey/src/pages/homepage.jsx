@@ -446,7 +446,7 @@ const NoteContainer = styled.div`
 
 
 const CalenderContainer = styled.div`
-  height: 100%;
+  height: 150%;
   width: 500px;
   display: flex;
   align-items: center;
