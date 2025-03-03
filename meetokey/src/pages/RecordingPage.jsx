@@ -8,13 +8,16 @@ import Timer from "../components/RecordingComponents/Timer";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import RecordingControls from "../components/RecordingComponents/RecordingControls";
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
-import AudioModal from "../components/RecordingComponents/AudioModal"; // ✅ 추가
+import AudioModal from "../components/RecordingComponents/AudioModal";
+
+// ✅ 이미지 추가 (경로 확인)
+import soundwave from "../assets/imgs/soundwave.jpg"; 
 
 const RecordingPage = () => {
     const navigate = useNavigate();
     const [isRecording, setIsRecording] = useState(false);
     const [showModal, setShowModal] = useState(true);
-    const [showAudioModal, setShowAudioModal] = useState(false); // ✅ 오디오 모달 상태 추가
+    const [showAudioModal, setShowAudioModal] = useState(false);
     const [meetingName, setMeetingName] = useState("");
     const [topic, setTopic] = useState("");
     const [seconds, setSeconds] = useState(0);
@@ -81,7 +84,7 @@ const RecordingPage = () => {
                 const url = URL.createObjectURL(blob);
                 setAudioUrl(url);
                 setAudioBlob(blob);
-                setShowAudioModal(true); // ✅ 녹음 종료 후 모달 자동 열기
+                setShowAudioModal(true);
             };
 
             recorder.start();
@@ -126,6 +129,12 @@ const RecordingPage = () => {
                 <>
                     <Header meetingName={meetingName} topic={topic} />
                     <RecordingStatus isRecording={isRecording} />
+    
+                    {/* ✅ '대기중' 아래에 사운드웨이브 이미지 추가 */}
+                    <div className="soundwave-container">
+                        <img src={soundwave} alt="Sound Wave" className="soundwave-img" />
+                    </div>
+    
                     <RecordingControls isRecording={isRecording} startRecording={startRecording} stopRecording={stopRecording} />
                     <Timer seconds={seconds} />
                     <TopicSwitcher onSwitch={setTopic} />
@@ -134,6 +143,7 @@ const RecordingPage = () => {
             )}
         </div>
     );
+    
 };
 
 export default RecordingPage;
