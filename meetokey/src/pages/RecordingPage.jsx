@@ -8,6 +8,12 @@ import Timer from "../components/RecordingComponents/Timer";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import RecordingControls from "../components/RecordingComponents/RecordingControls";
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
+import AudioModal from "../components/RecordingComponents/AudioModal";
+
+// ✅ 이미지 추가 (경로 확인)
+import soundwave from "../assets/imgs/soundwave.jpg"; 
+
+const API_BASE_URL = "http://3.37.72.45:25114";  // ✅ 백엔드 API 주소
 import AudioModal from "../components/RecordingComponents/AudioModal"; // ✅ 추가
 
 const RecordingPage = () => {
@@ -75,12 +81,16 @@ const RecordingPage = () => {
                 }
             };
 
-            recorder.onstop = () => {
+            recorder.onstop = async () => {
                 console.log("🛑 녹음이 멈춤, 오디오 데이터 저장 중...");
                 const blob = new Blob(audioChunks.current, { type: "audio/wav" });
                 const url = URL.createObjectURL(blob);
                 setAudioUrl(url);
                 setAudioBlob(blob);
+                setShowAudioModal(true);
+
+                // ✅ 백엔드에 회의 데이터 저장 요청
+                await saveMeeting(blob);
                 setShowAudioModal(true); // ✅ 녹음 종료 후 모달 자동 열기
             };
 
@@ -108,6 +118,29 @@ const RecordingPage = () => {
         a.click();
         document.body.removeChild(a);
         console.log("📥 녹음 파일 다운로드 완료");
+    };
+
+    // ✅ 백엔드에 회의 데이터 저장
+    const saveMeeting = async (audioBlob) => {
+        const formData = new FormData();
+        formData.append("meeting_name", meetingName);
+        formData.append("meeting_date", new Date().toISOString());
+        formData.append("audio_url", audioBlob);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/`, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("회의 데이터 저장 실패");
+            }
+
+            console.log("✅ 회의 데이터 저장 성공");
+        } catch (error) {
+            console.error("❌ 백엔드 API 요청 오류:", error);
+        }
     };
 
     return (
