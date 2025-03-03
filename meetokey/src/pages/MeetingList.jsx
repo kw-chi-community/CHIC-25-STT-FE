@@ -1,62 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MeetingCard from "../components/MeetingCard";
 import "../styles/MeetingStyles.css";
 
-const meetings = [
-  {
-    id: 1,
-    title: "프로젝트 킥오프 미팅",
-    date: "2025-03-03",
-    time: "14:00 ~ 15:30",
-    categories: ["전략", "기획", "개발"],
-    topics: ["프로젝트 일정", "역할 분담", "예산 계획"],
-  },
-  {
-    id: 2,
-    title: "주간 개발팀 스크럼",
-    date: "2025-03-02",
-    time: "10:00 ~ 10:30",
-    categories: ["개발"],
-    topics: ["진행 상황 공유", "이슈 논의"],
-  },
-  {
-    id: 3,
-    title: "UI/UX 디자인 리뷰",
-    date: "2025-02-27",
-    time: "13:30 ~ 15:00",
-    categories: ["디자인", "리뷰"],
-    topics: ["사용자 피드백", "UI 개선", "디자인 요소 검토"],
-  },
-  {
-    id: 4,
-    title: "마케팅 전략 회의",
-    date: "2025-02-28",
-    time: "15:00 ~ 16:30",
-    categories: ["마케팅", "전략"],
-    topics: ["분기별 마케팅 계획", "예산 배분", "성과 지표"],
-  },
-];
+const API_BASE_URL = "http://3.37.72.45:25114";  // ✅ 백엔드 API 주소
 
 const MeetingList = () => {
+  const [meetings, setMeetings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("date"); // 기본값: 최신순
 
+  // ✅ 백엔드에서 회의 목록 가져오기
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/`);
+        if (!response.ok) {
+          throw new Error("회의 데이터를 불러오는 데 실패했습니다.");
+        }
+        const data = await response.json();
+        setMeetings(data);
+      } catch (error) {
+        console.error("❌ 회의 목록 불러오기 실패:", error);
+      }
+    };
+
+    fetchMeetings();
+  }, []);
+
   const filteredMeetings = meetings.filter((meeting) => {
-    const matchesSearch = meeting.title.includes(searchTerm) || 
-                          meeting.topics.some(topic => topic.includes(searchTerm));
+    const matchesSearch =
+      meeting.meeting_name.includes(searchTerm) ||
+      meeting.topics?.some((topic) => topic.includes(searchTerm));
+
     const matchesCategory =
-      categoryFilter === "all" || meeting.categories.includes(categoryFilter);
-    
+      categoryFilter === "all" || meeting.categories?.includes(categoryFilter);
+
     return matchesSearch && matchesCategory;
   });
 
   const sortedMeetings = [...filteredMeetings].sort((a, b) => {
     if (sortBy === "date") {
-      return new Date(b.date) - new Date(a.date); // 최신순
+      return new Date(b.meeting_date) - new Date(a.meeting_date); // 최신순
     }
     if (sortBy === "title") {
-      return a.title.localeCompare(b.title); // 제목순 (가나다 정렬)
+      return a.meeting_name.localeCompare(b.meeting_name); // 제목순 (가나다 정렬)
     }
     return 0;
   });
