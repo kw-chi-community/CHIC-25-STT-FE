@@ -204,3 +204,24 @@
   background: #5b21b6; /* 어두운 보라색 */
 }
 
+/* ✅ 전체 회의록 보기 버튼 스타일 (작게 조정) */
+.all-meetings-btn {
+  position: absolute;
+  top: 10px; /* 상단 여백 줄이기 */
+  right: 15px; /* 더 오른쪽으로 이동 */
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 6px 10px; /* 크기 축소 */
+  border-radius: 6px; /* 더 둥글게 */
+  font-size: 12px; /* 글자 크기 축소 */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.all-meetings-btn:hover {
+  background: #5b21b6;
+}
+
+

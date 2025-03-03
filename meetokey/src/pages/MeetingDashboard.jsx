@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Play, Pause, Download, Search, Calendar, Clock, Tag, RefreshCcw, FileText, BookOpen, List, Bookmark, Save, Share2, CheckCircle } from 'lucide-react';
-import '../styles/MeetingDashboard.css'; // CSS 연결
+import { useNavigate } from 'react-router-dom'; // ✅ 페이지 이동을 위한 훅 추가
+import { Play, Pause, Download, FileText, Tag, BookOpen, CheckCircle } from 'lucide-react';
+import '../styles/MeetingDashboard.css'; // ✅ CSS 연결
 
 const MeetingDashboard = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(405);
+  const navigate = useNavigate(); // ✅ 네비게이션 함수
+
   const [activeTab, setActiveTab] = useState('summary');
 
   const meetingData = {
@@ -13,7 +14,6 @@ const MeetingDashboard = () => {
     time: '14:00 ~ 15:30',
     categories: ['전략', '기획', '개발', '디자인', '마케팅'],
     topics: ['프로젝트 일정', '역할 분담', '예산 계획', '리스크 관리', '커뮤니케이션 계획'],
-    duration: 1350,
     transcript: `안녕하세요, 오늘은 신규 프로젝트에 대한 킥오프 미팅을 진행하겠습니다...`,
     summary: [
       {
@@ -42,16 +42,16 @@ const MeetingDashboard = () => {
     keywords: ['프로젝트 킥오프', '일정 계획', '역할 분담', '예산 배분', '리스크 관리']
   };
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  };
-
   return (
     <div className="meeting-dashboard">
       <div className="header">
         <h1 className="logo">📔 Meet Okey!</h1>
+
+        {/* ✅ 전체 회의록 보기 버튼 */}
+        <button className="all-meetings-btn" onClick={() => navigate('/meetings')}>
+          📄 전체 회의록 보기
+        </button>
+
         <div className="meeting-info">
           <h2>{meetingData.title}</h2>
           <p>📅 {meetingData.date} | ⏰ {meetingData.time}</p>
