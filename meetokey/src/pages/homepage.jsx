@@ -55,8 +55,8 @@ function Homepage() {
 
 
     try {
-      // 백엔드 URL: 112.152.14.116:25114/users/login
-      const response = await fetch("http://112.152.14.116:25114/users/login", {
+      // 백엔드 URL: 3.37.72.45:25114/users/login
+      const response = await fetch("http://3.37.72.45:25114/users/login", {
         method: "POST",
         body: formData,
       });
@@ -89,8 +89,8 @@ function Homepage() {
   // 회원가입 요청 함수
   const handleRegister = async () => {
     try {
-      // 백엔드 URL: 112.152.14.116:25114/users/
-      const response = await fetch("http://112.152.14.116:25114/users/", {
+      // 백엔드 URL: 3.37.72.45:25114/users/
+      const response = await fetch("http://3.37.72.45:25114/users/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -131,7 +131,7 @@ function Homepage() {
   const fetchMeetingsByDate = async (date) => {
     const token = localStorage.getItem("token");
     const [year, month, day] = date.split("-");
-    const apiUrl = `http://112.152.14.116:25114/meetings/by-date/${year}/${month}/${day}`;
+    const apiUrl = `http://:25114/meetings/by-date/${year}/${month}/${day}`;
 
     try {
       const response = await fetch(apiUrl, {
