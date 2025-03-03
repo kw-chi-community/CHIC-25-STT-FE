@@ -14,13 +14,12 @@ import AudioModal from "../components/RecordingComponents/AudioModal";
 import soundwave from "../assets/imgs/soundwave.jpg"; 
 
 const API_BASE_URL = "http://3.37.72.45:25114";  // ✅ 백엔드 API 주소
-import AudioModal from "../components/RecordingComponents/AudioModal"; // ✅ 추가
 
 const RecordingPage = () => {
     const navigate = useNavigate();
     const [isRecording, setIsRecording] = useState(false);
     const [showModal, setShowModal] = useState(true);
-    const [showAudioModal, setShowAudioModal] = useState(false); // ✅ 오디오 모달 상태 추가
+    const [showAudioModal, setShowAudioModal] = useState(false);
     const [meetingName, setMeetingName] = useState("");
     const [topic, setTopic] = useState("");
     const [seconds, setSeconds] = useState(0);
@@ -91,7 +90,6 @@ const RecordingPage = () => {
 
                 // ✅ 백엔드에 회의 데이터 저장 요청
                 await saveMeeting(blob);
-                setShowAudioModal(true); // ✅ 녹음 종료 후 모달 자동 열기
             };
 
             recorder.start();
@@ -159,10 +157,25 @@ const RecordingPage = () => {
                 <>
                     <Header meetingName={meetingName} topic={topic} />
                     <RecordingStatus isRecording={isRecording} />
-                    <RecordingControls isRecording={isRecording} startRecording={startRecording} stopRecording={stopRecording} />
+
+                    {/* ✅ '대기중' 아래에 사운드웨이브 이미지 추가 */}
+                    <div className="soundwave-container">
+                        <img src={soundwave} alt="Sound Wave" className="soundwave-img" />
+                    </div>
+
+                    <RecordingControls 
+                        isRecording={isRecording} 
+                        startRecording={startRecording} 
+                        stopRecording={stopRecording} 
+                    />
                     <Timer seconds={seconds} />
                     <TopicSwitcher onSwitch={setTopic} />
-                    <AudioModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} audioUrl={audioUrl} onDownload={downloadRecording} />
+                    <AudioModal 
+                        isOpen={showAudioModal} 
+                        onClose={() => setShowAudioModal(false)} 
+                        audioUrl={audioUrl} 
+                        onDownload={downloadRecording} 
+                    />
                 </>
             )}
         </div>
