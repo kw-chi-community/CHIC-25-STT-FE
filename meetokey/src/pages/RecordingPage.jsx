@@ -13,7 +13,7 @@ import AudioModal from "../components/RecordingComponents/AudioModal";
 // ✅ 이미지 추가 (경로 확인)
 import soundwave from "../assets/imgs/soundwave.jpg"; 
 
-const API_BASE_URL = "http://3.37.72.45:25114";  // ✅ 백엔드 API 주소
+const API_BASE_URL = "https://meetokey.charlie-3965.com/";  // ✅ 백엔드 API 주소
 
 const RecordingPage = () => {
     const navigate = useNavigate();
