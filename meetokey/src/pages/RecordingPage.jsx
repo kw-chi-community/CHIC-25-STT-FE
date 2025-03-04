@@ -13,7 +13,8 @@ import AudioModal from "../components/RecordingComponents/AudioModal";
 // ✅ 이미지 추가 (경로 확인)
 import soundwave from "../assets/imgs/soundwave.jpg"; 
 
-const API_BASE_URL = "https://meetokey.charlie-3965.com/";  // ✅ 백엔드 API 주소
+const API_BASE_URL = "http://112.152.14.116:25114";  // ✅ 백엔드 API 주소
+const WS_BASE_URL = "ws://112.152.14.116:25114/ws"; // ✅ 웹소켓 주소
 
 const RecordingPage = () => {
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ const RecordingPage = () => {
     const mediaRecorderRef = useRef(null);
     const audioChunks = useRef([]); 
     const mediaStreamRef = useRef(null);
+    const ws = useRef(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -46,6 +48,23 @@ const RecordingPage = () => {
         return () => clearInterval(interval);
     }, [isRecording, navigate]);
 
+    useEffect(() => {
+        initializeMediaStream();
+
+        // ✅ WebSocket 연결
+        ws.current = new WebSocket(WS_BASE_URL);
+        ws.current.onopen = () => console.log("🔗 WebSocket 연결됨");
+        ws.current.onmessage = (event) => console.log("📩 WebSocket 메시지:", event.data);
+        ws.current.onerror = (error) => console.error("❌ WebSocket 오류:", error);
+        ws.current.onclose = () => console.log("🔌 WebSocket 연결 종료됨");
+
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, []);
+
     const initializeMediaStream = async () => {
         try {
             console.log("🎤 마이크 권한 요청 중...");
@@ -58,10 +77,6 @@ const RecordingPage = () => {
             alert("🚨 마이크 사용이 허용되지 않았습니다. 브라우저 설정을 확인하세요.");
         }
     };
-
-    useEffect(() => {
-        initializeMediaStream();
-    }, []);
 
     const startRecording = () => {
         try {
@@ -88,12 +103,22 @@ const RecordingPage = () => {
                 setAudioBlob(blob);
                 setShowAudioModal(true);
 
+                // ✅ WebSocket으로 녹음 완료 메시지 전송
+                if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+                    ws.current.send(JSON.stringify({ event: "recording_stopped", meeting_name: meetingName, topic }));
+                }
+
                 // ✅ 백엔드에 회의 데이터 저장 요청
                 await saveMeeting(blob);
             };
 
             recorder.start();
             console.log("🎙 녹음 시작됨");
+
+            // ✅ WebSocket으로 녹음 시작 메시지 전송
+            if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+                ws.current.send(JSON.stringify({ event: "recording_started", meeting_name: meetingName, topic }));
+            }
         } catch (error) {
             console.error("🚫 녹음 시작 중 오류:", error);
         }

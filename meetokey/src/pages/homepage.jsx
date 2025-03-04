@@ -55,8 +55,8 @@ function Homepage() {
 
 
     try {
-      // 백엔드 URL: https://meetokey.charlie-3965.com/users/login
-      const response = await fetch("https://meetokey.charlie-3965.com/users/login", {
+      // 백엔드 URL: http://112.152.14.116:25114/users/login
+      const response = await fetch("http://112.152.14.116:25114/users/login", {
         method: "POST",
         body: formData,
       });
@@ -89,8 +89,8 @@ function Homepage() {
   // 회원가입 요청 함수
   const handleRegister = async () => {
     try {
-      // 백엔드 URL: https://meetokey.charlie-3965.com/users/
-      const response = await fetch("https://meetokey.charlie-3965.com/users/", {
+      // 백엔드 URL: http://112.152.14.116:25114/users/
+      const response = await fetch("http://112.152.14.116:25114/users/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
