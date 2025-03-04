@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import MeetingCard from "../components/MeetingCard";
 import "../styles/MeetingStyles.css";
 
-const API_BASE_URL = "http://3.37.72.45:25114";  // ✅ 백엔드 API 주소
+const API_BASE_URL = "https://meetokey.charlie-3965.com/";  // ✅ 백엔드 API 주소
 
 const MeetingList = () => {
   const [meetings, setMeetings] = useState([]);
