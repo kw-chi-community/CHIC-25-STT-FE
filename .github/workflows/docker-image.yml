@@ -35,25 +35,27 @@ jobs:
     needs: build-and-push  # 'build-and-push' 작업이 완료되면 실행
 
     steps:
-    - name: Install SSH and sshpass
+    - name: Install SSH client
       run: |
         sudo apt-get update
-        sudo apt-get install -y openssh-client sshpass
+        sudo apt-get install -y openssh-client
 
-    # 5. Docker Hub에 로그인 (서버에서 이미지 풀링 전)
-    - name: Log in to Docker Hub on the server
+    # 5. SSH 키 설정
+    - name: Set up SSH key
       run: |
-        echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_SERVER_IP }} >> ~/.ssh/known_hosts
 
     # 6. SSH 접속 및 Docker 이미지 Pull & Run
     - name: Deploy to Server
       run: |
-        echo "Starting deployment..."
-        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_ID }}@${{ secrets.SSH_SERVER_IP }} << 'EOF'
+        ssh ${{ secrets.SSH_ID }}@${{ secrets.SSH_SERVER_IP }} << 'EOF'
           IMAGE="${{ secrets.DOCKER_HUB_USERNAME }}/chic_stt_frontend:latest"
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker pull $IMAGE
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker stop chic_STT_FE || true
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker rm chic_STT_FE || true
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker run -d --name chic_STT_FE -p 25113:80 $IMAGE
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker system prune -af
+          sudo docker pull $IMAGE
+          sudo docker stop chic_STT_FE || true
+          sudo docker rm chic_STT_FE || true
+          sudo docker run -d --name chic_STT_FE -p 25113:80 $IMAGE
+          sudo docker system prune -af
         EOF
