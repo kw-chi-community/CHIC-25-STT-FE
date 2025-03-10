@@ -131,7 +131,7 @@ function Homepage() {
   const fetchMeetingsByDate = async (date) => {
     const token = localStorage.getItem("token");
     const [year, month, day] = date.split("-");
-    const apiUrl = `http://:25114/meetings/by-date/${year}/${month}/${day}`;
+    Url = `http://:25114/meetings/by-date/${year}/${month}/${day}`;
 
     try {
       const response = await fetch(apiUrl, {
