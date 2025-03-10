@@ -6,16 +6,13 @@ import { Modal, Button } from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
-
-import mic from '../assets/imgs/mic-remove.png';
+import LoginModal from './LoginModal';
 
 function Homepage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-
-
 
   const handleLoginClose = () => setShowLogin(false);
   const handleLoginShow = () => setShowLogin(true);
@@ -25,12 +22,12 @@ function Homepage() {
     setShowRegister(true);
   };
 
-  //login, logout 기능
+  // Login, logout functionality
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const decoded = JSON.parse(atob(token.split(".")[1])); // JWT 디코딩
+        const decoded = JSON.parse(atob(token.split(".")[1])); // JWT decoding
         setUsername(decoded.username);
         setIsLoggedIn(true);
       } catch (error) {
@@ -39,34 +36,26 @@ function Homepage() {
     }
   }, []);
 
-  // 로그인 폼 필드 상태
+  // Login form fields
   const [loginUserID, setLoginUserID] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
-
   const handleLogin = async () => {
-    // FormData 객체를 사용하여 Form 데이터를 구성합니다.
     const formData = new FormData();
     formData.append("userid", loginUserID);
     formData.append("password", loginPassword);
 
-    console.log("loginUserID:", loginUserID);
-    console.log("loginPassword:", loginPassword);
-
-
     try {
-      // 백엔드 URL: https://meetokey.charlie-3965.com/users/login
       const response = await fetch("https://meetokey.charlie-3965.com/users/login", {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error("로그인 실패");
+      if (!response.ok) throw new Error("Login failed");
 
       const data = await response.json();
-      // 백엔드에서 "access_token"과 "token_type"을 반환한다고 가정합니다.
       localStorage.setItem("token", data.access_token);
-      alert("로그인 성공");
+      alert("Login successful");
       setUsername(loginUserID);
       setIsLoggedIn(true);
       setShowLogin(false);
@@ -81,35 +70,30 @@ function Homepage() {
     setIsLoggedIn(false);
   };
 
-  // 회원가입 폼 필드 상태
+  // Registration form fields
   const [registerName, setRegisterName] = useState('');
   const [registerUserID, setRegisterUserID] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
 
-  // 회원가입 요청 함수
+  // Registration request function
   const handleRegister = async () => {
     try {
-      // 백엔드 URL: https://meetokey.charlie-3965.com/users/
       const response = await fetch("https://meetokey.charlie-3965.com/users/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: registerName,   // 사용자의 이름 (예: 한글 이름)
-          userid: registerUserID,   // 로그인 아이디 (유니크)
+          username: registerName,
+          userid: registerUserID,
           password: registerPassword,
         }),
       });
 
-      console.log("registerName:", registerName);
-      console.log("registerUserID:", registerUserID);
-      console.log("registerPassword:", registerPassword);
-
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.detail || "회원가입 실패");
+        throw new Error(errData.detail || "Registration failed");
       }
 
-      alert("회원가입 성공! 로그인 해주세요.");
+      alert("Registration successful! Please log in.");
       setShowRegister(false);
       setShowLogin(true);
     } catch (error) {
@@ -117,7 +101,7 @@ function Homepage() {
     }
   };
 
-  //회의록
+  // Meeting notes
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
   const [meetings, setMeetings] = useState([]);
@@ -146,7 +130,7 @@ function Homepage() {
       const data = await response.json();
       setMeetings(data);
     } catch (error) {
-      alert(error.message);
+      console.error(error.message);
       setMeetings([]);
     }
   };
@@ -154,6 +138,12 @@ function Homepage() {
   const navigate = useNavigate();
 
   const handleMicClick = () => {
+    if (!isLoggedIn) {
+      alert("Please log in to record a meeting");
+      handleLoginShow();
+      return;
+    }
+    
     setNotes((prevNotes) => {
       const newNotes = { ...prevNotes };
       const currentNotes = newNotes[selectedDate] || [];
@@ -162,160 +152,137 @@ function Homepage() {
       return newNotes;
     });
 
-
-    // JWT 토큰 가져오기
+    // JWT token retrieval
     const token = localStorage.getItem("token");
 
-    // Recording 페이지로 이동
+    // Navigate to Recording page
     navigate('/recording', { state: { token } });
   };
 
-
   return (
     <PageContainer>
-      <div className="px-5 vh-100 d-flex flex-column">
+      <div className="px-4 vh-100 d-flex flex-column">
         <Header>
           <LogoText>
-            <h1 style={{ fontWeight: 'bold', fontSize: '55px' }}>
-              📔 Meet Okey!
-            </h1>
+            <h1>📔 Meet Okey!</h1>
           </LogoText>
           <LoginContainer>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '20px' }}>
-              {isLoggedIn ? (
-                <>
-                  <p>Welcome! {username}</p>
-                  <Button style={{ backgroundColor: '#D8BFD8', borderColor: '#D8BFD8' }} onClick={handleLogout}>
-                    LogOut
-                  </Button>
-                </>
-              ) : (
-                <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginShow}>
-                  LogIn
-                </Button>
-              )}
-            </div>
+            {isLoggedIn ? (
+              <>
+                <WelcomeText>Welcome, {username}!</WelcomeText>
+                <AuthButton onClick={handleLogout}>
+                  Logout
+                </AuthButton>
+              </>
+            ) : (
+              <AuthButton onClick={handleLoginShow}>
+                Login
+              </AuthButton>
+            )}
           </LoginContainer>
         </Header>
+
         <MainContainer>
-
-          <MicButton style={{ backgroundColor: '#ffffff', borderColor: '#9275BF' }} onClick={handleMicClick}>🎙️ </MicButton>
-
+          <ContentCard>
+            <RecordPrompt>Record your meeting</RecordPrompt>
+            <MicButton onClick={handleMicClick}>
+              <span>🎙️</span>
+            </MicButton>
+            <RecordHint>Click the microphone to start recording</RecordHint>
+          </ContentCard>
         </MainContainer>
-
 
         <MeetingSection>
           <NoteContainer>
-            <div className="col-12 p-3">
-              <div className="note-title">{selectedDate} Meeting Notes</div> {/* 제목 추가 */}
-
-              <ul className="list-group">
-                {meetings.length > 0 ? (
-                  meetings.map((meeting, index) => (
-                    <li key={index} className="list-group-item">{`Meeting ID: ${meeting.id}`}</li>
-                  ))
-                ) : (
-                  <li className="list-group-item">No meetings found for this date</li>
-                )}
-              </ul>
-            </div>
+            <NoteHeader>
+              <span>{selectedDate} Meeting Notes</span>
+            </NoteHeader>
+            <NoteContent>
+              {meetings.length > 0 ? (
+                meetings.map((meeting, index) => (
+                  <NoteItem key={index}>
+                    <span>Meeting ID: {meeting.id}</span>
+                    <ActionButton>
+                      <i className="bi bi-eye"></i>
+                    </ActionButton>
+                  </NoteItem>
+                ))
+              ) : (
+                <EmptyState>
+                  <i className="bi bi-calendar-x"></i>
+                  <p>No meetings found for this date</p>
+                </EmptyState>
+              )}
+            </NoteContent>
           </NoteContainer>
-          <CalenderContainer>
-            <div className="col-4 p-3" style={{ textAlign: "center", width: "100%", marginLeft: "10px" }}>
-              <h3 style={{ marginBottom: "16px", textAlign: "left", fontWeight: "bold" }}>Calender</h3>
-              <StyledCalendar
-                onChange={(date) => setSelectedDate(date.toLocaleDateString("ko-KR").replace(/\. /g, "-").replace(/\.$/, ""))}
-                value={new Date(selectedDate)}
-                className="custom-calendar"
-              />
-            </div></CalenderContainer>
-
+          
+          <CalendarContainer>
+            <CalendarHeader>Calendar</CalendarHeader>
+            <StyledCalendar
+              onChange={(date) => setSelectedDate(date.toLocaleDateString("ko-KR").replace(/\. /g, "-").replace(/\.$/, ""))}
+              value={new Date(selectedDate)}
+              className="custom-calendar"
+            />
+          </CalendarContainer>
         </MeetingSection>
 
-        {/* LogIn Modal */}
-        <Modal show={showLogin} onHide={handleLoginClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>LogIn</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <input
-              type="text"
-              id="loginUserID"
-              className="form-control mb-2"
-              placeholder="ID"
-              value={loginUserID}
-              onChange={(e) => setLoginUserID(e.target.value)}
-            />
-            <input
-              type="password"
-              id="loginPassword"
-              className="form-control mb-2"
-              placeholder="Password"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLoginClose}>
-              Close
-            </Button>
-            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleLogin}>
-              LogIn
-            </Button>
-            <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegisterShow}>
-              SignUp
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          <LoginModal
+    showLogin={showLogin}
+    handleLoginClose={handleLoginClose}
+    loginUserID={loginUserID}
+    setLoginUserID={setLoginUserID}
+    loginPassword={loginPassword}
+    setLoginPassword={setLoginPassword}
+    handleLogin={handleLogin}
+    handleRegisterShow={handleRegisterShow}
+  />
 
 
-        <Modal show={showRegister} onHide={handleRegisterClose}>
+        {/* Registration Modal */}
+        <StyledModal show={showRegister} onHide={handleRegisterClose} centered>
           <Modal.Header closeButton>
-            <Modal.Title>SignUp</Modal.Title>
+            <Modal.Title>Sign Up</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <input
+            <InputField
               type="text"
-              className="form-control mb-2"
               placeholder="Name"
               value={registerName}
               onChange={(e) => setRegisterName(e.target.value)}
             />
-            <input
+            <InputField
               type="text"
-              className="form-control mb-2"
               placeholder="ID"
               value={registerUserID}
               onChange={(e) => setRegisterUserID(e.target.value)}
             />
-            <input
+            <InputField
               type="password"
-              className="form-control mb-2"
               placeholder="Password"
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button style={{ backgroundColor: '#8A2BE2', borderColor: '#8A2BE2', color: '#fff' }} onClick={handleRegisterClose}>
+            <ModalButton secondary onClick={handleRegisterClose}>
               Close
-            </Button>
-            <Button style={{ backgroundColor: '#BA55D3', borderColor: '#BA55D3', color: '#fff' }} onClick={handleRegister}>
-              SignUp
-            </Button>
+            </ModalButton>
+            <ModalButton accent onClick={handleRegister}>
+              Sign Up
+            </ModalButton>
           </Modal.Footer>
-        </Modal>
+        </StyledModal>
       </div>
     </PageContainer>
   );
-};
+}
 
 export default Homepage;
 
+// Styled Components
 const PageContainer = styled.div`
   height: 100vh;
-  background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
-  background: linear-gradient(to bottom left, #ffffff, #CBC9EF);
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -325,172 +292,321 @@ const PageContainer = styled.div`
 `;
 
 const Header = styled.div`
-  height: 10%;
+  height: 80px;
   display: flex;
   align-items: center;
-  color:#3A215B;
-  justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
-  position: relative; /* 절대 위치 요소를 위한 설정 */
-  justify-content: center;  /* 헤더 내 요소 중앙 정렬 */
-  position: relative; /* 절대 위치 요소를 위한 설정 */
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: white;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 20px;
 `;
 
 const LogoText = styled.div`
-  font-size: 50px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  h1 {
+    font-weight: bold;
+    font-size: 32px;
+    color: #6A26CD;
+    margin: 0;
+  }
 `;
 
 const LoginContainer = styled.div`
-display: flex;
-align-items: center;
-gap: 5px;
-position: absolute;
-right: 20px;
-font-size: 14px;
-display: flex;
-align-items: center;
-gap: 5px;
-position: absolute;
-right: 20px;
-font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const WelcomeText = styled.p`
+  margin: 0;
+  font-size: 16px;
+  color: #555;
+  font-weight: 500;
+`;
+
+const AuthButton = styled.button`
+  background-color: #6A26CD;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #8A45E5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(106, 38, 205, 0.2);
+  }
 `;
 
 const MainContainer = styled.div`
-  height: 30%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  margin-bottom: 30px;
 `;
 
+const ContentCard = styled.div`
+  background-color: white;
+  border-radius: 16px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+  width: 100%;
+  max-width: 600px;
+`;
 
+const RecordPrompt = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  color: #6A26CD;
+  margin-bottom: 30px;
+  text-align: center;
+`;
 
 const MicButton = styled.button`
-  padding: 30px;
-  background-color: #ffffff;
-  border: none;
-  border-radius: 300px;
+  height: 120px;
+  width: 120px;
+  background-color: #fff;
+  border: 3px solid #6A26CD;
+  border-radius: 60px;
   cursor: pointer;
-  font-size: 90px;
   display: flex;
   align-items: center;
-  box-shadow: 0 0 10px rgba(146, 117, 191, 0.5); /* 보라색 테두리 */
-  &:hover {
-    background-color: #C9C7EC !important;
-    transform: scale(1.1);
-    transition: all 0.3s ease;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 16px rgba(106, 38, 205, 0.15);
+  transition: all 0.3s ease;
+  
+  span {
+    font-size: 60px;
   }
+  
+  &:hover {
+    background-color: #F4EEFF;
+    transform: scale(1.1);
+    box-shadow: 0 12px 24px rgba(106, 38, 205, 0.2);
+  }
+`;
+
+const RecordHint = styled.p`
+  font-size: 14px;
+  color: #777;
+  text-align: center;
 `;
 
 const MeetingSection = styled.div`
-  height: 60%;
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 30px;
+  gap: 30px;
+  padding: 0 30px 30px;
+  
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
 `;
 
 const NoteContainer = styled.div`
-  height: 100%;
-  width: 2000px;
-  width: 2000px;
-  padding: 12px 24px;
+  flex: 7;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
   display: flex;
-  align-items: center;
-  background-color: #ffffff;
-  color: black;
-  border: none;
-  border-radius: 26px;
-  margin-right: 40px;
-  box-shadow: 0px 4px 10px lightgray;
-  position: relative; /* 내부 요소 고정 가능하도록 설정 */
-
-
-  .note-title {
-    font-size: 30px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ffffff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    z-index: 10;
-  }
-
-  .list-group {
-    width: 100%; /* 리스트 그룹이 컨테이너 너비를 꽉 채우도록 */
-    margin-top: 40px; /* 제목 아래에 공간 추가 */
-  }
-
-  .list-group-item {
-    background: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    border: none; /* 기존 list-group의 테두리 제거 */
-    width: 100%;
-  }
-  position: relative; /* 내부 요소 고정 가능하도록 설정 */
-
-
- 
+  flex-direction: column;
+  overflow: hidden;
 `;
 
-
-
-const CalenderContainer = styled.div`
-  height: 150%;
-  width: 500px;
+const NoteHeader = styled.div`
+  padding: 16px 24px;
+  background-color: #6A26CD;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  background-color: #ffffff;
-  justify-content: center; /* 캘린더를 중앙에 정렬 */
-  color: black;
+  justify-content: center;
+`;
+
+const NoteContent = styled.div`
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+`;
+
+const NoteItem = styled.div`
+  padding: 16px;
+  background-color: #F9F5FF;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #F4EEFF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(106, 38, 205, 0.1);
+  }
+`;
+
+const ActionButton = styled.button`
+  background-color: transparent;
   border: none;
-  border-radius: 26px;
-  flex-grow: 1;
-  box-shadow: 0px 4px 10px lightgray;
+  color: #6A26CD;
+  cursor: pointer;
+  font-size: 18px;
+  
+  &:hover {
+    color: #8A45E5;
+  }
+`;
+
+const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: #aaa;
+  
+  i {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    font-size: 16px;
+  }
+`;
+
+const CalendarContainer = styled.div`
+  flex: 3;
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+const CalendarHeader = styled.h3`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
 `;
 
 const StyledCalendar = styled(Calendar)`
   width: 100% !important;
-  height: 400px !important;
-  border-radius: 26px;
-  border: 1px solid #ffffff;
-
+  border: none !important;
+  
+  .react-calendar__navigation {
+    margin-bottom: 16px;
+  }
+  
+  .react-calendar__navigation button {
+    color: #6A26CD;
+    font-weight: 600;
+  }
+  
   .react-calendar__tile {
-    font-size: 18px !important;
-    font-size: 18px !important;
-    border-radius: 12px;
-    transition: background-color 0.3s;
+    border-radius: 8px;
+    height: 40px;
+    font-size: 14px;
+    transition: all 0.2s ease;
   }
-
+  
   .react-calendar__tile:hover {
-    background-color: #D8D8F2;
+    background-color: #F4EEFF;
   }
-
+  
   .react-calendar__tile--now {
-    background: #C9C7EC !important; /* 오늘 날짜는 하늘색으로! */
-    border-radius: 12px;
+    background-color: #E6D8FF !important;
+    color: #6A26CD !important;
+    font-weight: 600;
   }
-
+  
   .react-calendar__tile--active {
-    background: #CFADFF !important; /* 선택된 날짜는 더 진한 파란색으로! */
+    background-color: #6A26CD !important;
     color: white !important;
-    border-radius: 12px;
   }
+  
+  .react-calendar__month-view__weekdays__weekday {
+    color: #6A26CD;
+    font-weight: 600;
+  }
+`;
 
-  /* 회의록이 있는 날짜 스타일 */
-  .meeting-log-day {
-    background-color: #ffefc2 !important; /* 노란색 배경 */
-    color: #8b572a !important;
-    font-weight: bold;
+const StyledModal = styled(Modal)`
+  .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 24px;
+    
+    .modal-title {
+      font-weight: 600;
+      color: #6A26CD;
+    }
+  }
+  
+  .modal-body {
+    padding: 24px;
+  }
+  
+  .modal-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 16px 24px;
+  }
+`;
+
+const InputField = styled.input`
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    border-color: #6A26CD;
+    box-shadow: 0 0 0 2px rgba(106, 38, 205, 0.1);
+    outline: none;
+  }
+  
+  &::placeholder {
+    color: #aaa;
+  }
+`;
+
+const ModalButton = styled.button`
+  background-color: ${props => props.secondary ? 'white' : props.accent ? '#A076EB' : '#6A26CD'};
+  color: ${props => props.secondary ? '#6A26CD' : 'white'};
+  border: ${props => props.secondary ? '1px solid #6A26CD' : 'none'};
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: ${props => props.secondary ? '#F4EEFF' : props.accent ? '#B38FF0' : '#8A45E5'};
+    transform: translateY(-2px);
   }
 `;
