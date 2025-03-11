@@ -7,7 +7,7 @@ a {
 
 /* 마우스 올렸을 때 (hover) 스타일 변경 */
 a:hover {
-    color: #B45A30 !important; /* 마우스 올리면 색상 변경 */
+    color: #cfa3fc !important; /* 마우스 올리면 색상 변경 */
     text-decoration: none !important; /* hover 시 밑줄 제거 */
 }
 
@@ -15,6 +15,11 @@ a:hover {
 a:visited {
     color: black;
     text-decoration: none !important;
+}
+
+.header__logo a:hover {
+    color: inherit !important; /* 원래 색상 유지 */
+    text-decoration: none !important; /* 밑줄 제거 */
 }
 
 
@@ -128,6 +133,11 @@ a:visited {
 
 
 /* image__inner */
+.image__btn:hover {
+    color: inherit !important; /* 원래 색상 유지 */
+    text-decoration: none !important; /* 밑줄 제거 */
+}
+
 .image__inner {
     display: flex;
     justify-content: space-between;
