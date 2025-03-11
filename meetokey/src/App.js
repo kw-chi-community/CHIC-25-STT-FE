@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 
-import Landing from './pages/Landing'; // ✅ 추가: 랜딩 페이지
+import Landing from './pages/Landing'; 
 import Home from './pages/homepage'; 
 import RecordingPage from './pages/RecordingPage'; 
 import MeetingDashboard from "./pages/MeetingDashboard";
