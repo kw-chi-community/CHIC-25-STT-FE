@@ -2,7 +2,6 @@ import React from 'react';
 
 // ✅ CSS 파일 올바른 경로
 import '../styles/reset.css'; 
-import '../styles/Landing.css';
 
 // ✅ 컴포넌트 올바른 경로
 import Header from '../components/landingComponents/Header';
