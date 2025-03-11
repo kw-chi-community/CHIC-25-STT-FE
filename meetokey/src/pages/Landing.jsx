@@ -5,12 +5,12 @@ import '../styles/reset.css';
 import '../styles/Landing.css';
 
 // ✅ 컴포넌트 올바른 경로
-import Header from '../components/randingComponents/Header';
-import Main from '../components/randingComponents/Main';
-import Footer from '../components/randingComponents/Footer';
-import Slider from '../components/randingComponents/Slider';
-import Image from '../components/randingComponents/Image';
-import Card from '../components/randingComponents/Card';
+import Header from '../components/landingComponents/Header';
+import Main from '../components/landingComponents/Main';
+import Footer from '../components/landingComponents/Footer';
+import Slider from '../components/landingComponents/Slider';
+import Image from '../components/landingComponents/Image';
+import Card from '../components/landingComponents/Card';
 
 const Landing = () => {
     return (

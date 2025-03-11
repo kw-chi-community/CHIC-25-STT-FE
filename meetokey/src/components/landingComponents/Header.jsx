@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../styles/Landing.css';  
-
+import '../../styles/reset.css';  
 
 const Header = ( props ) => {
     return (
