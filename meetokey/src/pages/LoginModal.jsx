@@ -2,7 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 
-const LoginModal = ({ showLogin, handleLoginClose, loginUserID, setLoginUserID, loginPassword, setLoginPassword, handleLogin, handleRegisterShow }) => {
+const LoginModal = ({
+  showLogin,
+  handleLoginClose,
+  loginUserID,
+  setLoginUserID,
+  loginPassword,
+  setLoginPassword,
+  handleLogin,
+  handleRegisterShow,
+  errorMessage
+}) => {
   return (
     <StyledModal show={showLogin} onHide={handleLoginClose} centered>
       <Modal.Header closeButton>
@@ -21,6 +31,8 @@ const LoginModal = ({ showLogin, handleLoginClose, loginUserID, setLoginUserID, 
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
         />
+        {/* 에러 메시지 표시 */}
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </Modal.Body>
       <Modal.Footer>
         <ModalButton secondary onClick={handleLoginClose}>
@@ -46,21 +58,21 @@ const StyledModal = styled(Modal)`
     border: none;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
   }
-  
+
   .modal-header {
     border-bottom: 1px solid #f0f0f0;
     padding: 20px 24px;
-    
+
     .modal-title {
       font-weight: 600;
       color: #6A26CD;
     }
   }
-  
+
   .modal-body {
     padding: 24px;
   }
-  
+
   .modal-footer {
     border-top: 1px solid #f0f0f0;
     padding: 16px 24px;
@@ -75,13 +87,13 @@ const InputField = styled.input`
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s ease;
-  
+
   &:focus {
     border-color: #6A26CD;
     box-shadow: 0 0 0 2px rgba(106, 38, 205, 0.1);
     outline: none;
   }
-  
+
   &::placeholder {
     color: #aaa;
   }
@@ -97,9 +109,17 @@ const ModalButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background-color: ${props => props.secondary ? '#F4EEFF' : props.accent ? '#B38FF0' : '#8A45E5'};
     transform: translateY(-2px);
   }
+`;
+
+// 에러 메시지 스타일 추가
+const ErrorText = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-top: 12px;
+  text-align: center;
 `;

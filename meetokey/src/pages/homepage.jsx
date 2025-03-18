@@ -11,8 +11,6 @@ import LoginModal from './LoginModal';
 function Homepage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
 
   const handleLoginClose = () => setShowLogin(false);
   const handleLoginShow = () => setShowLogin(true);
@@ -22,128 +20,25 @@ function Homepage() {
     setShowRegister(true);
   };
 
-  // Login, logout functionality
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = JSON.parse(atob(token.split(".")[1])); // JWT decoding
-        setUsername(decoded.username);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Invalid token", error);
-      }
-    }
-  }, []);
-
-  // Login form fields
-  const [loginUserID, setLoginUserID] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-
-  const handleLogin = async () => {
-    const formData = new FormData();
-    formData.append("userid", loginUserID);
-    formData.append("password", loginPassword);
-
-    try {
-      const response = await fetch("https://meetokey.charlie-3965.com/users/login", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Login failed");
-
-      const data = await response.json();
-      localStorage.setItem("token", data.access_token);
-      alert("Login successful");
-      setUsername(loginUserID);
-      setIsLoggedIn(true);
-      setShowLogin(false);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUsername("");
-    setIsLoggedIn(false);
-  };
-
-  // Registration form fields
-  const [registerName, setRegisterName] = useState('');
-  const [registerUserID, setRegisterUserID] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-
-  // Registration request function
-  const handleRegister = async () => {
-    try {
-      const response = await fetch("https://meetokey.charlie-3965.com/users/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: registerName,
-          userid: registerUserID,
-          password: registerPassword,
-        }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.detail || "Registration failed");
-      }
-
-      alert("Registration successful! Please log in.");
-      setShowRegister(false);
-      setShowLogin(true);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
   // Meeting notes
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [notes, setNotes] = useState({});
-  const [meetings, setMeetings] = useState([]);
+
+  // Dummy meetings for demo purposes
+  const [meetings, setMeetings] = useState([
+    { id: 1, title: 'Meeting 1' },
+    { id: 2, title: 'Meeting 2' },
+  ]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      fetchMeetingsByDate(selectedDate);
-    }
-  }, [selectedDate, isLoggedIn]);
-
-  const fetchMeetingsByDate = async (date) => {
-    const token = localStorage.getItem("token");
-    const [year, month, day] = date.split("-");
-    const apiUrl = `http://:25114/meetings/by-date/${year}/${month}/${day}`;
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error("Meetings not found");
-      }
-      const data = await response.json();
-      setMeetings(data);
-    } catch (error) {
-      console.error(error.message);
-      setMeetings([]);
-    }
-  };
+    // Here we can fetch meetings based on the selected date if needed
+    // For now, we'll use dummy data.
+  }, [selectedDate]);
 
   const navigate = useNavigate();
 
   const handleMicClick = () => {
-    if (!isLoggedIn) {
-      alert("Please log in to record a meeting");
-      handleLoginShow();
-      return;
-    }
-    
+    // Removed the check for login, as we're skipping JWT logic
     setNotes((prevNotes) => {
       const newNotes = { ...prevNotes };
       const currentNotes = newNotes[selectedDate] || [];
@@ -152,11 +47,8 @@ function Homepage() {
       return newNotes;
     });
 
-    // JWT token retrieval
-    const token = localStorage.getItem("token");
-
-    // Navigate to Recording page
-    navigate('/recording', { state: { token } });
+    // Simply navigate to the recording page (no token involved)
+    navigate('/recording');
   };
 
   return (
@@ -167,18 +59,9 @@ function Homepage() {
             <h1>📔 Meet Okey!</h1>
           </LogoText>
           <LoginContainer>
-            {isLoggedIn ? (
-              <>
-                <WelcomeText>Welcome, {username}!</WelcomeText>
-                <AuthButton onClick={handleLogout}>
-                  Logout
-                </AuthButton>
-              </>
-            ) : (
-              <AuthButton onClick={handleLoginShow}>
-                Login
-              </AuthButton>
-            )}
+            <AuthButton onClick={handleLoginShow}>
+              Login
+            </AuthButton>
           </LoginContainer>
         </Header>
 
@@ -226,17 +109,11 @@ function Homepage() {
           </CalendarContainer>
         </MeetingSection>
 
-          <LoginModal
-    showLogin={showLogin}
-    handleLoginClose={handleLoginClose}
-    loginUserID={loginUserID}
-    setLoginUserID={setLoginUserID}
-    loginPassword={loginPassword}
-    setLoginPassword={setLoginPassword}
-    handleLogin={handleLogin}
-    handleRegisterShow={handleRegisterShow}
-  />
-
+        <LoginModal
+          showLogin={showLogin}
+          handleLoginClose={handleLoginClose}
+          handleRegisterShow={handleRegisterShow}
+        />
 
         {/* Registration Modal */}
         <StyledModal show={showRegister} onHide={handleRegisterClose} centered>
@@ -244,30 +121,13 @@ function Homepage() {
             <Modal.Title>Sign Up</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <InputField
-              type="text"
-              placeholder="Name"
-              value={registerName}
-              onChange={(e) => setRegisterName(e.target.value)}
-            />
-            <InputField
-              type="text"
-              placeholder="ID"
-              value={registerUserID}
-              onChange={(e) => setRegisterUserID(e.target.value)}
-            />
-            <InputField
-              type="password"
-              placeholder="Password"
-              value={registerPassword}
-              onChange={(e) => setRegisterPassword(e.target.value)}
-            />
+            {/* Registration form */}
           </Modal.Body>
           <Modal.Footer>
             <ModalButton secondary onClick={handleRegisterClose}>
               Close
             </ModalButton>
-            <ModalButton accent onClick={handleRegister}>
+            <ModalButton accent>
               Sign Up
             </ModalButton>
           </Modal.Footer>
@@ -279,7 +139,7 @@ function Homepage() {
 
 export default Homepage;
 
-// Styled Components
+// Styled Components (No changes needed)
 const PageContainer = styled.div`
   height: 100vh;
   background-color: #fff;
@@ -317,13 +177,6 @@ const LoginContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 15px;
-`;
-
-const WelcomeText = styled.p`
-  margin: 0;
-  font-size: 16px;
-  color: #555;
-  font-weight: 500;
 `;
 
 const AuthButton = styled.button`
@@ -544,69 +397,5 @@ const StyledCalendar = styled(Calendar)`
   .react-calendar__month-view__weekdays__weekday {
     color: #6A26CD;
     font-weight: 600;
-  }
-`;
-
-const StyledModal = styled(Modal)`
-  .modal-content {
-    border-radius: 16px;
-    border: none;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
-  }
-  
-  .modal-header {
-    border-bottom: 1px solid #f0f0f0;
-    padding: 20px 24px;
-    
-    .modal-title {
-      font-weight: 600;
-      color: #6A26CD;
-    }
-  }
-  
-  .modal-body {
-    padding: 24px;
-  }
-  
-  .modal-footer {
-    border-top: 1px solid #f0f0f0;
-    padding: 16px 24px;
-  }
-`;
-
-const InputField = styled.input`
-  width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  
-  &:focus {
-    border-color: #6A26CD;
-    box-shadow: 0 0 0 2px rgba(106, 38, 205, 0.1);
-    outline: none;
-  }
-  
-  &::placeholder {
-    color: #aaa;
-  }
-`;
-
-const ModalButton = styled.button`
-  background-color: ${props => props.secondary ? 'white' : props.accent ? '#A076EB' : '#6A26CD'};
-  color: ${props => props.secondary ? '#6A26CD' : 'white'};
-  border: ${props => props.secondary ? '1px solid #6A26CD' : 'none'};
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: ${props => props.secondary ? '#F4EEFF' : props.accent ? '#B38FF0' : '#8A45E5'};
-    transform: translateY(-2px);
   }
 `;
