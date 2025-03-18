@@ -31,7 +31,7 @@ const LoginModal = ({
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
         />
-        {/* 에러 메시지 표시 */}
+        {/* Display error message */}
         {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </Modal.Body>
       <Modal.Footer>
@@ -116,7 +116,7 @@ const ModalButton = styled.button`
   }
 `;
 
-// 에러 메시지 스타일 추가
+// Error message style
 const ErrorText = styled.div`
   color: red;
   font-size: 14px;

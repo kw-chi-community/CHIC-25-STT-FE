@@ -38,7 +38,7 @@ function Homepage() {
   const navigate = useNavigate();
 
   const handleMicClick = () => {
-    // Removed the check for login, as we're skipping JWT logic
+    // Just navigate to the recording page (no token involved)
     setNotes((prevNotes) => {
       const newNotes = { ...prevNotes };
       const currentNotes = newNotes[selectedDate] || [];

@@ -31,10 +31,7 @@ const RecordingPage = () => {
     const mediaStreamRef = useRef(null);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            navigate("/");
-        }
+        // The authentication check and token logic are removed
 
         let interval;
         if (isRecording) {
@@ -44,7 +41,7 @@ const RecordingPage = () => {
             setSeconds(0);
         }
         return () => clearInterval(interval);
-    }, [isRecording, navigate]);
+    }, [isRecording]);
 
     const initializeMediaStream = async () => {
         try {
