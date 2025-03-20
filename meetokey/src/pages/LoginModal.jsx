@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const LoginModal = ({
   showLogin,
@@ -9,10 +10,17 @@ const LoginModal = ({
   setLoginUserID,
   loginPassword,
   setLoginPassword,
-  handleLogin,
   handleRegisterShow,
   errorMessage
 }) => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // 로그인 성공 처리
+    navigate("/dashboard");
+    handleLoginClose(); // 로그인 후 모달 닫기
+  };
+
   return (
     <StyledModal show={showLogin} onHide={handleLoginClose} centered>
       <Modal.Header closeButton>
@@ -31,7 +39,6 @@ const LoginModal = ({
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
         />
-        {/* Display error message */}
         {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </Modal.Body>
       <Modal.Footer>
@@ -116,7 +123,6 @@ const ModalButton = styled.button`
   }
 `;
 
-// Error message style
 const ErrorText = styled.div`
   color: red;
   font-size: 14px;
