@@ -2,21 +2,32 @@ import React, { useState } from 'react';
 import LoginModal from '../../pages/LoginModal';
 
 const Slider = (props) => {
-  const [showLogin, setShowLogin] = useState(false); 
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [loginUserID, setLoginUserID] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   // 로그인 모달 열기
   const handleLoginShow = () => {
-    console.log("로그인 모달 열기"); // 상태 확인용
     setShowLogin(true);
+    setShowRegister(false);
   };
 
   // 로그인 모달 닫기
   const handleLoginClose = () => {
-    console.log("로그인 모달 닫기"); // 상태 확인용
     setShowLogin(false);
+  };
+
+  // 회원가입 모달 열기
+  const handleRegisterShow = () => {
+    setShowLogin(false); // 로그인 모달 닫기
+    setShowRegister(true); // 회원가입 모달 열기
+  };
+
+  // 회원가입 모달 닫기
+  const handleRegisterClose = () => {
+    setShowRegister(false);
   };
 
   return (
@@ -37,22 +48,26 @@ const Slider = (props) => {
                 <a href="/" onClick={(e) => { e.preventDefault(); handleLoginShow(); }}>
                   로그인
                 </a> 
-                <a href="/" className="black">회원가입</a>
+                <a href="/" className="black" onClick={(e) => { e.preventDefault(); handleRegisterShow(); }}>
+                  회원가입
+                </a>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 로그인 모달 */}
+      {/* 로그인 & 회원가입 모달 */}
       <LoginModal
         showLogin={showLogin}
         handleLoginClose={handleLoginClose}
+        showRegister={showRegister}
+        handleRegisterClose={handleRegisterClose}
+        handleRegisterShow={handleRegisterShow}
         loginUserID={loginUserID}
         setLoginUserID={setLoginUserID}
         loginPassword={loginPassword}
         setLoginPassword={setLoginPassword}
-        handleRegisterShow={() => alert('회원가입 페이지로 이동')}
         errorMessage={errorMessage}
       />
     </section>
