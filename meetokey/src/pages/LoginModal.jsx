@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 const LoginModal = ({
   showLogin,
@@ -10,20 +9,13 @@ const LoginModal = ({
   setLoginUserID,
   loginPassword,
   setLoginPassword,
+  handleLogin,
   handleRegisterShow,
   errorMessage
 }) => {
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    // 로그인 성공 처리
-    navigate("/dashboard");
-    handleLoginClose(); // 로그인 후 모달 닫기
-  };
-
   return (
     <StyledModal show={showLogin} onHide={handleLoginClose} centered>
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title>Login</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -39,18 +31,18 @@ const LoginModal = ({
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
         />
+        {/* Display error message */}
         {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </Modal.Body>
       <Modal.Footer>
-        <ModalButton secondary onClick={handleLoginClose}>
-          Close
-        </ModalButton>
-        <ModalButton onClick={handleLogin}>
-          Login
-        </ModalButton>
-        <ModalButton accent onClick={handleRegisterShow}>
-          Sign Up
-        </ModalButton>
+    
+  <ModalButton onClick={handleLogin}>
+   로그인
+  </ModalButton>
+  <ModalButton signup onClick={handleRegisterShow}>
+    회원가입
+  </ModalButton>
+
       </Modal.Footer>
     </StyledModal>
   );
@@ -67,13 +59,18 @@ const StyledModal = styled(Modal)`
   }
 
   .modal-header {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #ccc;
     padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-    .modal-title {
-      font-weight: 600;
-      color: #6A26CD;
-    }
+  .modal-title {
+    font-size: 30px; /* 기존 header__logo와 동일 */
+    font-weight: 700; /* 기존 header__logo와 동일 */
+    text-transform: uppercase;
+    color: rgb(0, 0, 0);
   }
 
   .modal-body {
@@ -81,8 +78,11 @@ const StyledModal = styled(Modal)`
   }
 
   .modal-footer {
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #ccc;
     padding: 16px 24px;
+    display: flex;
+    justify-content: flex-end; /* 버튼을 오른쪽 정렬 */
+    gap: 10px; /* 버튼 간격 추가 */
   }
 `;
 
@@ -90,10 +90,12 @@ const InputField = styled.input`
   width: 100%;
   padding: 12px 16px;
   margin-bottom: 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #d9d9d9;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px; /* 기존 사이트 폰트 크기와 통일 */
+  font-weight: 300; /* 기존 card__body .desc와 동일 */
   transition: all 0.2s ease;
+  background: #f8f8f8;
 
   &:focus {
     border-color: #6A26CD;
@@ -102,23 +104,28 @@ const InputField = styled.input`
   }
 
   &::placeholder {
-    color: #aaa;
+    color: #666;
+    font-size: 14px;
+    font-weight: 300;
   }
 `;
 
 const ModalButton = styled.button`
-  background-color: ${props => props.secondary ? 'white' : props.accent ? '#A076EB' : '#6A26CD'};
-  color: ${props => props.secondary ? '#6A26CD' : 'white'};
-  border: ${props => props.secondary ? '1px solid #6A26CD' : 'none'};
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
+  background-color: ${(props) =>
+    props.signup ? "white" : "#6A26CD"};
+  color: ${(props) => (props.signup ? "#6A26CD" : "white")};
+  border: ${(props) => (props.signup ? "2px solid #6A26CD" : "none")};
+  border-radius: 50px; /* 기존 버튼 스타일과 통일 */
+  padding: 10px 30px;
+  font-size: 16px; /* 기존 버튼 스타일과 동일 */
+  font-weight: 600; /* 기존 버튼 스타일과 동일 */
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.33s ease;
+  text-transform: uppercase;
 
   &:hover {
-    background-color: ${props => props.secondary ? '#F4EEFF' : props.accent ? '#B38FF0' : '#8A45E5'};
+    background-color: ${(props) =>
+      props.signup ? "#F4EEFF" : "#8A45E5"};
     transform: translateY(-2px);
   }
 `;
@@ -128,4 +135,6 @@ const ErrorText = styled.div`
   font-size: 14px;
   margin-top: 12px;
   text-align: center;
+  font-weight: bold;
 `;
+
