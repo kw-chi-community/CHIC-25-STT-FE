@@ -1,172 +1,101 @@
-/* 🎨 전체 페이지 스타일 - 세로 길이 조정 */
+/* 🎨 전체 페이지 스타일 */
 .recording-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* 🔹 위쪽 정렬 */
-    width: 90%;
-    max-width: 1200px; /* 옆으로 길게 조정 */
-    margin: 20px auto; /* 🔹 세로 여백 추가 */
-    padding: 15px 20px; /* 🔹 패딩 줄여서 높이 감소 */
-    background: white; /* 배경 흰색 */
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 살짝 그림자 추가 */
-}
-
-/* 헤더 스타일 */
-.headers {
-    width: 100%;
-    padding: 15px; /* 🔹 패딩 줄이기 */
-    text-align: center;
-    font-size: 1.6rem; /* 🔹 글자 크기 조정 */
-    font-weight: bold;
-    color: #6a1b9a;
-}
-
-/* 녹음 상태 표시 */
-.recording-status {
-    margin: 10px 0; /* 🔹 여백 줄이기 */
-    padding: 8px 16px; /* 🔹 패딩 줄이기 */
-    border-radius: 12px;
-    background-color: rgba(106, 27, 154, 0.1); /* 연한 보라색 */
-    font-size: 1.3rem; /* 🔹 크기 감소 */
-    font-weight: bold;
-    text-align: center;
-    color: #6a1b9a;
-    width: fit-content;
-}
-
-/* 녹음 컨트롤 버튼 스타일 */
-.recording-controls {
-    display: flex;
     justify-content: center;
-    gap: 0.8rem; /* 🔹 버튼 간격 줄이기 */
-    margin: 15px 0; /* 🔹 여백 줄이기 */
     width: 100%;
+    height: 100vh;
+    background: white;  /* ✅ 배경 흰색 */
+    color: black;
+    padding-top: 30px;
 }
 
-.recording-controls button {
-    padding: 10px 20px; /* 🔹 버튼 크기 조정 */
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem; /* 🔹 글자 크기 줄이기 */
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    width: 130px;
-}
-
-/* 타이머 스타일 */
-.timer {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 10px 0; /* 🔹 여백 줄이기 */
-    padding: 6px 14px; /* 🔹 패딩 줄이기 */
-    background-color: rgba(106, 27, 154, 0.1);
-    border-radius: 8px;
-    width: fit-content;
-    text-align: center;
-    color: #6a1b9a;
-}
-
-/* 오디오 플레이어 스타일 */
-.audio-player {
-    margin-top: 15px;
-    padding: 12px;
-    background-color: rgba(106, 27, 154, 0.05);
-    border-radius: 10px;
-    text-align: center;
-    width: 90%; /* 🔹 크기 줄이기 */
-}
-
-.audio-player audio {
-    width: 100%;
-}
-
-/* 모달 스타일 */
-.recording-modal {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px; /* 🔹 패딩 줄이기 */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 50%;
-    max-width: 500px;
-    text-align: center;
-}
-
-/* 반응형 스타일 (모바일 최적화) */
-@media (max-width: 768px) {
-    .recording-page {
-        width: 95%;
-        padding: 10px 15px; /* 🔹 모바일에서 패딩 더 줄이기 */
-    }
-
-    .recording-controls {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .recording-controls button {
-        width: 100%;
-    }
-
-    .audio-player {
-        width: 100%;
-    }
-
-    .recording-modal {
-        width: 90%;
-    }
-}
-
-/* 📌 녹음 페이지 스타일 */
-.recording-page {
+/* 🎵 사운드 웨이브 박스 (중앙 박스) */
+.soundwave-box {
+    width: 75%;
+    max-width: 900px;
+    height: 280px;
+    background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
+    border-radius: 16px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px; /* 요소 간 기본 간격 */
-    padding: 40px 20px; /* 상하 여백 추가 */
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
 }
 
-/* 🟣 Header 여백 조정 */
-.header {
-    margin-bottom: 60px; /* 아래쪽 여백 추가 */
-}
-
-/* 🎙 녹음 상태 여백 */
-.recording-status {
-    margin-bottom: 30px; /* 아래쪽 여백 추가 */
-}
-
-/* 🎮 녹음 컨트롤 버튼 */
-.recording-controls {
-    margin-top: 60px; /* 위쪽 여백 증가 */
-    gap: 1.5rem; /* 버튼 사이 간격 증가 */
-}
-
-/* ⏳ 타이머 여백 */
-.timer {
-    margin: 50px 0; /* 위아래 여백 증가 */
-}
-
-/* 🔄 주제 변경 입력창 여백 */
-.topic-switcher {
-    margin-top: 60px; /* 위쪽 여백 증가 */
-}
-
-/* 🎵 오디오 모달 여백 */
-.audio-modal {
-    margin-top: 60px; /* 위쪽 여백 증가 */
-}
-
+/* 🎵 사운드 웨이브 애니메이션 */
 .soundwave-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 10px; /* 상단 요소와 간격 조절 */
+    align-items: flex-end;
+    height: 150px;
+    gap: 8px;
 }
 
-.soundwave-img {
-    width: 70%;  /* 적당한 크기로 조절 */
-    max-width: 500px;
-    height: auto;
+/* 🟣 각 wave bar */
+.wave-bar {
+    width: 10px;
+    height: 40px;
+    background-color: white;
+    border-radius: 4px;
+    opacity: 0.9;
+    transition: height 0.3s ease;
+}
+
+/* 🟣 애니메이션 부여 - 녹음 중일 때만 */
+.wave-bar.animate {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* 🟣 각 wave-bar에 delay 적용 */
+.wave-bar.animate:nth-child(odd) { animation-delay: 0.1s; }
+.wave-bar.animate:nth-child(even) { animation-delay: 0.2s; }
+
+/* 🟣 애니메이션 키프레임 */
+@keyframes pulse {
+    0%, 100% { height: 40px; }
+    50% { height: 120px; }
+}
+
+/* 🛑 녹음 버튼 */
+.recording-controls button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 150px;
+}
+
+/* 🎤 녹음 시작 버튼 */
+.recording-controls .start-btn {
+    background: #f44336;
+    color: white;
+}
+
+/* 🛑 녹음 중지 버튼 */
+.recording-controls .stop-btn {
+    background: #4caf50;
+    color: white;
+}
+
+/* 🎯 상태 표시 */
+.recording-status {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #6a1b9a;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ⏳ 타이머 */
+.timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 15px;
 }

@@ -12,6 +12,7 @@
     animation: fadeInOverlay 0.3s ease-in-out;
 }
 
+
 /* 🌟 모달 본체 (화이트 배경 + 보라색 포인트) */
 .modal-content {
     background: #ffffff; /* 모달 배경을 화이트로 */
