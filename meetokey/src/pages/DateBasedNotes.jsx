@@ -3,42 +3,84 @@ import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
+const pastelColors = [
+    "#ffe0ec", "#e0f7fa", "#fff3cd", "#e6f4ea",
+    "#f3e5f5", "#e3f2fd", "#fdebd0", "#e0e0e0"
+  ];
+  
+  const getColorForDate = (dateStr) => {
+    let hash = 0;
+    for (let i = 0; i < dateStr.length; i++) {
+      hash = dateStr.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % pastelColors.length;
+    return pastelColors[index];
+  };
+  
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [meetings, setMeetings] = useState([
-    { date: "2024-03-21", title: "프로젝트 킥오프 회의" },
-    { date: "2024-03-22", title: "UI 디자인 검토 회의" },
-    { date: "2024-03-22", title: "개발 일정 조율" },
+  const [meetings] = useState([
+    { date: "2025-03-1", title: "프로젝트 킥오프 회의" },
+    { date: "2025-03-10", title: "UI 디자인 검토 회의" },
+    { date: "2025-03-22", title: "개발 일정 조율" },
+    { date: "2025-03-3", title: "사용자 피드백 정리" },
+    { date: "2025-03-23", title: "마케팅 전략 회의" },
+    { date: "2025-03-26", title: "배포 일정 논의" }
   ]);
 
-  // 선택한 날짜의 회의 목록 필터링
+  const recordedDates = [...new Set(meetings.map(meeting => meeting.date))];
+
   const filteredMeetings = meetings.filter(
     (meeting) => meeting.date === selectedDate.toISOString().split("T")[0]
   );
 
   return (
     <PageContainer>
-      {/* 📌 사이드바 (주제별 회의록 아래에 달력 추가) */}
       <Sidebar>
         <Logo>MEET OKEY</Logo>
-        <NavItem>📅 날짜별 회의록</NavItem>
-        <NavItem active>📚 주제별 회의록</NavItem>
-        
-        {/* 📅 사이드바에 달력 추가 */}
+        <NavItem active>📅 날짜별 회의록</NavItem>
+        <NavItem>📚 주제별 회의록</NavItem>
+
         <SidebarCalendar>
-          <CalendarTitle>📆 날짜 선택</CalendarTitle>
+          <CalendarTitle>📆 Calendar 📆</CalendarTitle>
           <StyledCalendar
-            onChange={setSelectedDate}
-            value={selectedDate}
-            calendarType="gregory"
+  onChange={setSelectedDate}
+  value={selectedDate}
+  calendarType="gregory"
+  tileContent={({ date, view }) => {
+    if (view === "month") {
+      const dateStr = date.toISOString().split("T")[0];
+      const selectedStr = selectedDate.toISOString().split("T")[0];
+
+      // 선택된 날짜는 표시 안함 (배경 겹침 방지)
+      if (dateStr === selectedStr) return null;
+
+      if (recordedDates.includes(dateStr)) {
+        const bg = getColorForDate(dateStr);
+        return (
+          <div
+            style={{
+              backgroundColor: bg,
+              borderRadius: "0px",
+              height: "30%",
+              width: "100%",
+              boxSizing: "border-box",
+              border: "2px solid transparent",
+            }}
           />
+        );
+      }
+    }
+    return null;
+  }}
+/>
+
         </SidebarCalendar>
 
-        <Logout>🚪뒤로 가기 </Logout>
+        <Logout>🚪 뒤로 가기</Logout>
       </Sidebar>
 
-      {/* 📜 오른쪽에 선택한 날짜의 회의 목록 */}
       <MainContent>
         <MeetingListSection>
           <MeetingTitle>📜 회의 목록 ({selectedDate.toDateString()})</MeetingTitle>
@@ -57,7 +99,6 @@ const CalendarPage = () => {
 
 export default CalendarPage;
 
-// 스타일 정의
 const PageContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -85,7 +126,7 @@ const NavItem = styled.div`
   margin-bottom: 10px;
   background: ${(props) => (props.active ? "#6a26cd" : "transparent")};
   color: ${(props) => (props.active ? "white" : "#6a26cd")};
-  font-weight: 600;
+  font-weight: 00;
   border-radius: 8px;
   cursor: pointer;
   text-align: left;
@@ -96,7 +137,6 @@ const NavItem = styled.div`
   }
 `;
 
-// 📅 사이드바 안에 들어가는 달력 스타일
 const SidebarCalendar = styled.div`
   margin-top: 20px;
   padding: 10px;
@@ -130,7 +170,16 @@ const StyledCalendar = styled(Calendar)`
   .react-calendar__tile:hover {
     background: #e6d8ff;
   }
+
+  /* ✅ highlight 클래스 스타일 */
+  .highlight {
+    background-color: #ffe0ec !important; /* 파스텔 핑크 */
+    color: #6a26cd !important;
+    border-radius: 8px;
+    font-weight: bold;
+  }
 `;
+
 
 const Logout = styled.div`
   margin-top: auto;
@@ -154,9 +203,10 @@ const MeetingListSection = styled.div`
 `;
 
 const MeetingTitle = styled.h4`
-  color: #6a26cd;
+  color:rgb(0, 0, 0);
   text-align: center;
   margin-bottom: 10px;
+font-weight: 200;
 `;
 
 const MeetingItem = styled.div`
