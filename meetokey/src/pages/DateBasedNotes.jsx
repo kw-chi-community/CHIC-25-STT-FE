@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useNavigate } from "react-router-dom";
+
 
 const pastelColors = [
     "#ffe0ec", "#e0f7fa", "#fff3cd", "#e6f4ea",
@@ -20,6 +22,7 @@ const pastelColors = [
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const navigate = useNavigate();
   const [meetings] = useState([
     { date: "2025-03-1", title: "프로젝트 킥오프 회의" },
     { date: "2025-03-10", title: "UI 디자인 검토 회의" },
@@ -40,7 +43,7 @@ const CalendarPage = () => {
       <Sidebar>
         <Logo>MEET OKEY</Logo>
         <NavItem active>📅 날짜별 회의록</NavItem>
-        <NavItem>📚 주제별 회의록</NavItem>
+        <NavItem onClick={() => navigate("/topic")}>📚 주제별 회의록</NavItem>
 
         <SidebarCalendar>
           <CalendarTitle>📆 Calendar 📆</CalendarTitle>
