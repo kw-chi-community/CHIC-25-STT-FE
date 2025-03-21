@@ -13,7 +13,7 @@ const Image = ( props ) => {
                         지난 회의 내용을 한눈에 확인하고, <br />
                         중요한 논의 사항을 빠르게 찾아보세요.
                     </p>
-                    {/* ✅ Link로 교체 */}
+                    
                     <Link className="image__btn" to="/date">날짜별로 보기</Link>
                 </article>
 
@@ -23,7 +23,7 @@ const Image = ( props ) => {
                         회의 내용을 주제별로 정리하여 빠르게 찾아볼 수 있습니다. <br />
                         원하는 주제를 선택하고 회의록을 확인하세요.
                     </p>
-                    <a className="image__btn yellow" href="/">주제별로 보기</a>
+                    <Link className="image__btn yellow" to="/topic">주제별로 보기</Link>
                 </article>
             </div>
         </section>

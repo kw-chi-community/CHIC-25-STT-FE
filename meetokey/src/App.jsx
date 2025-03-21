@@ -10,6 +10,7 @@ import RecordingPage from './pages/RecordingPage';
 import MeetingDashboard from "./pages/MeetingDashboard";
 import MeetingList from "./pages/MeetingList";  
 import DateBasedNotes from './pages/DateBasedNotes'; 
+import TopicBasedNotes from './pages/TopicBasedNotes'; 
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/dashboard" element={<MeetingDashboard />} />
           <Route path="/meetings" element={<MeetingList />} />
           <Route path="/date" element={<DateBasedNotes />} />
+          <Route path="/topic" element={<TopicBasedNotes />} />
         </Routes>
       </div>
     </Router>
