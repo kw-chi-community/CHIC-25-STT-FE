@@ -9,6 +9,7 @@ import Home from './pages/homepage';
 import RecordingPage from './pages/RecordingPage'; 
 import MeetingDashboard from "./pages/MeetingDashboard";
 import MeetingList from "./pages/MeetingList";  
+import DateBasedNotes from './pages/DateBasedNotes'; 
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/recording" element={<RecordingPage />} /> 
           <Route path="/dashboard" element={<MeetingDashboard />} />
           <Route path="/meetings" element={<MeetingList />} />
+          <Route path="/date" element={<DateBasedNotes />} />
         </Routes>
       </div>
     </Router>

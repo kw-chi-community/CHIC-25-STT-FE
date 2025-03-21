@@ -37,7 +37,9 @@ const Slider = (props) => {
         <div className="slider">
           <div className="slider__img">
             <div className="desc">
-              <h3>MEET OKEY</h3>
+              <h3>MEET OKEY
+
+              </h3>
               <p>
                 <br />
                 똑똑한 회의, 핵심만 딱!
