@@ -27,7 +27,7 @@ const Header = (props) => {
                     <div className="header__logo">
                         <a href="/">MEET OKEY</a>
                     </div>
-                    <nav className="header__menu" style={{ marginLeft: "-830px" }}>
+                    <nav className="header__menu">
                         <ul>
                             <li><a href="/">회의 시작</a></li>
                             <li><a href="/">회의록 보기</a></li>
@@ -64,3 +64,5 @@ const Header = (props) => {
 };
 
 export default Header;
+
+

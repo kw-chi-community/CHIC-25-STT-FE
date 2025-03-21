@@ -4,7 +4,7 @@
     max-width: 1200px; /* 전체 페이지 너비 유지 */
     background-color: #6a1b9a; /* 진한 보라색 */
     color: white;
-    padding: 1.2rem;
+    padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 0.5rem; /* 🔹 아래 여백 줄이기 */
     box-shadow: 0 4px 6px rgba(106, 27, 154, 0.3);
