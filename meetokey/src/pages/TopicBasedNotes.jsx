@@ -105,7 +105,7 @@ const Sidebar = styled.div`
 
 const Logo = styled.h2`
   font-weight: 700;
-  color: #6a26cd;
+  color:rgb(0, 0, 0);
   margin-bottom: 30px;
 `;
 

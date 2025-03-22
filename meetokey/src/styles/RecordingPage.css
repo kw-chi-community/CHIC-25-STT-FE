@@ -1,66 +1,41 @@
-/* 🎨 전체 페이지 스타일 */
 .recording-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100vh;
-    background: white;  /* ✅ 배경 흰색 */
-    color: black;
-    padding-top: 30px;
-}
-
-/* 🎵 사운드 웨이브 박스 (중앙 박스) */
-.soundwave-box {
-    width: 75%;
-    max-width: 900px;
-    height: 280px;
-    background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-    margin-bottom: 20px;
-}
-
-/* 🎵 사운드 웨이브 애니메이션 */
-.soundwave-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    height: 150px;
-    gap: 8px;
-}
-
-/* 🟣 각 wave bar */
-.wave-bar {
-    width: 10px;
-    height: 40px;
-    background-color: white;
-    border-radius: 4px;
-    opacity: 0.9;
-    transition: height 0.3s ease;
-}
-
-/* 🟣 애니메이션 부여 - 녹음 중일 때만 */
-.wave-bar.animate {
-    animation: pulse 2s infinite ease-in-out;
-}
-
-/* 🟣 각 wave-bar에 delay 적용 */
-.wave-bar.animate:nth-child(odd) { animation-delay: 0.1s; }
-.wave-bar.animate:nth-child(even) { animation-delay: 0.2s; }
-
-/* 🟣 애니메이션 키프레임 */
-@keyframes pulse {
-    0%, 100% { height: 40px; }
-    50% { height: 120px; }
-}
-
-/* 🛑 녹음 버튼 */
-.recording-controls button {
+    padding: 40px 20px;
+    background: white;
+    min-height: 100vh;
+  }
+  
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 40px;
+  }
+  
+  /* 둥글지 않은 이미지 */
+  .main-image {
+    width: 600px;
+    height: auto;
+    border-radius: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* 실시간 오디오 웨이브 */
+  .waveform-canvas {
+    opacity: 0.6;
+    transition: opacity 0.3s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  /* 녹음 버튼 */
+  .recording-controls button {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
@@ -68,34 +43,105 @@
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     width: 150px;
-}
-
-/* 🎤 녹음 시작 버튼 */
-.recording-controls .start-btn {
+    margin: 10px;
+  }
+  
+  .recording-controls .start-btn {
     background: #f44336;
     color: white;
-}
-
-/* 🛑 녹음 중지 버튼 */
-.recording-controls .stop-btn {
+  }
+  
+  .recording-controls .stop-btn {
     background: #4caf50;
     color: white;
-}
-
-/* 🎯 상태 표시 */
-.recording-status {
+  }
+  
+  /* 상태 텍스트 */
+  .recording-status {
     font-size: 1.4rem;
     font-weight: bold;
     color: #6a1b9a;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* ⏳ 타이머 */
-.timer {
+    margin-bottom: 30px;
+  }
+  
+  /* 타이머 */
+  .timer {
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
     text-align: center;
     margin-top: 15px;
-}
+  }
+  .recording-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    background: white;
+    min-height: 100vh;
+  }
+  
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 40px;
+  }
+  
+  /* 둥글지 않은 이미지 */
+  .main-image {
+    width: 600px;
+    height: auto;
+    border-radius: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* 실시간 오디오 웨이브 */
+  .waveform-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  /* 녹음 버튼 */
+  .recording-controls button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 150px;
+    margin: 10px;
+  }
+  
+  .recording-controls .start-btn {
+    background: #f44336;
+    color: white;
+  }
+  
+  .recording-controls .stop-btn {
+    background: #4caf50;
+    color: white;
+  }
+  
+  /* 상태 텍스트 */
+  .recording-status {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #6a1b9a;
+    margin-bottom: 30px;
+  }
+  
+  /* 타이머 */
+  .timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 15px;
+  }
+    
