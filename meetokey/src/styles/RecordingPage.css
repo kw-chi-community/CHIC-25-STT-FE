@@ -1,109 +1,148 @@
 .recording-page {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     padding: 40px 20px;
     background: white;
     min-height: 100vh;
   }
   
+  /* 이미지 + 웨이브 */
   .image-wrapper {
     position: relative;
-    display: inline-block;
-    margin-bottom: 40px;
-  }
-  
-  /* 둥글지 않은 이미지 */
-  .main-image {
-    width: 600px;
-    height: auto;
-    border-radius: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* 실시간 오디오 웨이브 */
-  .waveform-canvas {
-    opacity: 0.6;
-    transition: opacity 0.3s ease-in-out;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 600px;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-  }
-  
-  /* 녹음 버튼 */
-  .recording-controls button {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    width: 150px;
-    margin: 10px;
-  }
-  
-  .recording-controls .start-btn {
-    background: #f44336;
-    color: white;
-  }
-  
-  .recording-controls .stop-btn {
-    background: #4caf50;
-    color: white;
-  }
-  
-  /* 상태 텍스트 */
-  .recording-status {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #6a1b9a;
-    margin-bottom: 30px;
-  }
-  
-  /* 타이머 */
-  .timer {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    margin-top: 15px;
-  }
-  .recording-page {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 40px 20px;
-    background: white;
-    min-height: 100vh;
+    margin-bottom: 30px;
   }
   
-  .image-wrapper {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 40px;
-  }
-  
-  /* 둥글지 않은 이미지 */
   .main-image {
-    width: 600px;
+    width: 750px;
+    max-width: 90vw;
     height: auto;
-    border-radius: 0;
+    border-radius: 16px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
   
-  /* 실시간 오디오 웨이브 */
+  /* ✅ 웨이브 캔버스 크기도 동일하게 줄임 */
   .waveform-canvas {
     position: absolute;
     top: 0;
     left: 0;
-    width: 600px;
+    width: 750px;
+    max-width: 90vw;
     height: 100%;
-    z-index: 2;
     pointer-events: none;
+    z-index: 2;
+    opacity: 0.6;
+  }
+  
+  /* 상단 바 */
+  .top-bar {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 30px;
+    margin-bottom: 10px;
+  }
+  
+  .nav-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #6a1b9a;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .nav-btn:hover {
+    color: #4a0072;
+  }
+  
+  
+  /* 상단 오른쪽 버튼들 */
+  .recording-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .action-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #333;
+    transition: background-color 0.2s ease;
+  }
+  
+  .action-btn:hover {
+    background-color: #ddd;
+  }
+  
+  .action-btn.stop {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .action-btn.stop:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* 타이머 */
+  .timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* 안내 문구 */
+  .auto-save-message {
+    font-size: 0.95rem;
+    color: #999;
+    margin-bottom: 20px;
+  }
+  
+  /* 하단 주제 입력 버튼 */
+  .floating-topic-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #6a1b9a;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+  }
+  
+  .floating-topic-btn:hover {
+    background-color: #4a0072;
+  }
+  
+  .floating-topic-box {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
   }
   
   /* 녹음 버튼 */
@@ -128,20 +167,12 @@
     color: white;
   }
   
-  /* 상태 텍스트 */
-  .recording-status {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #6a1b9a;
-    margin-bottom: 30px;
-  }
-  
-  /* 타이머 */
-  .timer {
-    font-size: 1.2rem;
-    font-weight: bold;
+  /* 주제 텍스트 */
+  .topic-title {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
     color: #333;
     text-align: center;
-    margin-top: 15px;
   }
-    
+  

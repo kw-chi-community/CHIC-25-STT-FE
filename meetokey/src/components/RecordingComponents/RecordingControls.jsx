@@ -8,8 +8,6 @@ const RecordingControls = ({ isRecording, startRecording, stopRecording }) => {
     return (
         <div className="recording-controls">
             {/* ✅ Home("/")으로 이동 */}
-            <button className="btn-back" onClick={() => navigate("/")}>🔙 돌아가기</button>
-            
             
             {isRecording ? (
                 <button onClick={stopRecording} className="btn-stop">
