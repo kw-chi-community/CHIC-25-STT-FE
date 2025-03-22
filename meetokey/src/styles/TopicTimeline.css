@@ -1,0 +1,32 @@
+.timeline-wrapper {
+    display: flex;
+    height: 30px;
+    background-color: #e3d6ff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 16px;
+    position: relative;
+  }
+  
+  .timeline-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #c4aaff;
+    color: white;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  .timeline-segment.active {
+    background-color: #a97fff;
+    font-weight: bold;
+  }
+  
+  .segment-label {
+    padding: 0 6px;
+    text-align: center;
+  }
+  

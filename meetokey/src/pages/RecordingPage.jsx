@@ -3,6 +3,7 @@ import "../styles/RecordingPage.css";
 import Timer from "../components/RecordingComponents/Timer";
 import AudioModal from "../components/RecordingComponents/AudioModal";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
+import TopicTimeline from "../components/RecordingComponents/TopicTimeline";
 import backgroundImage from "../assets/imgs/slider_bg01.jpg";
 
 const RecordingPage = () => {
@@ -13,6 +14,7 @@ const RecordingPage = () => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [topic, setTopic] = useState("회의 주제를 입력해주세요 ✍️");
   const [showTopicInput, setShowTopicInput] = useState(false);
+  const [topics, setTopics] = useState([{ name: "회의 주제를 입력해주세요 ✍️", time: 0 }]);
 
   const mediaRecorderRef = useRef(null);
   const audioChunks = useRef([]);
@@ -24,7 +26,8 @@ const RecordingPage = () => {
 
   const handleTopicSwitch = (newTopic) => {
     setTopic(newTopic);
-    setShowTopicInput(false); // 입력창 닫기
+    setTopics((prev) => [...prev, { name: newTopic, time: seconds }]);
+    setShowTopicInput(false);
   };
 
   useEffect(() => {
@@ -33,7 +36,6 @@ const RecordingPage = () => {
       interval = setInterval(() => setSeconds((prev) => prev + 1), 1000);
     } else {
       clearInterval(interval);
-      setSeconds(0);
     }
     return () => clearInterval(interval);
   }, [isRecording]);
@@ -133,56 +135,50 @@ const RecordingPage = () => {
 
   return (
     <div className="recording-page">
-      {/* 🔝 상단 바 */}
       <div className="top-bar">
-  <button className="nav-btn">{"< 돌아가기"}</button>
+        <button className="nav-btn">{"< 돌아가기"}</button>
+        <div className="recording-actions">
+          <button
+            className={`action-btn ${isRecording ? "stop" : ""}`}
+            onClick={isRecording ? stopRecording : startRecording}
+          >
+            {isRecording ? "⏹ 멈추기" : "🎤 시작"}
+          </button>
 
-  <div className="recording-actions">
-    <button
-      className={`action-btn ${isRecording ? "stop" : ""}`}
-      onClick={isRecording ? stopRecording : startRecording}
-    >
-      {isRecording ? "⏹ 멈추기" : "🎤 시작"}
-    </button>
-
-    <button
-      className="action-btn"
-      onClick={() => {
-        stopRecording(); // 녹음 중이라면 멈추고
-        setAudioUrl(null); // 오디오 URL 초기화
-        setAudioBlob(null); // Blob 초기화
-        setSeconds(0); // 타이머 초기화
-      }}
-    >
-      🔁 다시 녹음
-    </button>
-  </div>
+          <button
+            className="action-btn"
+            onClick={() => {
+              stopRecording();
+              setAudioUrl(null);
+              setAudioBlob(null);
+              setSeconds(0);
+              setTopics([{ name: topic, time: 0 }]);
+            }}
+          >
+            🔁 다시 녹음
+          </button>
+        </div>
+      </div>
+      <div className="top-info-row">
+  <h2 className="topic-title-inline">📝 {topic}</h2>
+  <Timer seconds={seconds} />
 </div>
 
 
 
-      <Timer seconds={seconds} />
-
-      {/* 📝 회의 주제 */}
-      <h2 className="topic-title">📝 {topic}</h2>
-
-      {/* 이미지 + 웨이브 */}
       <div className="image-wrapper">
         <canvas ref={canvasRef} className="waveform-canvas"></canvas>
         <img src={backgroundImage} alt="배경" className="main-image" />
       </div>
 
-      {/* 안내 문구 */}
-      <p className="auto-save-message">💾 오늘의 회의는 자동 저장됩니다</p>
+     
 
-      {/* 모달 또는 오디오 결과 */}
       <AudioModal
         isOpen={showAudioModal}
         onClose={() => setShowAudioModal(false)}
         audioUrl={audioUrl}
       />
 
-      {/* 🧷 하단 주제 플로팅 버튼 */}
       <button
         className="floating-topic-btn"
         onClick={() => setShowTopicInput((prev) => !prev)}
@@ -196,7 +192,14 @@ const RecordingPage = () => {
           <TopicSwitcher onSwitch={handleTopicSwitch} />
         </div>
       )}
+
+      {/* ✅ 타임라인을 맨 아래로 이동 */}
+      <TopicTimeline topics={topics} currentTime={seconds} />
+
+      <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
     </div>
+
+    
   );
 };
 
