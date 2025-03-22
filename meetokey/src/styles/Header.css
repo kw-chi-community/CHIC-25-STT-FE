@@ -4,7 +4,7 @@
     max-width: 1200px; /* 전체 페이지 너비 유지 */
     background-color: #6a1b9a; /* 진한 보라색 */
     color: white;
-    padding: 1.5rem;
+    padding: 0.8rem;
     border-radius: 8px;
     margin-bottom: 0.5rem; /* 🔹 아래 여백 줄이기 */
     box-shadow: 0 4px 6px rgba(106, 27, 154, 0.3);
@@ -14,19 +14,24 @@
     align-items: center;
 }
 
-/* 🆕 전체 컨텐츠 영역 - 흰색 배경 크기 줄이기 */
 .content-container {
-    width: 90%; /* 🔹 전체 너비를 90%로 줄임 */
-    max-width: 900px; /* 🔹 최대 너비 제한 */
+    width: 90%;
+    max-width: 900px;
     background-color: white;
-    border-radius: 12px; /* 🔹 둥근 모서리 */
-    padding: 1.5rem; /* 🔹 패딩 줄임 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 🔹 부드러운 그림자 */
+    border-radius: 12px;
+  
+    /* ✅ 패딩을 줄여 내부 콘텐츠 위아래 공간 축소 */
+    padding: 0.8rem 1rem; /* 🔽 위아래 여백만 줄이기 */
+  
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: -1rem auto 1rem auto; /* 🔹 상단 여백 줄이고 중앙 정렬 */
-}
+  
+    /* ✅ 상하 마진 줄이기 */
+    margin: -0.2rem auto 0.2rem auto; /* 🔽 상단 여백 더 줄임 */
+  }
+  
 
 /* 헤더 타이틀 (회의명) */
 .header-title {

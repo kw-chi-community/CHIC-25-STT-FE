@@ -1,4 +1,13 @@
 
+/* RecordingPage.css에 추가 */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  padding: 16px 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
 
 .recording-page {
   display: flex;

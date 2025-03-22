@@ -5,6 +5,8 @@ import AudioModal from "../components/RecordingComponents/AudioModal";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import TopicTimeline from "../components/RecordingComponents/TopicTimeline";
 import backgroundImage from "../assets/imgs/slider_bg01.jpg";
+import Header from "../components/landingComponents/Header";
+
 
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -134,6 +136,7 @@ const RecordingPage = () => {
   };
 
   return (
+    <> <Header />
     <div className="recording-page">
       <div className="top-bar">
         <button className="nav-btn">{"< 돌아가기"}</button>
@@ -199,7 +202,7 @@ const RecordingPage = () => {
       <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
     </div>
 
-    
+    </>
   );
 };
 
