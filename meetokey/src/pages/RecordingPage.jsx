@@ -177,6 +177,7 @@ const RecordingPage = () => {
           <div className="table-row">
             <div className="table-cell label">진행 시간</div>
             <div className="table-cell"><Timer seconds={seconds} /></div>
+
             <div className="table-cell label">조작</div>
             <div className="table-cell">
               <button
