@@ -21,7 +21,7 @@ header {
   flex-direction: column;
   align-items: center;
   background: #fff;
-  padding: 30px 16px;
+  padding: 20px 16px;
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
@@ -39,19 +39,24 @@ header {
 
 .table-row {
   display: flex;
+  height: 52px; /* 고정 높이 */
   border-bottom: 1px solid #ccc;
+  align-items: center
 }
 
 .table-cell {
   flex: 2.5;
-  padding: 14px 18px;
-  border-right: 1px solid #ccc;
+  padding: 0 18px;
   font-size: 15px;
   font-weight: 500;
   color: #4b0082;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: center;     /* 세로 가운데 정렬 */
+  justify-content: flex-start;
+  border-right: 1px solid #ccc;
+  background-color: white;
+  box-sizing: border-box;
+  height: 100%;             /* 부모 높이에 맞추기 */
 }
 
 .table-cell.label {
@@ -59,7 +64,6 @@ header {
   background-color: #ede9fe;
   font-weight: 600;
   color: #4b0082;
-  border-right: 1px solid #ccc;
 }
 
 .table-cell:last-child {
@@ -68,6 +72,15 @@ header {
 
 .table-row:last-child {
   border-bottom: none;
+}
+
+/* 버튼 정렬 개선 */
+.table-cell .action-btn {
+  margin-right: 8px;
+}
+
+.table-cell .action-btn:last-child {
+  margin-right: 0;
 }
 
 .image-wrapper {
@@ -100,21 +113,25 @@ header {
   opacity: 0.6;
 }
 
-/* 버튼 스타일 - 문서 양식에 맞게 */
 .action-btn {
   background: #ede9fe;
   padding: 6px 14px;
   border-radius: 4px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   color: #4b0082;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .action-btn:hover {
-  background-color: #d8c4ff;
+  background-color: #8a63ff; 
+  color: white;           
 }
+
 
 .action-btn.stop {
   background-color: #e53935;
@@ -126,12 +143,20 @@ header {
   background-color: #b71c1c;
 }
 
-/* 안내 문구도 회의록 스타일로 */
+/* 회의록 하단 문구 + 버튼 한 줄 정렬용 */
+.recording-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  gap: 10px;
+}
+
+/* 안내 문구 스타일 */
 .auto-save-message {
   font-size: 0.95rem;
   color: #777;
-  margin-bottom: 20px;
-  text-align: center;
+  margin: 0; /* 위아래 여백 제거 */
 }
 
 /* 타임라인 문서 스타일에 어울리게 */
@@ -169,24 +194,28 @@ header {
   padding: 0 6px;
 }
 
-/* 하단 주제 변경 버튼 */
+
+
 .floating-topic-btn {
-  background-color: #6a1b9a;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
+  background-color: white;
+  color: #4b0082;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 20px;
+  padding: 8px 16px;
   font-size: 14px;
-  box-shadow: none;
+  font-weight: 600;
   position: fixed;
   bottom: 30px;
   right: 30px;
-  transition: background-color 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .floating-topic-btn:hover {
-  background-color: #4a0072;
+  background-color: #ede9fe;
+  border-color: #a78bfa;
 }
+
 
 .floating-topic-box {
   position: fixed;
@@ -194,11 +223,19 @@ header {
   right: 30px;
   background: white;
   border: 1px solid #ccc;
-  padding: 16px;
+  padding: 7px 16px 16px 16px; /* 위쪽 패딩 줄이기 */
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+
+  /* ✅ 핵심 추가 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
 }
+
 
 .recording-document {
   background-color: white;
@@ -217,3 +254,5 @@ header {
   margin-bottom: 32px;
   color: #4b0082;
 }
+
+

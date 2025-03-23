@@ -8,7 +8,6 @@ import backgroundImage from "../assets/imgs/slider_bg01.jpg";
 import Header from "../components/landingComponents/Header";
 import RecordingModal from "../components/RecordingComponents/RecordingModal";
 
-
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [showAudioModal, setShowAudioModal] = useState(false);
@@ -18,12 +17,11 @@ const RecordingPage = () => {
   const [topic, setTopic] = useState("회의 주제를 입력해주세요 ✍️");
   const [showTopicInput, setShowTopicInput] = useState(false);
   const [topics, setTopics] = useState([{ name: "회의 주제를 입력해주세요 ✍️", time: 0 }]);
-  const [showInitModal, setShowInitModal] = useState(true); // 초기 모달 상태
-  const [meetingName, setMeetingName] = useState("");        // 회의명 저장
-  // 파일 맨 위 useState 아래에 추가
+  const [showInitModal, setShowInitModal] = useState(true);
+  const [meetingName, setMeetingName] = useState("");
+
   const today = new Date();
   const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
-
 
   const mediaRecorderRef = useRef(null);
   const audioChunks = useRef([]);
@@ -37,7 +35,7 @@ const RecordingPage = () => {
     setMeetingName(name);
     setTopic(firstTopic);
     setTopics([{ name: firstTopic, time: 0 }]);
-    setShowInitModal(false); // 모달 닫기
+    setShowAudioModal(true); // ✅ 오직 첫 시작할 때만 미리듣기 가능
   };
   
 
@@ -121,10 +119,11 @@ const RecordingPage = () => {
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
         setAudioBlob(blob);
-        setShowAudioModal(true);
+        // ❌ 저장 시 자동으로 모달 띄우지 않음
         cancelAnimationFrame(animationRef.current);
         audioContextRef.current?.close();
       };
+      
 
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
       const analyser = audioContextRef.current.createAnalyser();
@@ -150,98 +149,92 @@ const RecordingPage = () => {
     }
   };
 
-
   return (
     <>
-    <Header />
-  
-    <div className="recording-page">
-      <RecordingModal
-        isOpen={showInitModal}
-        onClose={() => setShowInitModal(false)}
-        onStart={handleStartMeeting}
-      />
-  
-      {/* 문서형 전체 박스 */}
-      <div className="recording-document">
-     <h1 className="document-title">{formattedDate}의 회의록</h1>
-  
-        {/* 회의 정보 테이블 */}
-        <div className="recording-table">
-          <div className="table-row">
-            <div className="table-cell label">회의명</div>
-            <div className="table-cell">{meetingName}</div>
-            <div className="table-cell label">주제</div>
-            <div className="table-cell">{topic}</div>
-          </div>
-          <div className="table-row">
-            <div className="table-cell label">진행 시간</div>
-            <div className="table-cell"><Timer seconds={seconds} /></div>
+      <Header />
+      <div className="recording-page">
+        {/* 회의록 보기 모달 */}
+        <RecordingModal
+          isOpen={showInitModal}
+          onClose={() => setShowInitModal(false)}
+          onStart={handleStartMeeting}
+        />
 
-            <div className="table-cell label">조작</div>
-            <div className="table-cell">
-              <button
-                className={`action-btn ${isRecording ? "stop" : ""}`}
-                onClick={isRecording ? stopRecording : startRecording}
-              >
-                {isRecording ? "⏹ 멈추기" : "🎤 시작"}
-              </button>
-              <button
-                className="action-btn"
-                onClick={() => {
-                  stopRecording();
-                  setAudioUrl(null);
-                  setAudioBlob(null);
-                  setSeconds(0);
-                  setTopics([{ name: topic, time: 0 }]);
-                }}
-              >
-                🔁 다시 녹음
-              </button>
+        <div className="recording-document">
+          <h1 className="document-title">{formattedDate}의 회의록</h1>
+
+          <div className="recording-table">
+            <div className="table-row">
+              <div className="table-cell label">회의명</div>
+              <div className="table-cell">{meetingName}</div>
+              <div className="table-cell label">주제</div>
+              <div className="table-cell">{topic}</div>
+            </div>
+            <div className="table-row">
+              <div className="table-cell label">진행 시간</div>
+              <div className="table-cell"><Timer seconds={seconds} /></div>
+              <div className="table-cell label">조작</div>
+              <div className="table-cell">
+                <button
+                  className={`action-btn ${isRecording ? "stop" : ""}`}
+                  onClick={isRecording ? stopRecording : startRecording}
+                >
+                  {isRecording ? "⏹ 멈추기" : "🎤 시작"}
+                </button>
+                <button
+                  className="action-btn"
+                  onClick={() => {
+                    stopRecording();
+                    setAudioUrl(null);
+                    setAudioBlob(null);
+                    setSeconds(0);
+                    setTopics([{ name: topic, time: 0 }]);
+                  }}
+                >
+                  🔁 다시 녹음
+                </button>
+              </div>
             </div>
           </div>
+
+          <div className="image-wrapper">
+            <canvas ref={canvasRef} className="waveform-canvas"></canvas>
+            <img src={backgroundImage} alt="배경" className="main-image" />
+          </div>
+
+          <TopicTimeline topics={topics} currentTime={seconds} />
+
+          {/* 안내 문구 + 회의록 보기 버튼 나란히 */}
+          <div className="recording-footer-row">
+            <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
+            <button className="action-btn" onClick={() => setShowInitModal(true)}>
+              📑 회의록 보기
+            </button>
+          </div>
         </div>
-  
-        {/* 웨이브 + 이미지 */}
-        <div className="image-wrapper">
-          <canvas ref={canvasRef} className="waveform-canvas"></canvas>
-          <img src={backgroundImage} alt="배경" className="main-image" />
-        </div>
-  
-        {/* 타임라인 */}
-        <TopicTimeline topics={topics} currentTime={seconds} />
-  
-        {/* 하단 문구 */}
-        <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
+
+        <AudioModal
+          isOpen={showAudioModal}
+          onClose={() => setShowAudioModal(false)}
+          audioUrl={audioUrl}
+        />
+
+        <button
+          className="floating-topic-btn"
+          onClick={() => setShowTopicInput((prev) => !prev)}
+          title="주제 변경"
+        >
+          ➕ 주제 추가
+        </button>
+
+        {showTopicInput && (
+          <div className="floating-topic-box">
+            <TopicSwitcher onSwitch={handleTopicSwitch} />
+          </div>
+        )}
       </div>
-  
-      {/* 오디오 모달 */}
-      <AudioModal
-        isOpen={showAudioModal}
-        onClose={() => setShowAudioModal(false)}
-        audioUrl={audioUrl}
-      />
-  
-      {/* 주제 변경 버튼 */}
-      <button
-        className="floating-topic-btn"
-        onClick={() => setShowTopicInput((prev) => !prev)}
-        title="주제 변경"
-      >
-        ➕
-      </button>
-  
-      {/* 주제 입력 박스 */}
-      {showTopicInput && (
-        <div className="floating-topic-box">
-          <TopicSwitcher onSwitch={handleTopicSwitch} />
-        </div>
-      )}
-    </div>
-  </>
-  
+    </>
   );
-  
 };
 
 export default RecordingPage;
