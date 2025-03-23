@@ -22,28 +22,28 @@ const Header = (props) => {
 
     return (
         <>
-            <header id="headerType" className={`header__wrap ${props.element}`}>
-                <div className="header__inner">
-                    <div className="header__logo">
-                        <a href="/">MEET OKEY</a>
-                    </div>
-                    <nav className="header__menu">
-                        <ul>
-                            <li><a href="/">회의 시작</a></li>
-                            <li><a href="/">회의록 보기</a></li>
-                        </ul>
-                    </nav>
+       <header id="landing-headerType" className={`landing-header__wrap ${props.element}`}>
+    <div className="landing-header__inner">
+        <div className="landing-header__logo">
+            <a href="/">MEET OKEY</a>
+        </div>
+        <nav className="landing-header__menu">
+            <ul>
+                <li><a href="/">회의 시작</a></li>
+                <li><a href="/">회의록 보기</a></li>
+            </ul>
+        </nav>
 
-                    <div className="header__member">
-                        <a href="/" onClick={(e) => { 
-                            e.preventDefault(); 
-                            handleLoginShow();
-                        }}>
-                            로그인
-                        </a>
-                    </div>
-                </div>
-            </header>
+        <div className="landing-header__member">
+            <a href="/" onClick={(e) => { 
+                e.preventDefault(); 
+                handleLoginShow();
+            }}>
+                로그인
+            </a>
+        </div>
+    </div>
+</header>
 
             {/* 로그인 & 회원가입 모달 추가 */}
             <LoginModal
