@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const topicData = [
   { topic: "디자인", notes: ["UI 리뷰", "컬러 가이드 설정"] },
@@ -14,6 +15,8 @@ const TopicBasedNotes = () => {
   const filteredTopics = topicData.filter((t) =>
     t.topic.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const navigate = useNavigate();
 
   // 전체 선택 시 모든 회의록 보여주기
   const selectedNotes =
@@ -59,7 +62,8 @@ const TopicBasedNotes = () => {
           ))}
         </TopicList>
 
-        <Logout>🚪 뒤로 가기</Logout>
+        <Logout onClick={() => navigate("/recording")}>📝 회의하기</Logout>
+
       </Sidebar>
 
       <MainContent>

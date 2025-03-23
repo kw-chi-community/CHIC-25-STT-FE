@@ -7,6 +7,8 @@ import TopicTimeline from "../components/RecordingComponents/TopicTimeline";
 import backgroundImage from "../assets/imgs/slider_bg01.jpg";
 import Header from "../components/landingComponents/Header";
 import RecordingModal from "../components/RecordingComponents/RecordingModal";
+import { useNavigate } from "react-router-dom"; 
+
 
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -19,6 +21,8 @@ const RecordingPage = () => {
   const [topics, setTopics] = useState([{ name: "회의 주제를 입력해주세요 ✍️", time: 0 }]);
   const [showInitModal, setShowInitModal] = useState(true);
   const [meetingName, setMeetingName] = useState("");
+  const navigate = useNavigate(); 
+
 
   const today = new Date();
   const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
@@ -209,9 +213,10 @@ const RecordingPage = () => {
           {/* 안내 문구 + 회의록 보기 버튼 나란히 */}
           <div className="recording-footer-row">
             <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
-            <button className="action-btn" onClick={() => setShowInitModal(true)}>
-              📑 회의록 보기
-            </button>
+<button className="action-btn" onClick={() => navigate("/date")}>
+  📑 회의록 보기
+</button>
+
           </div>
         </div>
 

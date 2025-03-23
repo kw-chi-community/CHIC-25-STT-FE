@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ 페이지 이동을 위한 훅 추가
 import { Play, Pause, Download, FileText, Tag, BookOpen, CheckCircle } from 'lucide-react';
 import '../styles/MeetingDashboard.css'; // ✅ CSS 연결
-
 const API_BASE_URL = "https://meetokey.charlie-3965.com/"; // ✅ 백엔드 API 주소
 
 const MeetingDashboard = () => {

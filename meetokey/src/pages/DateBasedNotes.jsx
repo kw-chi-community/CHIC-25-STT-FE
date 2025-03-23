@@ -81,7 +81,8 @@ const CalendarPage = () => {
 
         </SidebarCalendar>
 
-        <Logout>🚪 뒤로 가기</Logout>
+        <Logout onClick={() => navigate("/recording")}>📝 회의하기</Logout>
+
       </Sidebar>
 
       <MainContent>
