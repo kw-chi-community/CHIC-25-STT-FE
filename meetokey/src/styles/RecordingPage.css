@@ -1,98 +1,109 @@
+/* 문서 스타일 기본 설정 */
+body {
+  background: #f5f5f5;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #222;
+}
 
-/* RecordingPage.css에 추가 */
+/* 고정된 헤더 */
 header {
   position: sticky;
   top: 0;
   z-index: 1000;
   background: white;
   padding: 16px 24px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-bottom: 1px solid #ccc;
 }
 
+/* 페이지 전체 레이아웃 */
 .recording-page {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 40px 20px;
-  background: white;
+  background: #fff;
+  padding: 30px 16px;
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* 회의 정보 테이블 (박스 구조) */
+.recording-table {
+  width: 100%;
+  max-width: 1100px;
+  border: 1px solid #999;
+  border-collapse: collapse;
+  margin-bottom: 32px;
+  background: white;
+}
 
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
 
-/* 이미지 + 웨이브 */
+.table-cell {
+  flex: 1;
+  padding: 14px 18px;
+  border-right: 1px solid #ccc;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell.label {
+  background-color: #f2f2f2;
+  font-weight: 600;
+  color: #333;
+}
+
 .image-wrapper {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  max-width: 1100px;
   margin-bottom: 30px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+
+  height: 200px; /* 또는 180px, 150px 등 원하는 높이로 */
+  overflow: hidden;
 }
 
 .main-image {
-  width: 750px;
-  max-width: 90vw;
+  width: 100%;
   height: auto;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 0;
 }
 
-/* ✅ 웨이브 캔버스 크기도 동일하게 줄임 */
 .waveform-canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 750px;
-  max-width: 90vw;
+  width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
   opacity: 0.6;
 }
 
-/* 상단 바 */
-.top-bar {
-  width: 100%;
-  max-width: 1100px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 30px;
-  margin-bottom: 10px;
-}
-
-.nav-btn {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #6a1b9a;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.nav-btn:hover {
-  color: #4a0072;
-}
-
-
-/* 상단 오른쪽 버튼들 */
-.recording-actions {
-  display: flex;
-  gap: 8px;
-}
-
+/* 버튼 스타일 - 문서 양식에 맞게 */
 .action-btn {
-  background: #f0f0f0;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  background: #eaeaea;
+  border: 1px solid #bbb;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
   color: #333;
   transition: background-color 0.2s ease;
 }
@@ -102,45 +113,68 @@ header {
 }
 
 .action-btn.stop {
-  background-color: #f44336;
+  background-color: #e53935;
   color: white;
+  border-color: #d32f2f;
 }
 
 .action-btn.stop:hover {
-  background-color: #d32f2f;
+  background-color: #c62828;
 }
 
-/* 타이머 */
-.timer {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  margin-top: 10px;
-}
-
-/* 안내 문구 */
+/* 안내 문구도 회의록 스타일로 */
 .auto-save-message {
   font-size: 0.95rem;
-  color: #999;
+  color: #666;
   margin-bottom: 20px;
+  text-align: right;
 }
 
-/* 하단 주제 입력 버튼 */
+/* 타임라인도 회의록 박스처럼 */
+.timeline-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  height: 36px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 24px 0 16px;
+}
+
+.timeline-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #bcbcbc;
+  color: white;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.timeline-segment.active {
+  background-color: #8c8c8c;
+  font-weight: bold;
+}
+
+.segment-label {
+  padding: 0 6px;
+}
+
+/* 하단 주제 변경 버튼 */
 .floating-topic-btn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
   background-color: #6a1b9a;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  box-shadow: none;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color 0.2s;
 }
 
 .floating-topic-btn:hover {
@@ -149,93 +183,30 @@ header {
 
 .floating-topic-box {
   position: fixed;
-  bottom: 100px;
+  bottom: 80px;
   right: 30px;
   background: white;
+  border: 1px solid #ccc;
   padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   z-index: 1000;
 }
 
-/* 녹음 버튼 */
-.recording-controls button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  width: 150px;
-  margin: 10px;
+.recording-document {
+  background-color: white;
+  border: 1.5px solid #ccc;
+  padding: 40px;
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.recording-controls .start-btn {
-  background: #f44336;
-  color: white;
-}
-
-.recording-controls .stop-btn {
-  background: #4caf50;
-  color: white;
-}
-
-.top-info-row {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* 텍스트 사이 간격 */
-  margin-bottom: 16px;
-}
-
-.topic-title-inline {
-  font-size: 20px;
-  font-weight: 500;
-  color: #333;
-  margin: 0; /* h2 기본 여백 제거 */
-}
-
-.recording-actions {
-  display: flex;
-  gap: 12px;
-  margin-left: auto;
-}
-
-.action-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* 🎤 시작 버튼 */
-.action-btn:not(.stop) {
-  background-color: #6a26cd;
-  color: white;
-}
-
-.action-btn:not(.stop):hover {
-  background-color: #571faa;
-}
-
-/* ⏹ 멈추기 버튼 */
-.action-btn.stop {
-  background-color: #ff4d4d;
-  color: white;
-}
-
-.action-btn.stop:hover {
-  background-color: #e04343;
-}
-
-/* 🔁 다시 녹음 버튼 */
-.action-btn + .action-btn {
-  background-color: #d9d9d9;
-  color: #333;
-}
-
-.action-btn + .action-btn:hover {
-  background-color: #c2c2c2;
+.document-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #222;
 }

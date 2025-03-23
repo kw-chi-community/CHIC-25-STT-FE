@@ -4,144 +4,121 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom left, #ffffff, #CBC9EF); /* 💜 흰색 + 연한 보라색 */
+    background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 999;
     animation: fadeInOverlay 0.3s ease-in-out;
-}
-
-
-/* 🌟 모달 본체 (화이트 배경 + 보라색 포인트) */
-.modal-content {
-    background: #ffffff; /* 모달 배경을 화이트로 */
+  }
+  
+  .modal-content {
+    background: #ffffff;
     padding: 28px;
     width: 90%;
-    max-width: 420px;
-    border-radius: 16px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* 💜 부드러운 그림자 */
+    max-width: 540px;
+    border-radius: 6px;
+    text-align: left;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
     animation: fadeIn 0.4s ease-in-out, popIn 0.3s ease-out;
     color: #333;
     position: relative;
-}
-
-/* 🌟 닫기 버튼 */
-.close-button {
+  }
+  
+  .close-button {
     position: absolute;
     top: 12px;
     right: 16px;
     background: transparent;
     border: none;
     font-size: 1.8rem;
-    color: #8A2BE2; /* 보라색 포인트 */
+    color: #6A26CD;
     cursor: pointer;
     transition: color 0.2s ease;
-}
-
-.close-button:hover {
+  }
+  
+  .close-button:hover {
     color: #4b0082;
-}
-
-/* 🌟 제목 */
-.modal-title {
+  }
+  
+  .modal-title {
     font-size: 1.7rem;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #3e0771; /* 보라색 포인트 */
-}
-
-/* 🌟 입력 필드 스타일 */
-.modal-input {
+    color: #3e0771;
+    text-align: center;
+  }
+  
+  .modal-input {
     width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    margin: 10px 0;
-    border: 2px solid #d1c4e9; /* 연한 보라색 */
-    background: #f3f0ff; /* 약간의 보라색 배경 */
-    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #f8f8f8;
+    transition: all 0.2s ease;
+  }
+  
+  .modal-input:focus {
+    border-color: #6a26cd;
+    box-shadow: 0 0 0 2px rgba(106, 38, 205, 0.1);
     outline: none;
-    color: #333;
-    transition: all 0.3s ease;
-}
-
-.modal-input::placeholder {
-    color: #aaa;
-}
-
-.modal-input:focus {
-    border: 2px solid #8A2BE2;
-    box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
-}
-
-/* 🌟 버튼 스타일 (보라색 포인트) */
-.modal-button {
-    background: linear-gradient(to right, #8A2BE2, #BA55D3);
-    color: white;
-    padding: 14px 20px;
-    border-radius: 10px;
-    border: none;
+  }
+  
+  .modal-input::placeholder {
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    text-align: right;
+  }
+  
+  .modal-button {
+    width: 120px;
+    height: 44px;
+    font-size: 16px;
+    font-weight: normal;
     cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 14px;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.modal-button:hover {
-    background: linear-gradient(to right, #BA55D3, #4b0082);
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
-}
-
-/* 🌟 모달 애니메이션 */
-@keyframes fadeInOverlay {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes popIn {
-    from {
-        transform: scale(0.9);
-    }
-    to {
-        transform: scale(1);
-    }
-}
-
-/* 📱 반응형 스타일 */
-@media (max-width: 600px) {
-    .modal-content {
-        width: 95%;
-        padding: 24px;
-    }
-
-    .modal-title {
-        font-size: 1.5rem;
-    }
-
-    .modal-input {
-        font-size: 0.9rem;
-    }
-
-    .modal-button {
-        font-size: 1rem;
-        padding: 12px 18px;
-    }
-}
+    transition: all 0.3s ease;
+    text-align: center;
+    border-radius: 0;
+    border: 2px solid #6A26CD;
+    margin-left: auto;
+    padding: 0;
+    background-color: #6A26CD;
+    color: white;
+  }
+  
+  .modal-button.signup {
+    background-color: white;
+    color: #6A26CD;
+  }
+  
+  .modal-button:hover {
+    background-color: #8A45E5;
+  }
+  
+  .modal-button.signup:hover {
+    background-color: #F4EEFF;
+  }
+  
+  /* 애니메이션 */
+  @keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes popIn {
+    from { transform: scale(0.9); }
+    to { transform: scale(1); }
+  }
