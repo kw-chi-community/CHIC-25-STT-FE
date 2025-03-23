@@ -29,7 +29,8 @@ const TopicBasedNotes = () => {
   return (
     <PageContainer>
       <Sidebar>
-        <Logo>MEET OKEY</Logo>
+      <Logo onClick={() => navigate("/")}>MEET OKEY</Logo>
+
         <NavItem onClick={() => window.history.back()}>📅 날짜별 회의록</NavItem>
         <NavItem active>📚 주제별 회의록</NavItem>
 
@@ -109,8 +110,10 @@ const Sidebar = styled.div`
 
 const Logo = styled.h2`
   font-weight: 700;
-  color:rgb(0, 0, 0);
+  font-size: 28px;      /* 👈 크기 조절 */
+  color: rgb(0, 0, 0);
   margin-bottom: 30px;
+  cursor: pointer;      /* 클릭 가능하게 유지 */
 `;
 
 const NavItem = styled.div`
