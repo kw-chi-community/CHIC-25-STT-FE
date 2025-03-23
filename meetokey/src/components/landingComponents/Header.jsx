@@ -12,6 +12,12 @@ const Header = (props) => {
         navigate("/recording"); // ✅ 녹음 페이지로 이동
     };
 
+    const handleMeetingDashboard = (e) => {
+        e.preventDefault();
+        navigate("/date"); 
+    };
+    
+
     const [showLogin, setShowLogin] = useState(false); // 로그인 모달 상태 관리
     const [showRegister, setShowRegister] = useState(false); // 회원가입 모달 상태 관리
 
@@ -42,8 +48,9 @@ const Header = (props) => {
                             <a href="/" onClick={handleMeetingStart}>회의 시작</a>
                         </li>
                         <li>
-                            <a href="/">회의록 보기</a>
-                        </li>
+    <a href="/" onClick={handleMeetingDashboard}>회의록 보기</a>
+</li>
+
                     </ul>
                 </nav>
                 <div className="landing-header__member">
@@ -53,7 +60,7 @@ const Header = (props) => {
                 </div>
             </div>
         </header>
-        
+
             {/* 로그인 & 회원가입 모달 추가 */}
             <LoginModal
                 showLogin={showLogin}
