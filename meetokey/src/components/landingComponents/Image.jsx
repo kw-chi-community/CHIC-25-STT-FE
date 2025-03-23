@@ -20,8 +20,7 @@ const Image = ( props ) => {
                 <article className="image img2">
                     <h3 className="image__title">주제별 회의록 확인하기</h3>
                     <p className="image__desc">
-                        회의 내용을 주제별로 정리하여 빠르게 찾아볼 수 있습니다. <br />
-                        원하는 주제를 선택하고 회의록을 확인하세요.
+                        회의 내용을 주제별로 정리하여 빠르게 찾아볼 수 있습니다. 원하는 주제를 선택하고 회의록을 확인하세요.
                     </p>
                     <Link className="image__btn yellow" to="/topic">주제별로 보기</Link>
                 </article>
