@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/RecordingPage.css"; 
 import Timer from "../components/RecordingComponents/Timer";
-import AudioModal from "../components/RecordingComponents/AudioModal";
+//import AudioModal from "../components/RecordingComponents/AudioModal";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import TopicTimeline from "../components/RecordingComponents/TopicTimeline";
 import backgroundImage from "../assets/imgs/slider_bg01.jpg";
@@ -35,8 +35,9 @@ const RecordingPage = () => {
     setMeetingName(name);
     setTopic(firstTopic);
     setTopics([{ name: firstTopic, time: 0 }]);
-    setShowAudioModal(true); // ✅ 오직 첫 시작할 때만 미리듣기 가능
+    // setShowAudioModal(true); ❌ 주석 처리
   };
+  
   
 
   const handleTopicSwitch = (newTopic) => {
@@ -119,10 +120,11 @@ const RecordingPage = () => {
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
         setAudioBlob(blob);
-        // ❌ 저장 시 자동으로 모달 띄우지 않음
+        // setShowAudioModal(true); ❌ 주석 처리
         cancelAnimationFrame(animationRef.current);
         audioContextRef.current?.close();
       };
+      
       
 
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -213,11 +215,14 @@ const RecordingPage = () => {
           </div>
         </div>
 
-        <AudioModal
-          isOpen={showAudioModal}
-          onClose={() => setShowAudioModal(false)}
-          audioUrl={audioUrl}
-        />
+       {/* 
+<AudioModal
+  isOpen={showAudioModal}
+  onClose={() => setShowAudioModal(false)}
+  audioUrl={audioUrl}
+/> 
+*/}
+
 
         <button
           className="floating-topic-btn"
