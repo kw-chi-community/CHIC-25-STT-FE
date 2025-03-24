@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Header from "../components/landingComponents/Header";
 import Sidebar from "../components/Keyword/Sidebar";
 import MeetingKeywordGraph from "../components/Keyword/MeetingKeywordGraph";
 import "../styles/MeetingKeywordPage.css";
@@ -28,37 +29,40 @@ const MeetingKeywordPage = () => {
     { word: "담당자", color: "#a1887f" },
   ]);
 
-  // ✅ 선택된 카테고리에 따라 필터링
   const filteredKeywords =
     selectedCategory === "전체"
       ? keywords
       : keywords.filter((k) => k.category === selectedCategory);
 
-  return (
-    <div className="keyword-page">
-      <div className="keyword-header">
-        <div className="category-info">
-          <div className="category-title">학생회 {'>'} 회의</div>
-          <div className="category-date">{meetingInfo.date}</div>
-        </div>
-        <div className="highlight-info">
-          <div className="top-category">{meetingInfo.topCategory}</div>
-          <div className="top-keyword">연관어 TOP 1: {meetingInfo.topKeyword}</div>
-        </div>
-      </div>
-
-      <div className="keyword-main">
-        <Sidebar
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-        <MeetingKeywordGraph
-          center={meetingInfo.topKeyword}
-          keywords={filteredKeywords}
-        />
-      </div>
-    </div>
-  );
-};
+      return (
+        <>
+          <Header /> {/* 헤더는 바깥에 두고 따로 관리 */}
+      
+          <div className="keyword-page"> {/* 본문만 스타일 적용 */}
+            <div className="keyword-header">
+              <div className="category-info">
+                <div className="category-title">학생회 {'>'} 회의</div>
+                <div className="category-date">{meetingInfo.date}</div>
+              </div>
+              <div className="highlight-info">
+                <div className="top-category">{meetingInfo.topCategory}</div>
+                <div className="top-keyword">연관어 TOP 1: {meetingInfo.topKeyword}</div>
+              </div>
+            </div>
+      
+            <div className="keyword-main">
+              <Sidebar
+                selectedCategory={selectedCategory}
+                onSelectCategory={setSelectedCategory}
+              />
+              <MeetingKeywordGraph
+                center={meetingInfo.topKeyword}
+                keywords={filteredKeywords}
+              />
+            </div>
+          </div>
+        </>
+      );      
+    };
 
 export default MeetingKeywordPage;

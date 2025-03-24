@@ -1,4 +1,3 @@
-// src/styles/GlobalStyle.js
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
@@ -58,8 +57,6 @@ const GlobalStyle = createGlobalStyle`
   ul, ol, li {
     list-style: none;
   }
-
-  
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: normal;

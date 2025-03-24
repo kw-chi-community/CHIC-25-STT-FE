@@ -1,14 +1,41 @@
 /* 전체 레이아웃 */
+/* 전체 레이아웃 (본문 전용!) */
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* ✅ 가로 스크롤 방지 */
+}
+
 .keyword-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 84px); /* ✅ 헤더 제외한 높이만큼 */
+  padding: 20px 24px 0px 24px;
+  background-color: #f4f6fa;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+  overflow-x: hidden; /* ✅ 가로 스크롤 방지 */
+  overflow-y: auto;   /* ✅ 필요할 때만 세로 스크롤 */
+}
+
+
+
+
+
+
+  
+  /* Header 아래 본문 여백용 wrapper */
+  .keyword-content-wrapper {
+    padding: 80px 24px 0 24px;
     display: flex;
     flex-direction: column;
-    padding: 24px;
-    background-color: #f4f6fa;
-    min-height: 100vh;
-    box-sizing: border-box;
-    font-family: 'Pretendard', sans-serif;
+    max-width: 1200px;   /* ✅ 중앙 정렬을 위한 최대 너비 */
+    margin: 0 auto;      /* ✅ 가운데 정렬 */
+    width: 100%;         /* ✅ 화면 줄어들면 반응형 대응 */
   }
   
+
   /* 헤더 영역 */
   .keyword-header {
     display: flex;
@@ -50,23 +77,39 @@
     color: #777;
   }
   
-  /* 메인 영역 */
   .keyword-main {
     display: flex;
+    flex: 1;                    /* ✅ 남은 공간 다 차지 */
     gap: 24px;
+    width: 100%;
+    align-items: stretch;
   }
   
+  .force-graph-container canvas {
+    width: 100% !important;      /* ✅ 부모 안에 맞추기 */
+    height: 100% !important;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  
+  
   /* Sidebar 전체 */
-.sidebar {
-    width: 260px;
+  
+  .sidebar {
+    width: 320px;
+    height: 100%;
+    max-height: 450px;     /* ✅ 최대 높이 제한 */
+    overflow-y: auto;      /* ✅ 넘치면 스크롤! */
+    padding: 12px 16px;    /* ✅ 여백 조금 줄임 */
     background-color: #ffffff;
     border-radius: 16px;
-    padding: 20px 24px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     gap: 16px;
   }
+  
   
   /* 카테고리 제목 */
   .sidebar h3 {
@@ -135,14 +178,18 @@
     background-color: #1d2842;
   }
   
-  /* 키워드 그래프 박스 */
   .keyword-graph {
     flex: 1;
+    min-height: 450px;      /* 사이드바와 맞추기 위해 최소 높이 설정 */
+    max-height: 450px;      /* ✅ 추가: 높이 고정하려면 이것도! */
+    height: 100%;
+    padding: 16px;
     background-color: #fff;
     border-radius: 16px;
-    padding: 24px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: auto;         /* ✅ 혹시 내부 넘칠 경우 대비 */
   }
+  
   
   .keyword-graph h2 {
     font-size: 18px;
@@ -242,3 +289,31 @@
     background-color: #1d2842;
   }
   
+  /* keyword-sidebar 수정 */
+.keyword-sidebar {
+  width: 320px;
+  max-height: 450px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ 스크롤 가능한 영역 */
+.sidebar-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-bottom: 12px;
+}
+
+/* 예쁜 스크롤바 */
+.sidebar-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scrollable::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
