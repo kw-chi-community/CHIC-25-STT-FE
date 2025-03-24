@@ -218,12 +218,19 @@ const RecordingPage = () => {
 
           {/* 안내 문구 + 회의록 보기 버튼 나란히 */}
           <div className="recording-footer-row">
-            <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
-<button className="action-btn" onClick={() => navigate("/date")}>
-  📑 회의록 보기
-</button>
+  <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
 
-          </div>
+  <button
+    className="action-btn"
+    onClick={() => setShowTopicInput((prev) => !prev)}
+    title="주제 변경"
+  >
+    ➕ 주제 추가
+  </button>
+</div>
+
+
+
         </div>
 
        {/* 
@@ -235,13 +242,13 @@ const RecordingPage = () => {
 */}
 
 
-        <button
-          className="floating-topic-btn"
-          onClick={() => setShowTopicInput((prev) => !prev)}
-          title="주제 변경"
-        >
-          ➕ 주제 추가
-        </button>
+<button
+  className="floating-note-btn"
+  onClick={() => navigate("/date")}
+>
+  📑 회의록 보기
+</button>
+
 
       {/* ⏹ 멈추기 모달 */}
 {showStopConfirmModal && (
