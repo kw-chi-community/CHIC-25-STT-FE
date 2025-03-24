@@ -22,6 +22,10 @@ const RecordingPage = () => {
   const [showInitModal, setShowInitModal] = useState(true);
   const [meetingName, setMeetingName] = useState("");
   const navigate = useNavigate(); 
+  const [showStopConfirmModal, setShowStopConfirmModal] = useState(false);
+  const [showResetConfirmModal, setShowResetConfirmModal] = useState(false);
+
+
 
 
   const today = new Date();
@@ -181,24 +185,26 @@ const RecordingPage = () => {
               <div className="table-cell"><Timer seconds={seconds} /></div>
               <div className="table-cell label">조작</div>
               <div className="table-cell">
-                <button
-                  className={`action-btn ${isRecording ? "stop" : ""}`}
-                  onClick={isRecording ? stopRecording : startRecording}
-                >
-                  {isRecording ? "⏹ 멈추기" : "🎤 시작"}
-                </button>
-                <button
-                  className="action-btn"
-                  onClick={() => {
-                    stopRecording();
-                    setAudioUrl(null);
-                    setAudioBlob(null);
-                    setSeconds(0);
-                    setTopics([{ name: topic, time: 0 }]);
-                  }}
-                >
-                  🔁 다시 녹음
-                </button>
+              <button
+  className={`action-btn ${isRecording ? "stop" : ""}`}
+  onClick={() => {
+    if (isRecording) {
+      setShowStopConfirmModal(true); // 모달 띄우기
+    } else {
+      startRecording();
+    }
+  }}
+>
+  {isRecording ? "⏹ 멈추기" : "🎤 시작"}
+</button>
+
+<button
+  className="action-btn"
+  onClick={() => setShowResetConfirmModal(true)}
+>
+  🔁 다시 녹음
+</button>
+
               </div>
             </div>
           </div>
@@ -236,6 +242,57 @@ const RecordingPage = () => {
         >
           ➕ 주제 추가
         </button>
+
+      {/* ⏹ 멈추기 모달 */}
+{showStopConfirmModal && (
+  <div className="confirm-modal-overlay">
+    <div className="confirm-modal">
+      <p>정말 녹음을 멈출까요?</p>
+      <div className="modal-buttons">
+        <button
+          className="btn-confirm"
+          onClick={() => {
+            stopRecording();
+            setShowStopConfirmModal(false);
+          }}
+        >
+          네
+        </button>
+        <button className="btn-cancel" onClick={() => setShowStopConfirmModal(false)}>
+          아니오
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* 🔁 다시 녹음 모달 */}
+{showResetConfirmModal && (
+  <div className="confirm-modal-overlay">
+    <div className="confirm-modal">
+      <p>현재까지의 녹음을 삭제하고<br />다시 시작할까요?</p>
+      <div className="modal-buttons">
+        <button
+          className="btn-confirm"
+          onClick={() => {
+            stopRecording();
+            setAudioUrl(null);
+            setAudioBlob(null);
+            setSeconds(0);
+            setTopics([{ name: topic, time: 0 }]);
+            setShowResetConfirmModal(false);
+          }}
+        >
+          네
+        </button>
+        <button className="btn-cancel" onClick={() => setShowResetConfirmModal(false)}>
+          아니오
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
         {showTopicInput && (
           <div className="floating-topic-box">
