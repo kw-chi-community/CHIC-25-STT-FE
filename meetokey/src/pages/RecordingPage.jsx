@@ -216,10 +216,9 @@ const RecordingPage = () => {
 
           <TopicTimeline topics={topics} currentTime={seconds} />
 
-          {/* 안내 문구 + 회의록 보기 버튼 나란히 */}
-          <div className="recording-footer-row">
+  {/* 본문 하단 영역 안에 안내문구 + 주제추가 버튼 + 인라인 박스 표시 */}
+<div className="recording-footer-row">
   <p className="auto-save-message">💾 AI가 오늘의 회의를 정리해줍니다.</p>
-
   <button
     className="action-btn"
     onClick={() => setShowTopicInput((prev) => !prev)}
@@ -228,6 +227,13 @@ const RecordingPage = () => {
     ➕ 주제 추가
   </button>
 </div>
+
+{/* 주제 추가 입력창을 본문 안쪽에 자연스럽게 펼치기 */}
+{showTopicInput && (
+  <div className="inline-topic-input">
+    <TopicSwitcher onSwitch={handleTopicSwitch} />
+  </div>
+)}
 
 
 
@@ -300,12 +306,6 @@ const RecordingPage = () => {
   </div>
 )}
 
-
-        {showTopicInput && (
-          <div className="floating-topic-box">
-            <TopicSwitcher onSwitch={handleTopicSwitch} />
-          </div>
-        )}
       </div>
     </>
   );

@@ -19,7 +19,6 @@ const RecordingModal = ({ isOpen, onClose, onStart }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose}>×</button>
         <h2 className="modal-title">회의 정보 입력</h2>
         <input
           className="modal-input"

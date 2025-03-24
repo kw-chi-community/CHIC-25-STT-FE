@@ -24,23 +24,6 @@
     text-align: center;
 }
 
-/* ❌ 닫기 버튼 스타일 (우측 상단 고정) */
-.close-button {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: none;
-    border: none;
-    font-size: 1.8rem; /* 크기 조정 */
-    font-weight: bold;
-    cursor: pointer;
-    color: #6a1b9a; /* 보라색 */
-    transition: color 0.2s ease-in-out;
-}
-
-.close-button:hover {
-    color: #4a148c; /* 더 짙은 보라색 */
-}
 
 /* 제목 스타일 */
 .modal-title {

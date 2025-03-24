@@ -13,23 +13,24 @@ const TopicTimeline = ({ topics, currentTime }) => {
   return (
     <div className="timeline-wrapper">
       {topics.map((topic, index) => {
-        const start = topic.time;
-        const end = topics[index + 1]?.time || totalDuration;
-        const widthPercent = ((end - start) / totalDuration) * 100;
+  const start = topic.time;
+  const end = topics[index + 1]?.time || currentTime;
+  const widthPercent = ((end - start) / totalDuration) * 100;
 
-        return (
-          <div
-            key={index}
-            className={`timeline-segment ${index === topics.length - 1 ? "active" : ""}`}
-            style={{ width: `${widthPercent}%` }}
-            title={`${topic.name} (${formatTime(start)})`}
-          >
-            <span className="segment-label">
-              {topic.name} ({formatTime(start)})
-            </span>
-          </div>
-        );
-      })}
+  return (
+    <div
+      key={index}
+      className={`timeline-segment ${index === topics.length - 1 ? "active" : ""}`}
+      style={{ width: `${widthPercent}%` }}
+      title={`${topic.name} (${formatTime(start)} ~ ${formatTime(end)})`}
+    >
+      <span className="segment-label">
+        {topic.name} ({formatTime(start)} ~ {formatTime(end)})
+      </span>
+    </div>
+  );
+})}
+
     </div>
   );
 };
