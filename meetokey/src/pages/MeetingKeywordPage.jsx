@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Keyword/Sidebar";
 import MeetingKeywordGraph from "../components/Keyword/MeetingKeywordGraph";
-import "../styles/MeetingKeywordPage.css"; // src/styles 안에 위치해야 함
+import "../styles/MeetingKeywordPage.css";
 
 const MeetingKeywordPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("전체");
+
   const [meetingInfo] = useState({
     title: "광운대학교 회의",
     date: "2025.03.01~2025.03.15",
@@ -27,6 +28,12 @@ const MeetingKeywordPage = () => {
     { word: "담당자", color: "#a1887f" },
   ]);
 
+  // ✅ 선택된 카테고리에 따라 필터링
+  const filteredKeywords =
+    selectedCategory === "전체"
+      ? keywords
+      : keywords.filter((k) => k.category === selectedCategory);
+
   return (
     <div className="keyword-page">
       <div className="keyword-header">
@@ -45,7 +52,10 @@ const MeetingKeywordPage = () => {
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
         />
-        <MeetingKeywordGraph center={meetingInfo.topKeyword} keywords={keywords} />
+        <MeetingKeywordGraph
+          center={meetingInfo.topKeyword}
+          keywords={filteredKeywords}
+        />
       </div>
     </div>
   );
