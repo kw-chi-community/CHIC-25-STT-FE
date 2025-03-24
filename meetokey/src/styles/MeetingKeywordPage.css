@@ -1,0 +1,244 @@
+/* 전체 레이아웃 */
+.keyword-page {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background-color: #f4f6fa;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+  }
+  
+  /* 헤더 영역 */
+  .keyword-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 24px;
+  }
+  
+  /* 카드 스타일 공통 */
+  .keyword-header > div {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    flex: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .category-info .category-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4070f4;
+    margin-bottom: 4px;
+  }
+  
+  .category-info .category-date {
+    font-size: 12px;
+    color: #999;
+  }
+  
+  .highlight-info .top-category {
+    font-size: 16px;
+    font-weight: bold;
+    color: #f4a825;
+    margin-bottom: 4px;
+  }
+  
+  .highlight-info .top-keyword {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  /* 메인 영역 */
+  .keyword-main {
+    display: flex;
+    gap: 24px;
+  }
+  
+  /* Sidebar 전체 */
+.sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* 카테고리 제목 */
+  .sidebar h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  /* 전체 체크 토글 */
+  .sidebar .all-toggle {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  /* 카테고리 섹션 (예: 인물 / 단체 등) */
+  .sidebar .category-section {
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+  
+  .sidebar .category-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #666;
+  }
+  
+  /* 체크박스 라벨 */
+  .sidebar .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .sidebar label {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .sidebar input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #4070f4; /* 체크박스 색상 */
+  }
+  
+  /* 적용 버튼 */
+  .sidebar .apply-button {
+    margin-top: auto;
+    background-color: #2e3a59;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sidebar .apply-button:hover {
+    background-color: #1d2842;
+  }
+  
+  /* 키워드 그래프 박스 */
+  .keyword-graph {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .keyword-graph h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  
+  .keyword-graph ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .keyword-graph li {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  /* Sidebar 최상단 */
+.keyword-sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* 사이드바 제목 */
+  .keyword-sidebar h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  /* 카테고리 라디오 리스트 전체 */
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* 각 그룹: 인물, 단체, 장소 */
+  .category-group {
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+  
+  .group-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  
+  /* 각 항목 (라벨) */
+  .category-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  /* 라디오 버튼 */
+  .category-list input[type="radio"] {
+    accent-color: #4070f4;
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+  
+  /* 적용 버튼 */
+  .apply-button {
+    margin-top: auto;
+    background-color: #2e3a59;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .apply-button:hover {
+    background-color: #1d2842;
+  }
+  
