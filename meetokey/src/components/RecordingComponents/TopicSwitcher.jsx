@@ -16,7 +16,7 @@ const TopicSwitcher = ({ onSwitch }) => {
             <input
                 type="text"
                 className="topic-input"
-                placeholder="새 주제 입력"
+                placeholder="다음 주제 입력"
                 value={newTopic}
                 onChange={(e) => setNewTopic(e.target.value)}
             />

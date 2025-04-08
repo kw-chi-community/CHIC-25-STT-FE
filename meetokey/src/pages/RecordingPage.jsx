@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
 import "../styles/RecordingPage.css"; 
-
-import RecordingModal from "../components/RecordingComponents/RecordingModal";
-import Header from "../components/RecordingComponents/Header";
 import Timer from "../components/RecordingComponents/Timer";
+//import AudioModal from "../components/RecordingComponents/AudioModal";
 import TopicSwitcher from "../components/RecordingComponents/TopicSwitcher";
 import RecordingControls from "../components/RecordingComponents/RecordingControls";
 import RecordingStatus from "../components/RecordingComponents/RecordingStatus";
@@ -17,15 +14,25 @@ const API_BASE_URL = "http://112.152.14.116:25114";  // ✅ 백엔드 API 주소
 const WS_BASE_URL = "ws://112.152.14.116:25114/ws"; // ✅ 웹소켓 주소
 
 const RecordingPage = () => {
-    const navigate = useNavigate();
-    const [isRecording, setIsRecording] = useState(false);
-    const [showModal, setShowModal] = useState(true);
-    const [showAudioModal, setShowAudioModal] = useState(false);
-    const [meetingName, setMeetingName] = useState("");
-    const [topic, setTopic] = useState("");
-    const [seconds, setSeconds] = useState(0);
-    const [audioUrl, setAudioUrl] = useState(null);
-    const [audioBlob, setAudioBlob] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [showAudioModal, setShowAudioModal] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [topic, setTopic] = useState("회의 주제를 입력해주세요 ✍️");
+  const [showTopicInput, setShowTopicInput] = useState(false);
+  const [topics, setTopics] = useState([{ name: "회의 주제를 입력해주세요 ✍️", time: 0 }]);
+  const [showInitModal, setShowInitModal] = useState(true);
+  const [meetingName, setMeetingName] = useState("");
+  const navigate = useNavigate(); 
+  const [showStopConfirmModal, setShowStopConfirmModal] = useState(false);
+  const [showResetConfirmModal, setShowResetConfirmModal] = useState(false);
+
+
+
+
+  const today = new Date();
+  const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
 
     const mediaRecorderRef = useRef(null);
     const audioChunks = useRef([]); 
@@ -65,35 +72,30 @@ const RecordingPage = () => {
         };
     }, []);
 
+  useEffect(() => {
     const initializeMediaStream = async () => {
-        try {
-            console.log("🎤 마이크 권한 요청 중...");
-            const constraints = { audio: true };
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            mediaStreamRef.current = stream;
-            console.log("✅ 마이크 접근 성공");
-        } catch (error) {
-            console.error("🚫 마이크 접근 실패:", error);
-            alert("🚨 마이크 사용이 허용되지 않았습니다. 브라우저 설정을 확인하세요.");
-        }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaStreamRef.current = stream;
+      } catch (error) {
+        alert("🚨 마이크 사용이 허용되지 않았습니다.");
+      }
     };
 
-    const startRecording = () => {
-        try {
-            if (!mediaStreamRef.current) {
-                console.error("🚨 MediaStream이 존재하지 않습니다.");
-                return;
-            }
-            setIsRecording(true);
-            audioChunks.current = []; 
-            const recorder = new MediaRecorder(mediaStreamRef.current);
-            mediaRecorderRef.current = recorder;
+  const startRecording = () => {
+    if (!mediaStreamRef.current) return;
+    setIsRecording(true);
+    audioChunks.current = [];
 
-            recorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    audioChunks.current.push(event.data);
-                }
-            };
+    try {
+      const recorder = new MediaRecorder(mediaStreamRef.current);
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
+      };
 
             recorder.onstop = async () => {
                 console.log("🛑 녹음이 멈춤, 오디오 데이터 저장 중...");
@@ -124,47 +126,12 @@ const RecordingPage = () => {
         }
     };
 
-    const stopRecording = () => {
-        if (mediaRecorderRef.current) {
-            mediaRecorderRef.current.stop();
-            console.log("🛑 녹음 중지됨");
-            setIsRecording(false);
-        }
-    };
-
-    const downloadRecording = () => {
-        if (!audioBlob) return;
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(audioBlob);
-        a.download = "recording.wav";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        console.log("📥 녹음 파일 다운로드 완료");
-    };
-
-    // ✅ 백엔드에 회의 데이터 저장
-    const saveMeeting = async (audioBlob) => {
-        const formData = new FormData();
-        formData.append("meeting_name", meetingName);
-        formData.append("meeting_date", new Date().toISOString());
-        formData.append("audio_url", audioBlob);
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/`, {
-                method: "POST",
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error("회의 데이터 저장 실패");
-            }
-
-            console.log("✅ 회의 데이터 저장 성공");
-        } catch (error) {
-            console.error("❌ 백엔드 API 요청 오류:", error);
-        }
-    };
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
     return (
         <div className="recording-page">
@@ -204,7 +171,77 @@ const RecordingPage = () => {
                 </>
             )}
         </div>
-    );
+
+       {/* 
+<AudioModal
+  isOpen={showAudioModal}
+  onClose={() => setShowAudioModal(false)}
+  audioUrl={audioUrl}
+/> 
+*/}
+
+
+<button
+  className="floating-note-btn"
+  onClick={() => navigate("/date")}
+>
+  📑 회의록 보기
+</button>
+
+
+      {/* ⏹ 멈추기 모달 */}
+{showStopConfirmModal && (
+  <div className="confirm-modal-overlay">
+    <div className="confirm-modal">
+      <p>정말 녹음을 멈출까요?</p>
+      <div className="modal-buttons">
+        <button
+          className="btn-confirm"
+          onClick={() => {
+            stopRecording();
+            setShowStopConfirmModal(false);
+          }}
+        >
+          네
+        </button>
+        <button className="btn-cancel" onClick={() => setShowStopConfirmModal(false)}>
+          아니오
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* 🔁 다시 녹음 모달 */}
+{showResetConfirmModal && (
+  <div className="confirm-modal-overlay">
+    <div className="confirm-modal">
+      <p>현재까지의 녹음을 삭제하고<br />다시 시작할까요?</p>
+      <div className="modal-buttons">
+        <button
+          className="btn-confirm"
+          onClick={() => {
+            stopRecording();
+            setAudioUrl(null);
+            setAudioBlob(null);
+            setSeconds(0);
+            setTopics([{ name: topic, time: 0 }]);
+            setShowResetConfirmModal(false);
+          }}
+        >
+          네
+        </button>
+        <button className="btn-cancel" onClick={() => setShowResetConfirmModal(false)}>
+          아니오
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+      </div>
+    </>
+  );
 };
 
 export default RecordingPage;

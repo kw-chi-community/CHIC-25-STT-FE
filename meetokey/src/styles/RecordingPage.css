@@ -1,172 +1,372 @@
-/* 🎨 전체 페이지 스타일 - 세로 길이 조정 */
+/* 문서 스타일 기본 설정 */
+body {
+  background: #f8f8fc;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #222;
+}
+
+/* 고정된 헤더 */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  padding: 16px 24px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* 페이지 전체 레이아웃 */
 .recording-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* 🔹 위쪽 정렬 */
-    width: 90%;
-    max-width: 1200px; /* 옆으로 길게 조정 */
-    margin: 20px auto; /* 🔹 세로 여백 추가 */
-    padding: 15px 20px; /* 🔹 패딩 줄여서 높이 감소 */
-    background: white; /* 배경 흰색 */
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 살짝 그림자 추가 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  padding: 20px 16px;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* 헤더 스타일 */
-.headers {
-    width: 100%;
-    padding: 15px; /* 🔹 패딩 줄이기 */
-    text-align: center;
-    font-size: 1.6rem; /* 🔹 글자 크기 조정 */
-    font-weight: bold;
-    color: #6a1b9a;
+/* 회의 정보 테이블 (박스 구조) */
+.recording-table {
+  width: 100%;
+  max-width: 1100px;
+  border: 1px solid #c4b5fd;
+  border-collapse: collapse;
+  margin-bottom: 32px;
+  background: white;
 }
 
-/* 녹음 상태 표시 */
-.recording-status {
-    margin: 10px 0; /* 🔹 여백 줄이기 */
-    padding: 8px 16px; /* 🔹 패딩 줄이기 */
-    border-radius: 12px;
-    background-color: rgba(106, 27, 154, 0.1); /* 연한 보라색 */
-    font-size: 1.3rem; /* 🔹 크기 감소 */
-    font-weight: bold;
-    text-align: center;
-    color: #6a1b9a;
-    width: fit-content;
+.table-row {
+  display: flex;
+  height: 52px; /* 고정 높이 */
+  border-bottom: 1px solid #ccc;
+  align-items: center
 }
 
-/* 녹음 컨트롤 버튼 스타일 */
-.recording-controls {
-    display: flex;
-    justify-content: center;
-    gap: 0.8rem; /* 🔹 버튼 간격 줄이기 */
-    margin: 15px 0; /* 🔹 여백 줄이기 */
-    width: 100%;
+.table-cell {
+  flex: 2.5;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #4b0082;
+  display: flex;
+  align-items: center;     /* 세로 가운데 정렬 */
+  justify-content: flex-start;
+  border-right: 1px solid #ccc;
+  background-color: white;
+  box-sizing: border-box;
+  height: 100%;             /* 부모 높이에 맞추기 */
 }
 
-.recording-controls button {
-    padding: 10px 20px; /* 🔹 버튼 크기 조정 */
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem; /* 🔹 글자 크기 줄이기 */
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    width: 130px;
+.table-cell.label {
+  flex: 1;
+  background-color: #ede9fe;
+  font-weight: 600;
+  color: #4b0082;
 }
 
-/* 타이머 스타일 */
-.timer {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 10px 0; /* 🔹 여백 줄이기 */
-    padding: 6px 14px; /* 🔹 패딩 줄이기 */
-    background-color: rgba(106, 27, 154, 0.1);
-    border-radius: 8px;
-    width: fit-content;
-    text-align: center;
-    color: #6a1b9a;
+.table-cell:last-child {
+  border-right: none;
 }
 
-/* 오디오 플레이어 스타일 */
-.audio-player {
-    margin-top: 15px;
-    padding: 12px;
-    background-color: rgba(106, 27, 154, 0.05);
-    border-radius: 10px;
-    text-align: center;
-    width: 90%; /* 🔹 크기 줄이기 */
+.table-row:last-child {
+  border-bottom: none;
 }
 
-.audio-player audio {
-    width: 100%;
+/* 버튼 정렬 개선 */
+.table-cell .action-btn {
+  margin-right: 8px;
 }
 
-/* 모달 스타일 */
-.recording-modal {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px; /* 🔹 패딩 줄이기 */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 50%;
-    max-width: 500px;
-    text-align: center;
+.table-cell .action-btn:last-child {
+  margin-right: 0;
 }
 
-/* 반응형 스타일 (모바일 최적화) */
-@media (max-width: 768px) {
-    .recording-page {
-        width: 95%;
-        padding: 10px 15px; /* 🔹 모바일에서 패딩 더 줄이기 */
-    }
-
-    .recording-controls {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .recording-controls button {
-        width: 100%;
-    }
-
-    .audio-player {
-        width: 100%;
-    }
-
-    .recording-modal {
-        width: 90%;
-    }
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 0px;
+  border: 1px solid #c4b5fd;
+  box-sizing: border-box;
+  height: 200px;
+  overflow: hidden;
+  background: #faf9ff;
 }
 
-/* 📌 녹음 페이지 스타일 */
-.recording-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px; /* 요소 간 기본 간격 */
-    padding: 40px 20px; /* 상하 여백 추가 */
+.main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  border-radius: 0;
 }
 
-/* 🟣 Header 여백 조정 */
-.header {
-    margin-bottom: 60px; /* 아래쪽 여백 추가 */
+.waveform-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
-/* 🎙 녹음 상태 여백 */
-.recording-status {
-    margin-bottom: 30px; /* 아래쪽 여백 추가 */
+.action-btn {
+  background: #ede9fe;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #4b0082;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* 🎮 녹음 컨트롤 버튼 */
-.recording-controls {
-    margin-top: 60px; /* 위쪽 여백 증가 */
-    gap: 1.5rem; /* 버튼 사이 간격 증가 */
+.action-btn:hover {
+  background-color: #8a63ff; 
+  color: white;           
 }
 
-/* ⏳ 타이머 여백 */
-.timer {
-    margin: 50px 0; /* 위아래 여백 증가 */
+
+.action-btn.stop {
+  background-color: #e53935;
+  color: white;
+  border-color: #c62828;
 }
 
-/* 🔄 주제 변경 입력창 여백 */
-.topic-switcher {
-    margin-top: 60px; /* 위쪽 여백 증가 */
+.action-btn.stop:hover {
+  background-color: #b71c1c;
 }
 
-/* 🎵 오디오 모달 여백 */
-.audio-modal {
-    margin-top: 60px; /* 위쪽 여백 증가 */
+/* 회의록 하단 문구 + 버튼 한 줄 정렬용 */
+.recording-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  gap: 10px;
 }
 
-.soundwave-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px; /* 상단 요소와 간격 조절 */
+/* 안내 문구 스타일 */
+.auto-save-message {
+  font-size: 0.95rem;
+  color: #777;
+  margin: 0; /* 위아래 여백 제거 */
 }
 
-.soundwave-img {
-    width: 70%;  /* 적당한 크기로 조절 */
-    max-width: 500px;
-    height: auto;
+/* 타임라인 문서 스타일에 어울리게 */
+.timeline-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  height: 36px;
+  background-color: #f3efff;
+  border: 1px solid #d1c4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 0 16px;
 }
+
+.timeline-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c9b8f5;
+  color: #4b0082;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+  padding: 0 8px;
+}
+
+.timeline-segment.active {
+  background-color: #a084e8;
+  color: white;
+  font-weight: 600;
+}
+
+.segment-label {
+  padding: 0 6px;
+}
+
+
+
+.floating-topic-btn {
+  background-color: white;
+  color: #4b0082;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.floating-topic-btn:hover {
+  background-color: #ede9fe;
+  border-color: #a78bfa;
+}
+
+
+.floating-topic-box {
+  position: fixed;
+  bottom: 80px;
+  right: 30px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 7px 16px 16px 16px; /* 위쪽 패딩 줄이기 */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+
+  /* ✅ 핵심 추가 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+
+.recording-document {
+  background-color: white;
+  border: 2px solid #d1c4e9;
+  padding: 40px;
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(106, 38, 205, 0.06);
+}
+
+.document-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #4b0082;
+}
+
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(248, 248, 252, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-modal {
+  width: 360px;
+  max-width: 90%;
+  background-color: white;
+  border: 1.5px solid #d1c4e9;
+  border-radius: 10px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 16px rgba(106, 38, 205, 0.08);
+  text-align: center;
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.confirm-modal p {
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.btn-confirm,
+.btn-cancel {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-confirm {
+  background-color: #8a63ff;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background-color: #6b46d7;
+}
+
+.btn-cancel {
+  background-color: #eeeeee;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background-color: #dcdcdc;
+}
+
+.floating-note-btn {
+  background-color: white;
+  color: #4b0082;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s, border-color 0.2s;
+  z-index: 1500;
+}
+
+.floating-note-btn:hover {
+  background-color: #ede9fe;
+  border-color: #a78bfa;
+}
+
+
+.inline-topic-input {
+  width: 100%;
+  max-width: 900px;
+  background-color: #fdfcff;
+  border: 1px solid #d1c4e9;
+  border-radius: 6px;
+  padding: 20px;
+  margin-top: 16px;
+  box-shadow: 0 2px 8px rgba(106, 38, 205, 0.05);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
